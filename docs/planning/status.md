@@ -10,8 +10,14 @@
 
 ## Verification
 
-Record current command results here after the bootstrap commits are created.
-Do not copy counts from the legacy repository.
+Bootstrap verification on 2026-08-10:
+
+- `cargo fmt --check` → green.
+- `cargo clippy --workspace --all-targets --all-features -- -D warnings` → green.
+- `cargo test --workspace --all-features` → 3 tests passed.
+- `RUSTDOCFLAGS=-Dwarnings cargo doc --workspace --no-deps` → green.
+- Legacy `norm validate --all --strict` against this repository → 13 files,
+  0 errors, 0 warnings.
 
 ## Open work
 
