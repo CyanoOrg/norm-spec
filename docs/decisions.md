@@ -74,3 +74,42 @@ as part of the Rust project's active lineage.
 unambiguous. The A1 specification and fixtures needed for compatibility are
 maintained self-contained in this repository, so preserving product behavior
 does not require preserving an earlier implementation's Git ancestry.
+
+## D006 — Intentional deviations from the A1 behavior baseline
+
+**Decision.** The Rust product ports the observable A1 behavior captured from
+the private Python prototype (per D002), with the following explicit
+deviations. Each is part of the public contract and must not regress silently.
+
+1. **Versioned machine envelopes.** All machine-readable stdout from `parse`,
+   `collect`, `validate`, `init`, and `scan` is wrapped in a versioned envelope
+   whose first field is `apiVersion`, e.g. `norm-spec/parse/v1`. The prototype
+   emitted bare JSON with no version stamp.
+2. **Normalized output paths.** Machine output paths are relative to the
+   relevant root, not host-absolute. The prototype embedded `Path.resolve()`
+   absolute paths, which are not portable as a byte-for-byte contract.
+3. **No deprecated `--compat` alias.** Only `--compat-keys` ships. The
+   prototype kept a hidden `--compat` alias; it is not imported into the
+   independent product line (D005).
+4. **Explicit schema discovery.** Schema resolution uses an embedded copy or
+   an explicit `--schema-dir`. The prototype's multi-path implicit fallback
+   search is not reproduced.
+
+**Exit codes are inherited, not deviated.** The Rust CLI freezes the
+prototype's three-tier exit code: `0` success, `1` data or validation failure
+(including strict-mode warnings), `2` usage or configuration error.
+
+**Context.** D002 requires intentional deviations from the captured A1
+behavior to be recorded before implementation. The prototype is a reference
+input per D002, not a runtime dependency or authority; this decision records
+where the Rust product deliberately differs.
+
+**Open item — symbolic links.** Symbolic-link handling is not a deviation
+because the prototype has no defined behavior to port. The Rust product must
+choose follow, reject, or report semantics before collect, validate, and scan
+implementation; that decision is recorded separately and does not block the
+rest of the Gate B contract.
+
+**Rationale.** Recording deviations up front keeps the behavior contract
+reviewable, lets consumers rely on stable versioned envelopes and portable
+paths, and prevents the rewrite from inheriting accidental prototype behavior.
