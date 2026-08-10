@@ -3,11 +3,11 @@
 ## Resume here
 
 - Stage: `0.1.0-alpha.1` bootstrap.
-- Branch: `chore/open-source-readiness`.
+- Integration branch: `main`; the open-source-readiness batch is complete.
 - Current objective: establish governance, Rust workspace boundaries, A1
   behavior fixtures, and CI before implementing parser behavior.
-- Current side objective: finish public-repository safeguards before GitHub
-  publication.
+- Maintainer checkpoint: create and configure the GitHub repository, then push
+  `main`; public visibility may follow after the initial functional slice.
 - No production CLI subcommand is complete.
 
 ## Verification
