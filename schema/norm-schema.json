@@ -1,0 +1,310 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://norm-spec.dev/schema/norm-schema.json",
+  "title": ".norm File Schema",
+  "description": "Structure definition for .norm files - declarative project conventions for AI agent consumption",
+  "type": "object",
+  "additionalProperties": false,
+
+  "required": ["metadata"],
+
+  "properties": {
+    "metadata": {
+      "type": "object",
+      "required": ["layer", "scope", "version"],
+      "additionalProperties": true,
+      "properties": {
+        "layer": {
+          "type": "string",
+          "description": "Free-form label of this directory's role (profile matching is best-effort)"
+        },
+        "profile": {
+          "type": "string",
+          "description": "Optional explicit profile name (overrides best-effort layer matching when present)"
+        },
+        "scope": {
+          "type": "string",
+          "description": "Directory path this .norm covers (relative to project root)"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+$",
+          "description": "Norm spec version in MAJOR.MINOR format"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable description of this norm"
+        },
+        "last_updated": {
+          "type": "string",
+          "format": "date",
+          "description": "ISO 8601 date of last update (optional)"
+        }
+      }
+    },
+
+    "template": {
+      "type": "object",
+      "description": "File and directory structure requirements for this directory",
+      "additionalProperties": true,
+      "properties": {
+        "required_files": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Files that must exist in this directory"
+        },
+        "optional_files": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Files that are recommended to exist"
+        },
+        "required_directories": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Subdirectories that must exist"
+        },
+        "optional_directories": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Subdirectories that are recommended"
+        },
+        "required_subdirectories": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Subdirectories that must exist (alias for required_directories)"
+        },
+        "naming_convention": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "File/directory naming rules"
+        },
+        "single_source_of_truth": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["source", "for"],
+            "properties": {
+              "source": { "type": "string" },
+              "for": { "type": "string" }
+            }
+          },
+          "description": "Single source of truth declarations"
+        },
+        "architecture_files": {
+          "type": "object",
+          "description": "Architecture sub-document registry",
+          "additionalProperties": true
+        },
+        "diagram_registry": {
+          "type": "object",
+          "properties": {
+            "path": { "type": "string" },
+            "format": { "type": "string" }
+          }
+        },
+        "file_structure": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Required sections in document files (e.g., Epic sections)"
+        },
+        "scope_definition": {
+          "type": "object",
+          "description": "Work scope boundary rules",
+          "additionalProperties": true
+        }
+      }
+    },
+
+    "agent_rules": {
+      "type": "object",
+      "description": "Rules for AI agents working in this directory",
+      "additionalProperties": true,
+      "properties": {
+        "update_order": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Ordered steps for updating documents"
+        },
+        "archiving": {
+          "type": "object",
+          "description": "Archiving rules for completed artifacts",
+          "additionalProperties": true
+        },
+        "module_version_sync": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Cross-module version synchronization rules"
+        },
+        "document_lifecycle": {
+          "description": "Document lifecycle contract. String arrays are accepted for legacy compatibility; new norms should use the structured state machine.",
+          "oneOf": [
+            {
+              "type": "array",
+              "items": { "type": "string" }
+            },
+            {
+              "$ref": "#/definitions/documentLifecycle"
+            }
+          ]
+        },
+        "reference_policy": {
+          "$ref": "#/definitions/referencePolicy"
+        },
+        "recommended_client": {
+          "type": "object",
+          "description": "Recommended test clients per test type",
+          "additionalProperties": true
+        },
+        "test_naming": {
+          "type": "string",
+          "description": "Test file naming convention"
+        },
+        "no_test_results": {
+          "type": "boolean",
+          "description": "This directory should not contain test result artifacts"
+        },
+        "no_development_hooks": {
+          "type": "boolean",
+          "description": "This directory should not contain development hooks"
+        },
+        "validation": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Validation rules"
+        },
+        "server_instances": {
+          "type": "object",
+          "description": "Test server instance configuration",
+          "additionalProperties": true
+        },
+        "long_connection": {
+          "type": "object",
+          "description": "Long-lived connection handling rules",
+          "additionalProperties": true
+        }
+      }
+    },
+
+    "scope": {
+      "type": "object",
+      "description": "Responsibility boundaries (primarily for test directories)",
+      "additionalProperties": true,
+      "properties": {
+        "covers": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Responsibilities covered by this directory"
+        },
+        "NOT": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Responsibilities explicitly NOT covered"
+        },
+        "resource_type": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Resource types managed here"
+        },
+        "subdirectories": {
+          "type": "object",
+          "description": "Subdirectory responsibility mapping",
+          "additionalProperties": true
+        }
+      }
+    },
+
+    "cross_references": {
+      "type": "array",
+      "description": "Cross-directory reference relationships",
+      "items": {
+        "type": "object",
+        "properties": {
+          "target": { "type": "string" },
+          "boundary": { "type": "string" },
+          "sync": { "type": "string", "enum": ["auto_pull", "auto_push", "manual"] },
+          "validation": { "type": "string", "enum": ["strict", "loose"] },
+          "description": { "type": "string" }
+        }
+      }
+    },
+
+    "strong_references": {
+      "type": "array",
+      "description": "Strong cross-directory references with type annotation",
+      "items": {
+        "type": "object",
+        "required": ["type", "target", "sync", "validation"],
+        "properties": {
+          "type": { "type": "string", "enum": ["upstream", "downstream", "cross_reference", "source"] },
+          "target": { "type": "string" },
+          "sync": { "type": "string", "enum": ["auto_pull", "auto_push", "manual"] },
+          "validation": { "type": "string", "enum": ["strict", "loose"] },
+          "description": { "type": "string" }
+        }
+      }
+    }
+  },
+
+  "definitions": {
+    "documentLifecycle": {
+      "type": "object",
+      "description": "Machine-verifiable document lifecycle states and transitions.",
+      "required": ["state_field", "states", "initial", "transitions"],
+      "additionalProperties": false,
+      "properties": {
+        "state_field": {
+          "type": "string",
+          "description": "Field in the owning catalog or document metadata that stores the current state."
+        },
+        "states": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["id"],
+            "additionalProperties": false,
+            "properties": {
+              "id": { "type": "string", "minLength": 1 },
+              "description": { "type": "string" }
+            }
+          }
+        },
+        "initial": { "type": "string", "minLength": 1 },
+        "terminal": {
+          "type": "array",
+          "items": { "type": "string" },
+          "uniqueItems": true
+        },
+        "transitions": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["from", "to"],
+            "additionalProperties": false,
+            "properties": {
+              "from": { "type": "string", "minLength": 1 },
+              "to": { "type": "string", "minLength": 1 },
+              "requires": {
+                "type": "array",
+                "items": { "type": "string" },
+                "uniqueItems": true
+              },
+              "description": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+    "referencePolicy": {
+      "type": "object",
+      "description": "Validation policy for cross_references and strong_references targets.",
+      "additionalProperties": false,
+      "properties": {
+        "target_must_exist": { "type": "boolean", "default": false },
+        "allow_external": { "type": "boolean", "default": false },
+        "require_description": { "type": "boolean", "default": false }
+      }
+    }
+  }
+}

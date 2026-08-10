@@ -1,0 +1,25 @@
+---
+metadata:
+  layer: test
+  scope: "tests/{name}/"
+  version: "1.0"
+  description: "Test layer structure and responsibility boundaries"
+
+scope:
+  covers:
+    - "{primary responsibility}"
+  NOT:
+    - "{explicit out-of-scope item} → {actual location}"
+
+cross_references:
+  - target: "../{adjacent}/"
+    boundary: "Boundary description"
+
+agent_rules:
+  test_naming: "{name}_test.* or test_{name}.*"
+---
+
+# Test layer
+
+Scope boundaries (including an explicit NOT-list), naming, and edges to
+neighboring test directories.

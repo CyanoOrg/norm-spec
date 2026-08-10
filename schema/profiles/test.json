@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://norm-spec.dev/schema/profiles/test.json",
+  "title": "Profile: test",
+  "description": "Profile for test directories (e.g., tests/{name}/.norm)",
+  "allOf": [
+    { "$ref": "../norm-schema.json" }
+  ],
+  "profile_rules": {
+    "required_fields": ["metadata"],
+    "recommended_fields": ["scope", "agent_rules", "cross_references"],
+    "recommended_scope": ["covers", "NOT"],
+    "recommended_agent_rules": ["test_naming"]
+  }
+}

@@ -1,0 +1,44 @@
+---
+metadata:
+  layer: root
+  profile: root
+  scope: ./
+  version: "1.0"
+  description: Rust norm-spec repository governance
+
+template:
+  required_files: [AGENTS.md, README.md, CHANGELOG.md, ROADMAP.md, Cargo.toml]
+  required_directories: [crates/, docs/, schema/, templates/, tests/]
+  naming_convention:
+    - "kebab-case for crate and planning directory names"
+    - "UPPERCASE.md for stable top-level reference documents"
+  single_source_of_truth:
+    - source: docs/SPEC.md
+      for: the .norm format
+    - source: docs/decisions.md
+      for: architectural and product rationale
+    - source: docs/planning/status.md
+      for: current development state
+
+agent_rules:
+  update_order:
+    - "Record scope-changing decisions before implementation"
+    - "Update the behavior contract with parser or validator changes"
+    - "Run Rust quality gates before merge"
+  reference_policy:
+    target_must_exist: true
+    allow_external: false
+    require_description: true
+
+strong_references:
+  - type: source
+    target: /docs/SPEC.md
+    sync: auto_pull
+    validation: strict
+    description: The prose specification defines the format implemented here
+---
+
+# Repository conventions
+
+Keep the format, schemas, behavior contract, and implementation aligned. The
+Rust engine is consumer-independent; pi-specific behavior belongs downstream.

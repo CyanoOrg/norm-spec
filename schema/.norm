@@ -1,0 +1,43 @@
+---
+metadata:
+  layer: schema
+  scope: schema/
+  version: "1.0"
+  description: Machine-readable format and profile schemas
+
+template:
+  required_files: [norm-schema.json]
+  required_directories: [profiles/]
+  single_source_of_truth:
+    - source: norm-schema.json
+      for: the machine-readable core format
+    - source: profiles/
+      for: profile-specific recommendations
+
+agent_rules:
+  update_order:
+    - "Record the format decision"
+    - "Update docs/SPEC.md"
+    - "Update core and profile schemas"
+    - "Update templates and behavior fixtures"
+  reference_policy:
+    target_must_exist: true
+    allow_external: false
+    require_description: true
+
+strong_references:
+  - type: source
+    target: /docs/SPEC.md
+    sync: auto_pull
+    validation: strict
+    description: The prose specification is authoritative
+  - type: downstream
+    target: /crates/norm-core/
+    sync: auto_push
+    validation: strict
+    description: norm-core implements schema and semantic behavior
+---
+
+# Schema conventions
+
+Schema changes are format changes and require same-commit contract coverage.

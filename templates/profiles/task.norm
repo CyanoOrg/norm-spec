@@ -1,0 +1,41 @@
+---
+metadata:
+  layer: task
+  scope: "{task_root}/"
+  version: "1.0"
+  description: "Task definition and acceptance criteria structure"
+
+template:
+  required_files:
+    - "TASK.md"
+  file_structure:
+    - "Task title and objectives"
+    - "Story list with explicit status"
+    - "Acceptance criteria (DoD)"
+    - "Dependencies and scope boundaries"
+  single_source_of_truth:
+    - source: "TASK.md"
+      for: "task scope, story breakdown and acceptance details"
+
+agent_rules:
+  document_lifecycle:
+    state_field: task_state
+    states:
+      - {id: draft}
+      - {id: in_progress}
+      - {id: done}
+    initial: draft
+    terminal: [done]
+    transitions:
+      - {from: draft, to: in_progress}
+      - {from: in_progress, to: done, requires: ["acceptance criteria met"]}
+  update_order:
+    - "Update task scope and story details as work progresses"
+    - "Record story completion with commit references"
+    - "Do not infer completion state without verification evidence"
+---
+
+# Task / work item
+
+Task definition file, required sections, lifecycle, and the order in which a
+task is updated as work progresses.

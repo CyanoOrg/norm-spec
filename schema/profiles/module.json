@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://norm-spec.dev/schema/profiles/module.json",
+  "title": "Profile: module",
+  "description": "Profile for module documentation directories (e.g., docs/modules/{name}/.norm)",
+  "allOf": [
+    { "$ref": "../norm-schema.json" }
+  ],
+  "profile_rules": {
+    "required_fields": ["metadata"],
+    "recommended_fields": ["template", "agent_rules", "cross_references"],
+    "recommended_template": ["required_files", "single_source_of_truth", "naming_convention"],
+    "recommended_agent_rules": ["update_order"]
+  }
+}

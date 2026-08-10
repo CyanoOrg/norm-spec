@@ -1,0 +1,37 @@
+---
+metadata:
+  layer: root
+  scope: docs/
+  version: "1.0"
+  description: "Overall documentation structure and conventions"
+
+template:
+  required_directories:
+    - "development/"
+    - "prd/"
+    - "modules/"
+  naming_convention:
+    - "kebab-case for directories and filenames"
+    - "Chinese for content (default), English for technical terms"
+  single_source_of_truth:
+    - source: "product-strategy.md"
+      for: "product vision, target users, feature priorities"
+
+agent_rules:
+  update_order:
+    - "Verify strategy document is source of truth"
+    - "Update downstream documents (plans → epics → stories)"
+    - "Ensure consistency across all layers"
+
+strong_references:
+  - type: downstream
+    target: "/docs/prd/"
+    sync: auto_push
+    validation: strict
+    description: "Product strategy drives all PRD documents"
+---
+
+# Documentation Root
+
+Project-wide documentation structure: required directories, naming, sources of
+truth, and the update order that keeps layers consistent.

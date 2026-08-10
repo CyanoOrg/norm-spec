@@ -1,0 +1,7 @@
+---
+metadata:
+  layer: root
+  scope: ./
+  version: "1.0"
+
+# This is still frontmatter because the closing fence is missing.

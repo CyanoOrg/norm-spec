@@ -1,0 +1,70 @@
+---
+metadata:
+  layer: epic
+  scope: docs/prd/epics/
+  version: "1.0"
+  description: "Epic document structure and conventions"
+
+template:
+  required_files:
+    - "{EpicName}.md"
+  file_structure:
+    - "## Epic Overview"
+    - "## Objectives"
+    - "## Stories"
+    - "## Dependencies"
+    - "## Progress Tracking"
+  scope_definition:
+    description: "Define work scope (repository + branch)"
+  single_source_of_truth:
+    - source: "Epic .md file"
+      for: "objectives, scope, story list, progress"
+
+agent_rules:
+  document_lifecycle:
+    state_field: document_state
+    states:
+      - {id: draft}
+      - {id: review}
+      - {id: accepted}
+      - {id: superseded}
+      - {id: archived}
+    initial: draft
+    terminal: [archived]
+    transitions:
+      - {from: draft, to: review}
+      - {from: review, to: draft}
+      - {from: review, to: accepted}
+      - {from: accepted, to: superseded}
+      - {from: accepted, to: archived, requires: ["delivery state is verified or released"]}
+      - {from: superseded, to: archived}
+  archiving:
+    file_format: "archive/[{YYYY-MM-DD}]-{epic-slug}.md"
+    date_source: "epic_completed_date"
+  update_order:
+    - "Update Epic overview if scope changes"
+    - "Update Story list and status"
+    - "Update progress percentage"
+    - "Archive completed Epic"
+  reference_policy:
+    target_must_exist: false
+    allow_external: false
+    require_description: true
+
+strong_references:
+  - type: upstream
+    target: "/docs/prd/plans/"
+    sync: auto_pull
+    validation: strict
+    description: "Epic follows from short-term plan"
+  - type: downstream
+    target: "/docs/stories/"
+    sync: auto_push
+    validation: strict
+    description: "Epic decomposes into Stories"
+---
+
+# Epic
+
+Work-unit PRD: required file structure, scope definition, lifecycle, and
+archiving rules.

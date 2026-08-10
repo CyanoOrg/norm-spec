@@ -1,0 +1,32 @@
+---
+metadata:
+  layer: test
+  profile: test
+  scope: tests/
+  version: "1.0"
+  description: Language-neutral behavior contract
+
+scope:
+  covers:
+    - "released .norm parsing and validation behavior"
+    - "stable machine protocols, errors, ordering, and exit codes"
+  NOT:
+    - "framework-specific consumer behavior"
+    - "implementation-private Rust unit tests"
+
+agent_rules:
+  test_naming: "behavior-oriented fixture directories and descriptive Rust test names"
+  no_test_results: true
+
+cross_references:
+  - target: contract/README.md
+    boundary: "Contract policy and fixture conventions"
+    sync: auto_pull
+    validation: strict
+    description: "The contract README defines how language-neutral fixtures are maintained"
+---
+
+# Contract tests
+
+Oracle unavailability is failure. Normalize incidental host paths, not semantic
+differences.

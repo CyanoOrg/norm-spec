@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://norm-spec.dev/schema/profiles/epic.json",
+  "title": "Profile: epic",
+  "description": "Profile for Epic PRD directories (e.g., docs/prd/epics/.norm)",
+  "allOf": [
+    { "$ref": "../norm-schema.json" }
+  ],
+  "profile_rules": {
+    "required_fields": ["metadata"],
+    "recommended_fields": ["template", "agent_rules", "strong_references"],
+    "recommended_template": ["required_files", "file_structure", "scope_definition", "single_source_of_truth"],
+    "recommended_agent_rules": ["update_order", "archiving", "document_lifecycle", "reference_policy"]
+  }
+}

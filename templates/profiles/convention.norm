@@ -1,0 +1,17 @@
+---
+metadata:
+  layer: convention
+  scope: docs/development/
+  version: "1.0"
+  description: "Development conventions and standards"
+
+template:
+  required_files:
+    - "conventions.md"
+    - "status.md"
+---
+
+# Development conventions
+
+Minimum starter for a standards/convention directory: required files. Expand
+with `single_source_of_truth` and `reference_policy` as the directory grows.

@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://norm-spec.dev/schema/profiles/task.json",
+  "title": "Profile: task",
+  "description": "Profile for task/PRD directories that define work items and acceptance criteria",
+  "allOf": [
+    { "$ref": "../norm-schema.json" }
+  ],
+  "profile_rules": {
+    "required_fields": ["metadata"],
+    "recommended_fields": ["template", "agent_rules"],
+    "recommended_template": ["required_files", "file_structure", "single_source_of_truth"],
+    "recommended_agent_rules": ["update_order", "document_lifecycle"]
+  }
+}

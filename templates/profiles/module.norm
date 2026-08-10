@@ -1,0 +1,42 @@
+---
+metadata:
+  layer: module
+  scope: "docs/modules/{name}/"
+  version: "1.0"
+  description: "Module documentation structure and conventions"
+
+template:
+  required_files:
+    - "ARCHITECTURE.md"
+    - "DEVELOPLOG.md"
+    - "ROADMAP.md"
+  optional_files:
+    - "API.md"
+    - "GUIDE.md"
+  naming_convention:
+    - "UPPERCASE for top-level filenames"
+    - "PascalCase for Architecture/ sub-files"
+    - "English for content"
+  single_source_of_truth:
+    - source: "package.json"
+      for: "version number"
+    - source: "ARCHITECTURE.md"
+      for: "architecture documentation index"
+
+agent_rules:
+  update_order:
+    - "Update DEVELOPLOG.md (from git commits)"
+    - "Update ARCHITECTURE.md index (only if structure changed)"
+    - "Update ROADMAP.md (adjust future plans)"
+    - "Update package version (if release)"
+
+cross_references:
+  - target: "../../prd/epics/"
+    sync: auto_pull
+    description: "Epic documents drive module development plan"
+---
+
+# Module documentation
+
+Required files, version source, naming, and cross-module references for a
+single component or package.

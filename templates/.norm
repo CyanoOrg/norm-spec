@@ -1,0 +1,39 @@
+---
+metadata:
+  layer: templates
+  scope: templates/
+  version: "1.0"
+  description: Starter files emitted by norm init
+
+template:
+  required_directories: [profiles/]
+  single_source_of_truth:
+    - source: profiles/
+      for: profile starter .norm files
+
+agent_rules:
+  update_order:
+    - "Update the corresponding profile schema"
+    - "Update the template"
+    - "Update init contract fixtures"
+  reference_policy:
+    target_must_exist: true
+    allow_external: false
+    require_description: true
+
+strong_references:
+  - type: source
+    target: /schema/profiles/
+    sync: auto_pull
+    validation: strict
+    description: Profile schemas define template recommendations
+  - type: downstream
+    target: /crates/norm-cli/
+    sync: auto_push
+    validation: loose
+    description: The CLI will expose templates through norm init
+---
+
+# Template conventions
+
+Keep one starter per supported profile and validate every starter strictly.

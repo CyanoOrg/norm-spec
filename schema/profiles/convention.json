@@ -1,0 +1,14 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://norm-spec.dev/schema/profiles/convention.json",
+  "title": "Profile: convention",
+  "description": "Profile for development convention directories (e.g., docs/development/.norm)",
+  "allOf": [
+    { "$ref": "../norm-schema.json" }
+  ],
+  "profile_rules": {
+    "required_fields": ["metadata"],
+    "recommended_fields": ["template"],
+    "recommended_template": ["required_files"]
+  }
+}

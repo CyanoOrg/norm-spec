@@ -1,0 +1,15 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://norm-spec.dev/schema/profiles/architecture.json",
+  "title": "Profile: architecture",
+  "description": "Profile for architecture design directories (e.g., docs/architecture/.norm)",
+  "allOf": [
+    { "$ref": "../norm-schema.json" }
+  ],
+  "profile_rules": {
+    "required_fields": ["metadata"],
+    "recommended_fields": ["template", "agent_rules", "strong_references"],
+    "recommended_template": ["required_directories", "single_source_of_truth"],
+    "recommended_agent_rules": ["update_order", "document_lifecycle", "reference_policy"]
+  }
+}

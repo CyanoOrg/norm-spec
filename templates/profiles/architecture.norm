@@ -1,0 +1,67 @@
+---
+metadata:
+  layer: architecture
+  scope: docs/architecture/
+  version: "1.0"
+  description: "Architecture documentation structure and conventions"
+
+template:
+  required_directories:
+    - "drafts/"
+  single_source_of_truth:
+    - source: "Architecture documents"
+      for: "system design decisions, patterns, trade-offs"
+
+agent_rules:
+  document_lifecycle:
+    state_field: document_state
+    states:
+      - id: draft
+        description: "Design is being explored"
+      - id: review
+        description: "Design is under review"
+      - id: accepted
+        description: "Design is approved but not necessarily implemented"
+      - id: current
+        description: "Document is a current architecture source of truth"
+      - id: superseded
+        description: "A newer design or architecture document replaced this one"
+      - id: archived
+        description: "Document remains available as history"
+    initial: draft
+    terminal: [archived]
+    transitions:
+      - {from: draft, to: review}
+      - {from: review, to: draft}
+      - {from: review, to: accepted}
+      - {from: accepted, to: current, requires: ["implementation verified", "current architecture updated"]}
+      - {from: accepted, to: superseded}
+      - {from: current, to: superseded}
+      - {from: superseded, to: archived}
+  update_order:
+    - "Create/update draft documents when designing"
+    - "Reference drafts from Epic and Story documents"
+    - "Update the current architecture source when implementation is verified"
+    - "Archive only superseded documents that retain historical value"
+  reference_policy:
+    target_must_exist: false
+    allow_external: false
+    require_description: true
+
+strong_references:
+  - type: upstream
+    target: "/docs/prd/epics/"
+    sync: auto_pull
+    validation: strict
+    description: "Architecture designs support Epic requirements"
+  - type: downstream
+    target: "/docs/modules/"
+    sync: auto_push
+    validation: loose
+    description: "Architecture decisions reflected in module docs"
+---
+
+# Architecture
+
+Design documents: drafts area, design-decision sources of truth, and a
+lifecycle that separates "design accepted" from "design implemented".
