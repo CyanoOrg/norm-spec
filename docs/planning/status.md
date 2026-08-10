@@ -5,8 +5,12 @@
 - Stage: `0.1.0-alpha.1`; Gate B contract definition is next.
 - Integration branch: `main`; Node 24 CI maintenance is verified and ready to
   integrate.
-- Current objective: complete the A1 CLI behavior matrix and contract fixtures
-  before implementing parser behavior.
+- Current objective: freeze the five-command behavior contract (parse, collect,
+  validate, init, scan) in one pass before implementing parser behavior. The
+  matrix covers flags, versioned stdout machine envelopes, stderr, exit codes,
+  and cross-cutting cases (BOM, leading blanks, malformed fences, pre-A1
+  compatibility input, unknown keys, profiles, semantic errors, symlinks,
+  outside-root paths, and cross-platform path normalization).
 - The private GitHub repository, initial `main` push, and first hosted Actions
   run are complete and green.
 - GitHub repository bootstrap is complete; public visibility remains a
@@ -40,7 +44,8 @@ Bootstrap verification on 2026-08-10:
 
 ## Open work
 
-- [ ] Complete the documented A1 CLI behavior matrix.
+- [ ] Freeze the five-command behavior contract (parse, collect, validate, init,
+      scan) in one pass.
 - [ ] Select and spike the YAML parser and Draft 7 validator dependencies.
 - [ ] Implement A1 parse and canonical structured errors.
 - [ ] Implement path-scoped collect.
