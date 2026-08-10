@@ -13,8 +13,17 @@ in the execution plan, its public form is:
 # Create a .norm from a profile template
 norm init --profile module --output docs/modules/example/.norm
 
+# Overwrite an existing .norm
+norm init --profile module --output docs/modules/example/.norm --force
+
 # Validate all .norm files (strict)
 norm validate --all --strict
+
+# Validate against an explicit schema directory
+norm validate --all --strict --schema-dir schema/
+
+# Downgrade unknown top-level keys to warnings
+norm validate --all --compat-keys
 
 # Validate pre-A1 compatibility files ('# Title + YAML')
 norm validate --all --strict --legacy-format
