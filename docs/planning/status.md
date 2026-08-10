@@ -5,12 +5,17 @@
 - Stage: `0.1.0-alpha.1`; Gate B contract definition is next.
 - Integration branch: `main`; Node 24 CI maintenance is verified and ready to
   integrate.
-- Current objective: freeze the five-command behavior contract (parse, collect,
-  validate, init, scan) in one pass before implementing parser behavior. The
-  matrix covers flags, versioned stdout machine envelopes, stderr, exit codes,
-  and cross-cutting cases (BOM, leading blanks, malformed fences, pre-A1
-  compatibility input, unknown keys, profiles, semantic errors, symlinks,
-  outside-root paths, and cross-platform path normalization).
+- Current objective: freeze the five-command behavior contract (parse,
+  collect, validate, init, scan) in one pass before implementing parser
+  behavior. The matrix is grounded in the A1 baseline captured from the
+  private Python prototype (D002, reference only) and detailed in
+  `docs/planning/gate-b-contract.md`. It covers flags, versioned stdout
+  machine envelopes, stderr, exit codes, and cross-cutting cases (BOM, leading
+  blanks, malformed fences, pre-A1 compatibility input, unknown keys,
+  profiles, semantic errors, symlinks, outside-root paths, and cross-platform
+  path normalization). Intentional deviations from the baseline are recorded
+  in D006; symbolic-link semantics remain an open decision and do not block
+  the rest of the contract.
 - The private GitHub repository, initial `main` push, and first hosted Actions
   run are complete and green.
 - GitHub repository bootstrap is complete; public visibility remains a
@@ -46,6 +51,8 @@ Bootstrap verification on 2026-08-10:
 
 - [ ] Freeze the five-command behavior contract (parse, collect, validate, init,
       scan) in one pass.
+- [ ] Decide symbolic-link semantics (follow, reject, or report) before
+      collect, validate, and scan implementation (D006 open item).
 - [ ] Select and spike the YAML parser and Draft 7 validator dependencies.
 - [ ] Implement A1 parse and canonical structured errors.
 - [ ] Implement path-scoped collect.
