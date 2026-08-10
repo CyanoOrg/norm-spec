@@ -7,8 +7,8 @@ metadata:
   description: Rust norm-spec repository governance
 
 template:
-  required_files: [AGENTS.md, README.md, CHANGELOG.md, ROADMAP.md, Cargo.toml]
-  required_directories: [crates/, docs/, schema/, templates/, tests/]
+  required_files: [AGENTS.md, README.md, CHANGELOG.md, ROADMAP.md, Cargo.toml, SECURITY.md, CODE_OF_CONDUCT.md]
+  required_directories: [.github/, crates/, docs/, schema/, scripts/, templates/, tests/]
   naming_convention:
     - "kebab-case for crate and planning directory names"
     - "UPPERCASE.md for stable top-level reference documents"

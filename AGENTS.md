@@ -34,6 +34,7 @@ cargo fmt --check
 cargo clippy --workspace --all-targets --all-features -- -D warnings
 cargo test --workspace --all-features
 cargo doc --workspace --no-deps
+bash scripts/check-public-history.sh
 ```
 
 Before the Rust validator is complete, read applicable `.norm` files directly

@@ -1,0 +1,65 @@
+name: Bug report
+description: Report reproducible incorrect norm-spec behavior
+title: "[Bug]: "
+body:
+  - type: markdown
+    attributes:
+      value: |
+        norm-spec is pre-release software. Please remove secrets and private project data from every example.
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      placeholder: 0.1.0-alpha.1 or a commit SHA
+    validations:
+      required: true
+  - type: dropdown
+    id: surface
+    attributes:
+      label: Affected surface
+      options:
+        - Format or schema
+        - parse
+        - collect
+        - validate
+        - init
+        - scan
+        - Installation or packaging
+        - Documentation
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: Operating system, architecture, and installation method
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Minimal reproduction
+      description: Include the smallest sanitized `.norm` input and exact command needed to reproduce the problem.
+      render: shell
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: Include complete sanitized output and exit status.
+    validations:
+      required: true
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Submission checks
+      options:
+        - label: I searched existing issues and removed credentials and private project data.
+          required: true

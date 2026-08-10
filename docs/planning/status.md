@@ -3,9 +3,11 @@
 ## Resume here
 
 - Stage: `0.1.0-alpha.1` bootstrap.
-- Branch: `docs/v0.1-public-line`.
+- Branch: `chore/open-source-readiness`.
 - Current objective: establish governance, Rust workspace boundaries, A1
   behavior fixtures, and CI before implementing parser behavior.
+- Current side objective: finish public-repository safeguards before GitHub
+  publication.
 - No production CLI subcommand is complete.
 
 ## Verification
@@ -16,6 +18,16 @@ Bootstrap verification on 2026-08-10:
 - `cargo clippy --workspace --all-targets --all-features -- -D warnings` → green.
 - `cargo test --workspace --all-features` → 3 tests passed.
 - `RUSTDOCFLAGS=-Dwarnings cargo doc --workspace --no-deps` → green.
+- `bash scripts/check-public-history.sh` → green across the current index and
+  all reachable commits.
+
+## Open-source readiness
+
+- [x] Independent public `0.1` history and product identity.
+- [x] Security policy, code of conduct, and structured issue/PR templates.
+- [x] High-confidence secret, sensitive filename, and private-path history scan.
+- [x] GitHub Actions references pinned to full commit SHAs.
+- [ ] GitHub repository creation, rules, and initial push (maintainer checkpoint).
 
 ## Open work
 

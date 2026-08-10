@@ -1,0 +1,34 @@
+name: Feature request
+description: Propose a format, CLI, or tooling improvement
+title: "[Feature]: "
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: Describe the user problem independently of a preferred solution.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed outcome
+      description: Explain the behavior, compatibility impact, and alternatives considered.
+    validations:
+      required: true
+  - type: textarea
+    id: consumers
+    attributes:
+      label: Consumer evidence
+      description: Name real framework-independent use cases that need this capability.
+    validations:
+      required: true
+  - type: checkboxes
+    id: boundary
+    attributes:
+      label: Scope check
+      options:
+        - label: This belongs in the framework-independent norm-spec project rather than a consumer adapter.
+          required: true
+        - label: I considered migration and machine-protocol compatibility.
+          required: true

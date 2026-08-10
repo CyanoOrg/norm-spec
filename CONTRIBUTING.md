@@ -16,6 +16,7 @@ cargo fmt --check
 cargo clippy --workspace --all-targets --all-features -- -D warnings
 cargo test --workspace --all-features
 cargo doc --workspace --no-deps
+bash scripts/check-public-history.sh
 ```
 
 A parser, schema, validator, or machine-output change must include contract
