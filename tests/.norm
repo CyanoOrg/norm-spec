@@ -8,7 +8,7 @@ metadata:
 
 scope:
   covers:
-    - "released .norm parsing and validation behavior"
+    - "documented A1 parsing and validation behavior"
     - "stable machine protocols, errors, ordering, and exit codes"
   NOT:
     - "framework-specific consumer behavior"
@@ -28,5 +28,5 @@ cross_references:
 
 # Contract tests
 
-Oracle unavailability is failure. Normalize incidental host paths, not semantic
-differences.
+Required implementations and fixtures must be available for their applicable
+gates. Normalize incidental host paths, not semantic differences.

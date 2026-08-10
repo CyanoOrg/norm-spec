@@ -4,11 +4,11 @@ version = 4
 
 [[package]]
 name = "norm-spec-cli"
-version = "0.4.0-alpha.1"
+version = "0.1.0-alpha.1"
 dependencies = [
  "norm-spec-core",
 ]
 
 [[package]]
 name = "norm-spec-core"
-version = "0.4.0-alpha.1"
+version = "0.1.0-alpha.1"

@@ -1,29 +1,29 @@
 # AGENTS.md
 
-Entry point for humans and agents working in the Rust implementation of
-norm-spec.
+Entry point for humans and agents working in norm-spec.
 
 ## Purpose
 
-This repository is the future canonical implementation of the `.norm` format
-and tooling. It owns the specification, schemas, templates, behavior contract,
-Rust core library, and `norm` CLI. It must remain independent of any agent
-framework or consumer.
+This repository is the canonical Rust implementation of the `.norm` format and
+tooling. It owns the specification, schemas, templates, behavior contract, Rust
+core library, and `norm` CLI. It must remain independent of any agent framework
+or consumer.
 
-The legacy Python repository is a migration oracle only. New semantics must be
-declared here and implemented once in `norm-core`; consumers must not fork the
-parser or validator.
+The repository is self-contained. New semantics must be declared here and
+implemented once in `norm-core`; consumers must not fork the parser or
+validator. Earlier private prototypes are not runtime dependencies or public
+release history.
 
 ## Current state
 
-The repository is in bootstrap. Version `0.4.0-alpha.1` establishes governance,
-architecture, and cross-language contracts before porting behavior. No CLI
-subcommand is complete until the execution plan and tests say so.
+The repository is in bootstrap. Version `0.1.0-alpha.1` establishes governance,
+architecture, and language-neutral contracts before implementing behavior. No
+CLI subcommand is complete until the execution plan and tests say so.
 
 Read first:
 
 - `docs/planning/status.md` for live state.
-- `docs/planning/v0.4-execution.md` for the active plan.
+- `docs/planning/v0.1-execution.md` for the active plan.
 - `docs/ARCHITECTURE.md` for code boundaries.
 - `docs/decisions.md` for immutable decisions.
 
@@ -36,8 +36,9 @@ cargo test --workspace --all-features
 cargo doc --workspace --no-deps
 ```
 
-Before the Rust validator is complete, validate repository `.norm` files with
-the legacy Python CLI recorded in `docs/planning/status.md`.
+Before the Rust validator is complete, read applicable `.norm` files directly
+and review changes against `docs/SPEC.md` and the contract fixtures. Do not
+claim self-hosted validation until the repository's own validator exists.
 
 ## Sources of truth
 
@@ -51,7 +52,7 @@ the legacy Python CLI recorded in `docs/planning/status.md`.
 | shipped changes | `CHANGELOG.md` |
 | in-flight state | `docs/planning/status.md` |
 | machine-readable rules | `schema/` |
-| behavior compatibility | `tests/contract/` |
+| behavior contract | `tests/contract/` |
 
 ## Work loop
 
@@ -88,10 +89,11 @@ dependency updates into feature commits.
 
 ## Versioning and releases
 
-The Rust product continues the existing norm-spec line at `0.4.0-alpha.1`.
-Use independent Semantic Versioning for the CLI/crates, the `.norm` format,
-and machine-output protocols. A CLI release must not silently redefine the
-format.
+This public Rust project starts an independent product line at
+`0.1.0-alpha.1`. Earlier prototype histories and tags are not part of this
+repository. Use independent version identifiers for the CLI/crates, the
+`.norm` format, and machine-output protocols. A CLI release must not silently
+redefine the format.
 
 - Release tag: `vX.Y.Z` on `main`.
 - Pre-release tags: `vX.Y.Z-alpha.N`, then `-beta.N` or `-rc.N` when warranted.
@@ -139,4 +141,5 @@ When the format changes, update in order: decision → `docs/SPEC.md` → `schem
 
 Before operating in a directory, collect `.norm` files from that directory to
 the repository root and honor their frontmatter and body. Until the Rust CLI is
-self-hosting, the legacy Python CLI is the compatibility oracle.
+self-hosting, perform that collection directly from the filesystem and treat
+the repository's specification and contract fixtures as authoritative.

@@ -53,3 +53,24 @@ pure Rust even though its semantic engine can be.
 
 **Rationale.** The boundary keeps norm-spec framework-independent and prevents
 consumer convenience code from becoming a second format authority.
+
+## D005 — Start an independent public Rust product line
+
+**Decision.** This repository begins the public norm-spec product at
+`0.1.0-alpha.1` with its own Git history. It does not import prototype commits,
+branches, tags, or release numbers. The future `CyanoOrg/norm-spec` repository
+is the canonical public collaboration and release authority; any Gitea copy is
+a mirror or separately named legacy archive. This supersedes D001's cutover
+wording, D002's migration-target framing, and any assumption that this product
+continues an earlier version line; their single-engine and behavior-first
+principles remain in force.
+
+**Context.** A private Python prototype established useful A1 design inputs,
+but it was never a public GitHub project. Importing its product history would
+make new contributors interpret superseded implementation and release choices
+as part of the Rust project's active lineage.
+
+**Rationale.** A clean public history makes ownership and version meaning
+unambiguous. The A1 specification and fixtures needed for compatibility are
+maintained self-contained in this repository, so preserving product behavior
+does not require preserving an earlier implementation's Git ancestry.

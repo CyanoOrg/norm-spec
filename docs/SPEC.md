@@ -4,26 +4,29 @@
 
 A `.norm` file is a structured declaration placed in a project directory. An AI agent collects it before working there so it knows the directory's conventions — required files, single sources of truth, update order, document lifecycle, references. norm-spec defines this format and ships a validator. It is **format- and tooling-only**; how a consumer collects, injects, and obeys `.norm` is the consumer's concern, not the spec's.
 
-## Quick start
+## Planned CLI surface
+
+The production CLI is under development. Once each command is marked complete
+in the execution plan, its public form is:
 
 ```bash
 # Create a .norm from a profile template
-python3 bin/norm init --profile module --output docs/modules/example/.norm
+norm init --profile module --output docs/modules/example/.norm
 
 # Validate all .norm files (strict)
-python3 bin/norm validate --all --strict
+norm validate --all --strict
 
-# Validate legacy v0.1 files ('# Title + YAML')
-python3 bin/norm validate --all --strict --legacy-format
+# Validate pre-A1 compatibility files ('# Title + YAML')
+norm validate --all --strict --legacy-format
 
 # Parse a .norm to JSON (frontmatter + body)
-python3 bin/norm parse docs/.norm --pretty
+norm parse docs/.norm --pretty
 
 # Collect inherited .norm for a target directory
-python3 bin/norm collect --root . --target docs/modules/example --pretty
+norm collect --root . --target docs/modules/example --pretty
 
 # Structural scan (raw material for writing .norm; no inference)
-python3 bin/norm scan --root . --text
+norm scan --root . --text
 ```
 
 ## Concepts
@@ -40,7 +43,8 @@ docs/modules/.norm
 docs/.norm                ← least specific
 ```
 
-How collection and priority are resolved is the consumer's choice. norm-spec's `collect` command provides one reference implementation.
+How collection and priority are resolved is the consumer's choice. norm-spec's
+`collect` command defines the canonical CLI traversal behavior.
 
 ## File format (A1)
 
@@ -81,7 +85,8 @@ examples, and rationale that does not belong in the structured frontmatter.
 3. `metadata.version` is required, in `"MAJOR.MINOR"` format.
 4. Encoding: UTF-8.
 
-**Legacy v0.1 format** (`# Title` + full YAML, no fences) is parsed only with `--legacy-format`.
+**Pre-A1 compatibility format** (`# Title` + full YAML, no fences) is parsed
+only with `--legacy-format`.
 
 ## Core schema
 
@@ -129,7 +134,7 @@ agent_rules:
   update_order: [string]
   archiving: object
   module_version_sync: [string]
-  document_lifecycle: object | [string]   # structured state machine (preferred) or legacy string list
+  document_lifecycle: object | [string]   # structured state machine (preferred) or compatibility string list
   reference_policy: object
   test_naming: string
   no_test_results: bool
@@ -137,7 +142,8 @@ agent_rules:
 
 #### document_lifecycle
 
-A machine-verifiable state machine. New norms should use the structured form; the legacy string-list form is read for compatibility but produces a warning.
+A machine-verifiable state machine. New norms should use the structured form;
+the string-list compatibility form is read with a warning.
 
 ```yaml
 agent_rules:

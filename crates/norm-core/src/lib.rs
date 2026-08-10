@@ -1,12 +1,12 @@
 //! Canonical semantic engine for the `.norm` format.
 //!
 //! The bootstrap exposes only protocol identity. Parser and validator modules
-//! are added after the legacy behavior contract is complete.
+//! are added after the A1 behavior contract is complete.
 
 #![forbid(unsafe_code)]
 
-/// Compatibility range for the released format being migrated.
-pub const FORMAT_COMPATIBILITY: &str = ">=0.3";
+/// Identifier for the initial `.norm` format contract.
+pub const FORMAT_ID: &str = "norm-spec/a1";
 
 /// Machine API identifier for parse responses.
 pub const PARSE_API_VERSION: &str = "norm-spec/parse/v1";
@@ -22,12 +22,12 @@ pub const fn crate_version() -> &'static str {
 
 #[cfg(test)]
 mod tests {
-    use super::{COLLECT_API_VERSION, FORMAT_COMPATIBILITY, PARSE_API_VERSION};
+    use super::{COLLECT_API_VERSION, FORMAT_ID, PARSE_API_VERSION};
 
     #[test]
     fn protocol_identifiers_are_explicitly_versioned() {
         assert!(PARSE_API_VERSION.ends_with("/v1"));
         assert!(COLLECT_API_VERSION.ends_with("/v1"));
-        assert_eq!(FORMAT_COMPATIBILITY, ">=0.3");
+        assert_eq!(FORMAT_ID, "norm-spec/a1");
     }
 }

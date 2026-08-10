@@ -136,7 +136,7 @@
           "description": "Cross-module version synchronization rules"
         },
         "document_lifecycle": {
-          "description": "Document lifecycle contract. String arrays are accepted for legacy compatibility; new norms should use the structured state machine.",
+          "description": "Document lifecycle contract. String arrays are accepted as a compatibility form; new norms should use the structured state machine.",
           "oneOf": [
             {
               "type": "array",

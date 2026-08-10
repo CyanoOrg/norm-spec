@@ -7,14 +7,14 @@ canonical data, error codes, ordering, and exit status.
 Rules:
 
 - A fixture change is a contract change and must be reviewed as such.
-- Failure to execute an oracle or implementation is a test failure, not a skip.
+- Failure to execute an applicable implementation is a test failure, not a skip.
 - Absolute temporary paths are normalized before comparison.
 - Ordered collections remain ordered; JSON object-key order is ignored.
 - Human wording may improve, but stable error codes and field paths may not
   change without a protocol decision.
 
-The initial fixtures seed the migration. Gate B expands them to every released
-CLI behavior before parser implementation begins.
+The initial fixtures establish the A1 baseline. Gate B expands them to every
+documented CLI behavior before parser implementation begins.
 
 Intentionally malformed inputs use a suffix such as `.norm.invalid` so
 repository-wide dogfood validation does not mistake them for live conventions;

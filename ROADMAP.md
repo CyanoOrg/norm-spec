@@ -1,9 +1,9 @@
 # Roadmap
 
-## 0.4 — Rust replacement
+## 0.1 — Initial Rust release
 
-Goal: replace the legacy Python runtime with one portable Rust semantic engine
-without silently changing the `.norm` format.
+Goal: publish a self-contained `.norm` specification, Rust semantic engine, and
+portable CLI with explicit format and machine contracts.
 
 ### Alpha
 
@@ -16,17 +16,18 @@ without silently changing the `.norm` format.
 ### Beta
 
 - Linux, macOS, and Windows release artifacts.
-- Legacy Python parity across the frozen fixture set.
+- A1 contract coverage across the frozen fixture set.
 - `pi-norm-spec` integration against the Rust engine.
 - Self-hosted validation of this repository.
 
-### Stable cutover
+### Stable
 
 - Release-quality review is green.
-- Rust becomes canonical; Python becomes read-only migration history.
-- Installation and migration documentation is complete.
+- The Rust library and CLI satisfy the documented A1 contract.
+- Installation and compatibility documentation is complete.
 
 ## Later
 
-Format evolution remains at 0.x until multiple real consumers demonstrate that
-the format is stable enough to freeze.
+The A1 contract remains evolvable until multiple real consumers demonstrate
+that the format is stable enough to receive a separate stable-format
+identifier.

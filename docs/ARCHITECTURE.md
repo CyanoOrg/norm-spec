@@ -50,8 +50,9 @@ Arrays whose order carries meaning stay ordered. Object-key order is not a
 semantic contract. Contract tests compare canonical data and stable fields,
 not host-specific absolute paths or incidental error wording.
 
-## Migration boundary
+## Compatibility boundary
 
-The legacy Python implementation is an oracle while behavior is captured. It
-is not a permanent second implementation. Once the Rust release passes the
-cutover gate, new behavior is implemented and tested only here.
+The A1 specification and fixtures in this repository define the initial
+compatibility baseline. Contract coverage is expanded before parser and
+validator behavior lands. External implementations may provide research input,
+but they are not runtime dependencies or authorities for this project.

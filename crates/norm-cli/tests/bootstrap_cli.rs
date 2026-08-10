@@ -15,7 +15,7 @@ fn version_is_available_during_bootstrap() {
     assert!(output.status.success());
     assert_eq!(
         String::from_utf8_lossy(&output.stdout),
-        "norm 0.4.0-alpha.1\n"
+        "norm 0.1.0-alpha.1\n"
     );
 }
 
