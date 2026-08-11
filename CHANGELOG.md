@@ -26,3 +26,6 @@ Versioning and keeps changes under `[Unreleased]` until release preparation.
 - Offline Draft 7, profile, lifecycle, single-source, and reference validation;
   versioned human/machine `norm validate` output; embedded or explicitly
   selected schema bundles; and all 35 frozen validate cases executable.
+- Self-contained `norm init` with seven embedded, strictly validated profile
+  templates; deterministic `norm scan` structure, naming, recurrence, symlink,
+  and coverage reports; and all 19 frozen init/scan cases executable.

@@ -16,11 +16,11 @@ release history.
 
 ## Current state
 
-Version `0.1.0-alpha.1` has completed Gate B: governance, architecture, and the
-language-neutral five-command behavior contract are frozen. Gate C implements
-one executable command slice at a time. Global help/version, `parse`, and
-`collect`, and `validate` are complete; `init` and `scan` remain explicit stubs
-until their execution-plan items and executable contract cases close.
+Version `0.1.0-alpha.1` has completed Gate B and the full Gate C implementation
+locally: governance, architecture, the language-neutral five-command behavior
+contract, and all five production commands are in place. All 82 frozen cases
+execute the compiled binary without skips. The final init/scan topic branch
+still requires hosted cross-platform CI and maintainer integration.
 
 Read first:
 
@@ -37,6 +37,7 @@ cargo clippy --workspace --all-targets --all-features -- -D warnings
 cargo test --workspace --all-features
 cargo doc --workspace --no-deps
 cargo run -p norm-spec-cli -- validate --all --strict
+cargo run -p norm-spec-cli -- scan --root . --text
 bash scripts/check-public-history.sh
 ```
 

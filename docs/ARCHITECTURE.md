@@ -36,6 +36,11 @@ compiles Draft 7 with format checks and an in-memory-only reference retriever.
 Missing references fail compilation rather than triggering filesystem or
 network fallback.
 
+The CLI also embeds the seven init templates and performs explicit filesystem
+traversal for scan. Template selection never discovers ambient files. Scan
+passes portable directory and symlink observations into `norm-core`, which owns
+naming classification, ordering, recurrence, and coverage aggregation.
+
 ## Dependency direction
 
 ```text

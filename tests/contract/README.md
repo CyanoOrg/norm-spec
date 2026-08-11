@@ -53,8 +53,9 @@ an isolated `.norm`, so expected paths never expose the repository checkout.
 The Rust Gate B integrity test rejects missing or duplicate requirements/cases,
 unknown placeholders and match modes, invalid layout instructions, absent
 assets, protocol/command/exit inconsistencies, and incomplete success, error,
-or human-mode coverage. Gate C replaces presence checks with executable command
-assertions one vertical slice at a time.
+or human-mode coverage. Gate C now executes all 82 cases against the compiled
+binary in isolated roots; an unavailable command, fixture, layout instruction,
+or platform path is a failure rather than a skip.
 
 Intentionally malformed inputs use a suffix such as `.norm.invalid` so
 repository-wide dogfood validation does not mistake them for live conventions;
