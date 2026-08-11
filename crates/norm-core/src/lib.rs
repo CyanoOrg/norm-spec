@@ -5,6 +5,7 @@
 mod collector;
 mod parser;
 mod protocol;
+mod scan;
 mod schema;
 mod semantics;
 mod validator;
@@ -15,6 +16,10 @@ pub use protocol::{
     CollectResponse, CollectedNorm, Diagnostic, ErrorDetail, ErrorResponse, InitAction,
     InitResponse, ParseResponse, ValidateResponse, ValidationResult, ValidationStatus,
     ValidationSummary,
+};
+pub use scan::{
+    DirectoryObservation, NormCoverage, RecurringFilename, ScanNaming, ScanResponse, ScanSymlink,
+    ScanSymlinkAction, ScanSymlinkKind, ScannedDirectory, classify_name, is_ignored_directory,
 };
 pub use schema::{SchemaCompileError, SchemaViolation, validate_draft7};
 pub use semantics::{ReferenceResolver, ReferenceStatus, validate_frontmatter};
