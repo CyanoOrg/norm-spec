@@ -1,0 +1,35 @@
+{
+  "apiVersion": "norm-spec/scan/v1",
+  "root": ".",
+  "directory_count": 2,
+  "directories": [
+    {
+      "path": ".",
+      "depth": 0,
+      "file_count": 1,
+      "has_norm": false
+    },
+    {
+      "path": "src",
+      "depth": 1,
+      "file_count": 1,
+      "has_norm": false
+    }
+  ],
+  "symlinks": [],
+  "naming": {
+    "directories": {
+      "lowercase": 1
+    },
+    "files": {
+      "UPPER": 1,
+      "lowercase": 1
+    }
+  },
+  "recurring_filenames": [],
+  "norm_coverage": {
+    "total_dirs": 2,
+    "dirs_with_norm": 0,
+    "ratio": 0.0
+  }
+}

@@ -16,8 +16,14 @@ norm init --profile module --output docs/modules/example/.norm
 # Overwrite an existing .norm
 norm init --profile module --output docs/modules/example/.norm --force
 
+# Emit the versioned init machine envelope
+norm init --profile module --output docs/modules/example/.norm --json --pretty
+
 # Validate all .norm files (strict)
 norm validate --all --strict
+
+# Emit the versioned validation machine envelope
+norm validate --all --strict --json --pretty
 
 # Validate against an explicit schema directory
 norm validate --all --strict --schema-dir schema/

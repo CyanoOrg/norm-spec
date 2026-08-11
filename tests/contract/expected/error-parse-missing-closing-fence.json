@@ -1,0 +1,9 @@
+{
+  "apiVersion": "norm-spec/error/v1",
+  "command": "parse",
+  "error": {
+    "code": "norm/parse/missing-closing-fence",
+    "message": "A1 frontmatter opened without a closing fence.",
+    "path": ".norm"
+  }
+}

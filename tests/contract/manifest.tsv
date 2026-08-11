@@ -1,0 +1,7 @@
+# case_id	command	fixture	expected	api_version	exit_code
+parse-minimal	parse	fixtures/valid/minimal.norm	expected/parse-minimal.json	norm-spec/parse/v1	0
+collect-minimal	collect	fixtures/valid/minimal.norm	expected/collect-minimal.json	norm-spec/collect/v1	0
+validate-minimal	validate	fixtures/valid/minimal.norm	expected/validate-minimal.json	norm-spec/validate/v1	0
+init-module	init	-	expected/init-module.json	norm-spec/init/v1	0
+scan-minimal	scan	fixtures/scan/minimal	expected/scan-minimal.json	norm-spec/scan/v1	0
+parse-missing-closing-fence	parse	fixtures/invalid/missing-closing-fence.norm.invalid	expected/error-parse-missing-closing-fence.json	norm-spec/error/v1	1

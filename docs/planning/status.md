@@ -14,8 +14,7 @@
   blanks, malformed fences, pre-A1 compatibility input, unknown keys,
   profiles, semantic errors, symlinks, outside-root paths, and cross-platform
   path normalization). Intentional deviations from the baseline are recorded
-  in D006; symbolic-link semantics remain an open decision and do not block
-  the rest of the contract.
+  in D006; symbolic-link containment and reporting are resolved in D007.
 - The private GitHub repository, initial `main` push, and first hosted Actions
   run are complete and green.
 - GitHub repository bootstrap is complete; public visibility remains a
@@ -24,16 +23,20 @@
 
 ## Verification
 
-Bootstrap verification on 2026-08-10:
+Gate B contract-foundation verification on 2026-08-11:
 
 - `cargo fmt --check` → green.
 - `cargo clippy --workspace --all-targets --all-features -- -D warnings` → green.
-- `cargo test --workspace --all-features` → 3 tests passed.
+- `cargo test --workspace --all-features` → 4 tests passed, including static
+  manifest coverage for all six initial machine protocols.
 - `RUSTDOCFLAGS=-Dwarnings cargo doc --workspace --no-deps` → green.
 - `bash scripts/check-public-history.sh` → green across the current index and
   all reachable commits.
+- Legacy strict validation against this repository → 13 files, 0 errors,
+  0 warnings. This is transitional evidence, not Rust self-hosting.
 - The Node 24 GitHub-hosted verification run was green across `quality`, Linux,
-  macOS, and Windows with no annotations.
+  macOS, and Windows with no annotations at `origin/main`; the current Gate B
+  branch still requires hosted CI after push.
 
 ## Open-source readiness
 
@@ -51,8 +54,10 @@ Bootstrap verification on 2026-08-10:
 
 - [ ] Freeze the five-command behavior contract (parse, collect, validate, init,
       scan) in one pass.
-- [ ] Decide symbolic-link semantics (follow, reject, or report) before
-      collect, validate, and scan implementation (D006 open item).
+- [x] Establish all six protocol identifiers and an initial statically checked
+      manifest with one success case per command plus one machine error case.
+- [x] Decide symbolic-link containment, rejection, and reporting semantics
+      before collect, validate, and scan implementation (D007).
 - [ ] Select and spike the YAML parser and Draft 7 validator dependencies.
 - [ ] Implement A1 parse and canonical structured errors.
 - [ ] Implement path-scoped collect.
