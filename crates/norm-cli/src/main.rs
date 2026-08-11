@@ -3,6 +3,8 @@
 mod collect;
 mod output;
 mod paths;
+mod schemas;
+mod validate;
 
 use std::{fs, path::PathBuf, process::ExitCode};
 
@@ -13,6 +15,7 @@ use crate::{
     collect::CollectArgs,
     output::{EXIT_OPERATION, EXIT_USAGE, emit_error, emit_json},
     paths::portable_path,
+    validate::ValidateArgs,
 };
 
 #[derive(Debug, Parser)]
@@ -34,7 +37,7 @@ enum Command {
     /// Collect inherited .norm files for a target directory.
     Collect(CollectArgs),
     /// Validate one or more .norm files.
-    Validate,
+    Validate(ValidateArgs),
     /// Create a .norm file from a profile template.
     Init,
     /// Scan a directory without inferring conventions.
@@ -57,7 +60,7 @@ fn main() -> ExitCode {
     match Cli::parse().command {
         Command::Parse(args) => run_parse(args),
         Command::Collect(args) => collect::run(&args),
-        Command::Validate => unimplemented_command("validate"),
+        Command::Validate(args) => validate::run(&args),
         Command::Init => unimplemented_command("init"),
         Command::Scan => unimplemented_command("scan"),
     }
