@@ -26,6 +26,10 @@
   exit-2 stubs and are the next Gate C objective.
 - The Rust validator now self-validates all five `.norm` files in this
   repository with both its embedded and explicit repository schema bundles.
+- The first hosted Windows validate run exposed string-based expansion of
+  composite absolute-path placeholders in the language-neutral test runner.
+  Commit `59f32b7` now joins placeholder suffixes with native path APIs; the
+  hosted Windows rerun remains pending.
 - The private GitHub repository, initial `main` push, and hosted Actions are
   established and green through the collect slice. Public visibility remains
   a maintainer checkpoint after the initial functional slice.
@@ -37,7 +41,7 @@ Gate C validate-slice local verification on 2026-08-11:
 - `cargo fmt --check` → green.
 - `cargo clippy --workspace --all-targets --all-features -- -D warnings` →
   green.
-- `cargo test --workspace --all-features` → 39 Rust test functions passed. In
+- `cargo test --workspace --all-features` → 40 Rust test functions passed. In
   addition to the static 91-requirement / 82-case inventory gate, all 63
   currently applicable global, parse, collect, and validate cases execute the
   compiled binary with asserted streams, protocols, output data, and exits.
