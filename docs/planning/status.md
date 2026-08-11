@@ -3,15 +3,12 @@
 ## Resume here
 
 - Stage: `0.1.0-alpha.1`; Gate B and the full Gate C implementation are
-  complete locally.
-- Integration branch: `main` at `f0298a9`. The maintainer pushed the validate
-  integration, verified hosted Linux, macOS, and Windows CI, and removed the
-  remote validate topic branch.
-- Current branch: `codex/feat-gate-c-init-scan`. It contains D012, versioned
-  init/scan models, self-contained template init, deterministic structural
-  scan, the final 19 executable contract cases, and this documentation
-  closeout. Maintainer push, hosted CI, and integration remain the final Gate C
-  checkpoint.
+  complete and integrated locally.
+- Integration branch: local `main` at `8b74ae2`. The final init/scan topic was
+  fast-forwarded after the maintainer verified hosted Linux, macOS, and Windows
+  CI. Pushing integrated `main`, verifying hosted `main` CI, and removing the
+  remote init/scan topic branch remain maintainer operations.
+- Current branch: `main`; no local Gate C topic branch remains.
 - D012 embeds the seven repository-owned templates without ambient discovery
   and fixes scan's infrastructure ignore set, naming precedence, ordering,
   recurrence limit, coverage rounding, and no-inference boundary.
@@ -26,8 +23,8 @@
   contracts/conformance and Gate E distribution/release readiness remain open;
   Gate C completion does not claim those later gates.
 - The private GitHub repository and hosted Actions are established and green
-  through integrated validate. Public visibility remains a maintainer
-  checkpoint.
+  through the final Gate C topic branch. Public visibility remains a
+  maintainer checkpoint.
 
 ## Verification
 
@@ -53,7 +50,7 @@ Full Gate C local verification on 2026-08-11:
   the installed binary initialized a module template, strictly validated it,
   and scanned its isolated root with full coverage.
 - Hosted Linux, macOS, and Windows evidence for the final init/scan branch is
-  pending maintainer push.
+  green. Hosted evidence for integrated `main` remains pending maintainer push.
 
 ## Open-source readiness
 
