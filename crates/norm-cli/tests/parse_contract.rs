@@ -237,21 +237,33 @@ fn create_dir_symlink(target: &Path, link: &Path, layout: &str) {
 }
 
 fn replace_argument_placeholders(value: &str, isolated: &IsolatedRoot) -> String {
-    let root = isolated.path.to_string_lossy();
-    let outside = isolated.outside.to_string_lossy();
-    let fixture = isolated.path.join(".norm").to_string_lossy().into_owned();
-    let missing = isolated.path.join("missing").to_string_lossy().into_owned();
-    let schema = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-        .join("../../schema")
-        .to_string_lossy()
-        .into_owned();
-    value
-        .replace("{fixture}", &fixture)
-        .replace("{root}", &root)
-        .replace("{outside}", &outside)
-        .replace("{missing}", &missing)
-        .replace("{schema}", &schema)
-        .replace("{version}", env!("CARGO_PKG_VERSION"))
+    let schema = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../schema");
+    let fixture = isolated.path.join(".norm");
+    let missing = isolated.path.join("missing");
+    for (placeholder, base) in [
+        ("{fixture}", fixture.as_path()),
+        ("{root}", isolated.path.as_path()),
+        ("{outside}", isolated.outside.as_path()),
+        ("{missing}", missing.as_path()),
+        ("{schema}", schema.as_path()),
+    ] {
+        if let Some(path) = replace_path_placeholder(value, placeholder, base) {
+            return path;
+        }
+    }
+    value.replace("{version}", env!("CARGO_PKG_VERSION"))
+}
+
+fn replace_path_placeholder(value: &str, placeholder: &str, base: &Path) -> Option<String> {
+    if value == placeholder {
+        return Some(base.to_string_lossy().into_owned());
+    }
+    let suffix = value.strip_prefix(placeholder)?.strip_prefix('/')?;
+    let mut path = base.to_path_buf();
+    for component in suffix.split('/').filter(|component| !component.is_empty()) {
+        path.push(component);
+    }
+    Some(path.to_string_lossy().into_owned())
 }
 
 fn replace_expected_placeholders(value: &str, isolated: &IsolatedRoot) -> String {
@@ -459,4 +471,19 @@ fn implemented_contract_cases_execute_without_skips() {
         );
         assert_machine_protocol(case, stdout);
     }
+}
+
+#[test]
+fn composite_path_placeholders_use_native_path_joining() {
+    let base = PathBuf::from("root");
+    assert_eq!(
+        replace_path_placeholder("{root}/docs/.norm", "{root}", &base),
+        Some(
+            base.join("docs")
+                .join(".norm")
+                .to_string_lossy()
+                .into_owned()
+        )
+    );
+    assert_eq!(replace_path_placeholder("--root", "{root}", &base), None);
 }
