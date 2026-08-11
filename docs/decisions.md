@@ -218,3 +218,35 @@ parsing defaults while allowing the unused serializer graph to be disabled.
 behavior. Keeping the dependency set small and recording the legacy split
 before implementation preserves D002's behavior-first rule and D008's frozen
 contract.
+
+## D010 — Compile Draft 7 schemas from explicit offline resources
+
+**Decision.** The first validator slice uses `jsonschema` 0.49.9 with default
+features disabled and the explicit `jsonschema::draft7` builder. Format checks
+are enabled. Schema compilation receives only caller-supplied in-memory
+resources keyed by absolute schema identifier; unresolved `$ref` values fail
+compilation. The dependency's HTTP, file, asynchronous retrieval, macro, and
+TLS features are not enabled.
+
+`norm-core` owns Draft 7 evaluation and converts structured keyword, instance
+path, schema path, and unexpected-property data into norm-spec diagnostics. A
+dependency-provided display message is never a stable machine-contract field.
+`norm-cli` may read the packaged schema bundle or an explicit `--schema-dir`,
+but the core library does not read files, inspect environment variables, or
+access the network. Enabling a retrieval feature or allowing an implicit
+fallback requires a new decision.
+
+**Context.** Gate C validation must evaluate the existing Draft 7 root and
+profile schemas, including profile-relative `../norm-schema.json` references,
+without weakening D006's explicit schema discovery or the architecture's
+deterministic core boundary. The dependency's defaults include HTTP, file, and
+TLS retrieval, so accepting its default feature set would create hidden I/O.
+`boon` was also considered; it supports Draft 7 and structured output, but its
+loader and compatibility surface do not isolate the forbidden retrieval paths
+as explicitly for this use case.
+
+**Rationale.** `jsonschema` exposes a draft-specific builder, structured error
+data, custom in-memory retrieval, an MSRV below this workspace's Rust 1.97, and
+an MIT license. Disabling defaults and proving relative-reference success plus
+unregistered-reference failure keeps dependency behavior behind a small,
+auditable boundary while preserving the frozen `validate/v1` contract.

@@ -5,10 +5,12 @@
 mod collector;
 mod parser;
 mod protocol;
+mod schema;
 
 pub use collector::{CollectPathError, collect_candidate_paths, project_path};
 pub use parser::{ParseError, ParseOptions, ParsedNorm, parse_norm};
 pub use protocol::{CollectResponse, CollectedNorm, ErrorDetail, ErrorResponse, ParseResponse};
+pub use schema::{SchemaCompileError, SchemaViolation, validate_draft7};
 
 /// Identifier for the initial `.norm` format contract.
 pub const FORMAT_ID: &str = "norm-spec/a1";
