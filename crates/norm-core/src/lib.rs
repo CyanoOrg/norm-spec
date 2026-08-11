@@ -6,6 +6,7 @@ mod collector;
 mod parser;
 mod protocol;
 mod schema;
+mod semantics;
 mod validator;
 
 pub use collector::{CollectPathError, collect_candidate_paths, project_path};
@@ -15,6 +16,7 @@ pub use protocol::{
     ValidateResponse, ValidationResult, ValidationStatus, ValidationSummary,
 };
 pub use schema::{SchemaCompileError, SchemaViolation, validate_draft7};
+pub use semantics::{ReferenceResolver, ReferenceStatus, validate_frontmatter};
 pub use validator::{SchemaBundle, ValidationDiagnostics, ValidationOptions, validate_structure};
 
 /// Identifier for the initial `.norm` format contract.
