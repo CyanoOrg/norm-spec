@@ -1,0 +1,4 @@
+# kind	path	value
+dir	docs	-
+file	README.md	root readme
+symlink-dir	linked-docs	docs

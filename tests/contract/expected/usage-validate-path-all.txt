@@ -1,0 +1,3 @@
+ERROR [norm/usage/conflicting-arguments]
+path
+--all

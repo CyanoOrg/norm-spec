@@ -1,0 +1,8 @@
+{
+  "apiVersion": "norm-spec/error/v1",
+  "command": "validate",
+  "error": {
+    "code": "norm/usage/missing-argument",
+    "field": "path|--all"
+  }
+}

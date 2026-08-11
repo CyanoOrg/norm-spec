@@ -1,0 +1,8 @@
+{
+  "apiVersion": "norm-spec/error/v1",
+  "command": "scan",
+  "error": {
+    "code": "norm/path/symlink-norm",
+    "path": "docs/.norm"
+  }
+}

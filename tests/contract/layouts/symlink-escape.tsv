@@ -1,0 +1,3 @@
+# kind	path	value
+outside-dir	outside-project	-
+symlink-dir	linked-outside	{outside}

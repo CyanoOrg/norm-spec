@@ -1,0 +1,3 @@
+# kind	path	value
+copy	.norm	fixtures/invalid/reference-outside.norm.invalid
+outside-dir	outside-project	-

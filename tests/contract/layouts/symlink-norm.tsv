@@ -1,0 +1,4 @@
+# kind	path	value
+dir	docs	-
+copy	docs/actual.norm	fixtures/valid/minimal.norm
+symlink-file	docs/.norm	actual.norm

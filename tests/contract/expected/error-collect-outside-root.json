@@ -1,0 +1,8 @@
+{
+  "apiVersion": "norm-spec/error/v1",
+  "command": "collect",
+  "error": {
+    "code": "norm/path/outside-root",
+    "path": "{outside}"
+  }
+}
