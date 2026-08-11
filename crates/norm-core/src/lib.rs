@@ -1,9 +1,12 @@
 //! Canonical semantic engine for the `.norm` format.
-//!
-//! The bootstrap exposes only protocol identity. Parser and validator modules
-//! are added after the A1 behavior contract is complete.
 
 #![forbid(unsafe_code)]
+
+mod parser;
+mod protocol;
+
+pub use parser::{ParseError, ParseOptions, ParsedNorm, parse_norm};
+pub use protocol::{ErrorDetail, ErrorResponse, ParseResponse};
 
 /// Identifier for the initial `.norm` format contract.
 pub const FORMAT_ID: &str = "norm-spec/a1";
