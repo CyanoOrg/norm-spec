@@ -4,6 +4,7 @@ mod collect;
 mod init;
 mod output;
 mod paths;
+mod scan;
 mod schemas;
 mod templates;
 mod validate;
@@ -18,6 +19,7 @@ use crate::{
     init::InitArgs,
     output::{EXIT_OPERATION, EXIT_USAGE, emit_error, emit_json},
     paths::portable_path,
+    scan::ScanArgs,
     validate::ValidateArgs,
 };
 
@@ -44,7 +46,7 @@ enum Command {
     /// Create a .norm file from a profile template.
     Init(InitArgs),
     /// Scan a directory without inferring conventions.
-    Scan,
+    Scan(ScanArgs),
 }
 
 #[derive(Debug, Args)]
@@ -65,7 +67,7 @@ fn main() -> ExitCode {
         Command::Collect(args) => collect::run(&args),
         Command::Validate(args) => validate::run(&args),
         Command::Init(args) => init::run(&args),
-        Command::Scan => unimplemented_command("scan"),
+        Command::Scan(args) => scan::run(&args),
     }
 }
 
@@ -121,9 +123,4 @@ fn run_parse(args: ParseArgs) -> ExitCode {
     };
 
     emit_json(&ParseResponse::from(parsed), args.pretty, 0)
-}
-
-fn unimplemented_command(command: &str) -> ExitCode {
-    eprintln!("norm {command} is not implemented yet");
-    ExitCode::from(EXIT_USAGE)
 }

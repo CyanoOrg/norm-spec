@@ -135,6 +135,33 @@ fn init_writes_an_embedded_template_and_versioned_response() {
 }
 
 #[test]
+fn scan_emits_a_versioned_structural_response() {
+    let root = temporary_root("scan");
+    fs::create_dir(root.join("src"))
+        .unwrap_or_else(|error| panic!("scan source directory should be created: {error}"));
+    fs::write(root.join("README.md"), "readme")
+        .unwrap_or_else(|error| panic!("scan root fixture should be written: {error}"));
+    fs::write(root.join("src/lib.rs"), "library")
+        .unwrap_or_else(|error| panic!("scan source fixture should be written: {error}"));
+    let output = match Command::new(env!("CARGO_BIN_EXE_norm"))
+        .arg("scan")
+        .arg("--root")
+        .arg(&root)
+        .output()
+    {
+        Ok(output) => output,
+        Err(error) => panic!("failed to execute norm: {error}"),
+    };
+    assert!(output.status.success());
+    assert!(output.stderr.is_empty());
+    let stdout = String::from_utf8_lossy(&output.stdout);
+    assert!(stdout.contains("norm-spec/scan/v1"));
+    assert!(stdout.contains("\"directory_count\":2"));
+    fs::remove_dir_all(&root)
+        .unwrap_or_else(|error| panic!("temporary scan root should be removable: {error}"));
+}
+
+#[test]
 fn missing_collect_target_is_a_machine_usage_error() {
     let output = run_norm(&["collect"]);
     assert_eq!(output.status.code(), Some(2));
@@ -168,11 +195,4 @@ fn missing_absolute_path_is_reported_relative_to_the_working_root() {
     let stdout = String::from_utf8_lossy(&output.stdout);
     assert!(stdout.contains("\"path\":\"missing\""));
     assert!(!stdout.contains(&root.to_string_lossy().into_owned()));
-}
-
-#[test]
-fn scan_fails_explicitly() {
-    let output = run_norm(&["scan"]);
-    assert_eq!(output.status.code(), Some(2));
-    assert!(String::from_utf8_lossy(&output.stderr).contains("not implemented yet"));
 }
