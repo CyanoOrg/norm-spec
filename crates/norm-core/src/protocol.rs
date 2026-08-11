@@ -4,7 +4,8 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 use crate::{
-    COLLECT_API_VERSION, ERROR_API_VERSION, PARSE_API_VERSION, ParsedNorm, VALIDATE_API_VERSION,
+    COLLECT_API_VERSION, ERROR_API_VERSION, INIT_API_VERSION, PARSE_API_VERSION, ParsedNorm,
+    VALIDATE_API_VERSION,
 };
 
 /// Successful `parse` machine response.
@@ -226,6 +227,43 @@ impl ValidateResponse {
     }
 }
 
+/// Filesystem action completed by `norm init`.
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "lowercase")]
+pub enum InitAction {
+    /// A new convention file was created.
+    Created,
+    /// An existing convention file was replaced under explicit force.
+    Overwritten,
+}
+
+/// Versioned machine response for a completed `init` operation.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct InitResponse {
+    /// Version of the init response protocol.
+    #[serde(rename = "apiVersion")]
+    pub api_version: String,
+    /// Name of the embedded profile template that was written.
+    pub profile: String,
+    /// Output path relative to the current working directory when contained.
+    pub path: String,
+    /// Whether the output was created or explicitly overwritten.
+    pub action: InitAction,
+}
+
+impl InitResponse {
+    /// Construct a versioned init response.
+    #[must_use]
+    pub fn new(profile: impl Into<String>, path: impl Into<String>, action: InitAction) -> Self {
+        Self {
+            api_version: INIT_API_VERSION.to_owned(),
+            profile: profile.into(),
+            path: path.into(),
+            action,
+        }
+    }
+}
+
 /// Versioned machine response for a handled command failure.
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 pub struct ErrorResponse {
@@ -298,8 +336,8 @@ mod tests {
     use serde_json::json;
 
     use super::{
-        CollectResponse, CollectedNorm, Diagnostic, ErrorDetail, ErrorResponse, ParseResponse,
-        ValidateResponse, ValidationResult, ValidationStatus,
+        CollectResponse, CollectedNorm, Diagnostic, ErrorDetail, ErrorResponse, InitAction,
+        InitResponse, ParseResponse, ValidateResponse, ValidationResult, ValidationStatus,
     };
     use crate::ParsedNorm;
 
@@ -420,5 +458,22 @@ mod tests {
         assert_eq!(response.summary.errors, 1);
         assert_eq!(response.summary.warnings, 2);
         assert_eq!(json_value(response)["apiVersion"], "norm-spec/validate/v1");
+    }
+
+    #[test]
+    fn init_response_uses_the_versioned_action_contract() {
+        assert_eq!(
+            json_value(InitResponse::new(
+                "module",
+                ".norm",
+                InitAction::Overwritten,
+            )),
+            json!({
+                "apiVersion": "norm-spec/init/v1",
+                "profile": "module",
+                "path": ".norm",
+                "action": "overwritten"
+            })
+        );
     }
 }

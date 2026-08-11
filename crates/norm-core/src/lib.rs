@@ -12,8 +12,9 @@ mod validator;
 pub use collector::{CollectPathError, collect_candidate_paths, project_path};
 pub use parser::{ParseError, ParseOptions, ParsedNorm, parse_norm};
 pub use protocol::{
-    CollectResponse, CollectedNorm, Diagnostic, ErrorDetail, ErrorResponse, ParseResponse,
-    ValidateResponse, ValidationResult, ValidationStatus, ValidationSummary,
+    CollectResponse, CollectedNorm, Diagnostic, ErrorDetail, ErrorResponse, InitAction,
+    InitResponse, ParseResponse, ValidateResponse, ValidationResult, ValidationStatus,
+    ValidationSummary,
 };
 pub use schema::{SchemaCompileError, SchemaViolation, validate_draft7};
 pub use semantics::{ReferenceResolver, ReferenceStatus, validate_frontmatter};
