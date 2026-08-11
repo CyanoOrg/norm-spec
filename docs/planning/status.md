@@ -3,10 +3,11 @@
 ## Resume here
 
 - Stage: `0.1.0-alpha.1`; Gate B plus Gate C's parse and collect executable
-  vertical slices are complete locally.
-- Integration branch: `main`; current work is on the short-lived branch
-  `codex/feat-gate-c-collect`, based on the synchronized integration branch.
-  The collect branch awaits maintainer push, hosted CI, review, and merge.
+  vertical slices are complete.
+- Integration branch: `main`; the maintainer pushed the collect branch and
+  verified every hosted CI job, including Windows after the native-path runner
+  correction. The branch was fast-forwarded into local `main`, which now awaits
+  push and its resulting hosted CI run.
 - Completed objective: the five-command behavior contract (parse, collect,
   validate, init, scan) is frozen before parser implementation. D006 records
   baseline deviations, D007 resolves symbolic-link semantics, and D008 binds
@@ -21,9 +22,9 @@
   collect/v1 models; `norm collect` canonicalizes roots and targets, rejects
   containment and symlink violations, and reads inherited conventions in
   most-specific-first order. All 11 collect cases execute without skips.
-- Next implementation objective after this branch integrates: select the Draft
-  7 validator dependency, then implement schema, profile, and semantic
-  validation. Dependency selection remains a maintainer checkpoint.
+- Next implementation objective: select the Draft 7 validator dependency, then
+  implement schema, profile, and semantic validation. Dependency selection
+  remains a maintainer checkpoint.
 - The private GitHub repository, initial `main` push, and first hosted Actions
   run are complete and green.
 - GitHub repository bootstrap is complete; public visibility remains a
@@ -49,8 +50,8 @@ Gate C collect-slice verification on 2026-08-11:
 - `cargo install --path crates/norm-cli --root <isolated> --locked` → green;
   the installed binary collected this repository's `docs/.norm` and root
   `.norm` in the expected order.
-- The previous parse branch's hosted jobs were green without annotations. The
-  current collect branch's cross-platform hosted CI remains pending until push.
+- The collect branch's quality, Linux, macOS, and Windows jobs were green. The
+  integrated `main` run remains pending until push.
 
 ## Open-source readiness
 
