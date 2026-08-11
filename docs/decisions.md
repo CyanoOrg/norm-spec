@@ -250,3 +250,23 @@ data, custom in-memory retrieval, an MSRV below this workspace's Rust 1.97, and
 an MIT license. Disabling defaults and proving relative-reference success plus
 unregistered-reference failure keeps dependency behavior behind a small,
 auditable boundary while preserving the frozen `validate/v1` contract.
+
+## D011 — Stabilize generic Draft 7 failures behind one diagnostic code
+
+**Decision.** `norm/schema/unknown-key` and `norm/schema/version-format` retain
+their specialized frozen diagnostics and suggestions. Every other Draft 7 or
+profile-required-field failure maps to `norm/schema/invalid`, with a normalized
+frontmatter field path when available. The underlying dependency keyword may
+appear in the human message, but dependency display text and per-keyword error
+names do not become protocol codes.
+
+**Context.** Gate B froze specialized codes for its observable compatibility
+cases but did not assign a machine code to other valid Draft 7 failures such as
+missing required properties, incorrect types, enums, or formats. The Gate C
+implementation cannot silently omit these failures, and exposing a new code
+for every dependency keyword would couple `validate/v1` to a third-party enum.
+
+**Rationale.** One generic code completes schema coverage without weakening
+validation or expanding the protocol on every dependency release. Stable field
+paths preserve machine actionability; specialized cases remain available where
+the contract requires a correction hint.

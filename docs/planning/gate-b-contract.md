@@ -192,6 +192,7 @@ not change without a protocol decision. Frozen Gate B list:
 | `norm/parse/yaml` | YAML parse error in frontmatter. |
 | `norm/schema/unknown-key` | Unknown top-level key (error by default; warn with `--compat-keys`; suggest closest match). |
 | `norm/schema/version-format` | `metadata.version` is not `MAJOR.MINOR`. |
+| `norm/schema/invalid` | Another Draft 7 or profile-required-field constraint failed (D011). |
 | `norm/profile/unknown-explicit` | `metadata.profile` names no known profile. |
 | `norm/profile/recommended-field` | A selected profile omits a recommended field. |
 | `norm/semantic/lifecycle` | Lifecycle state machine invariant violated. |
