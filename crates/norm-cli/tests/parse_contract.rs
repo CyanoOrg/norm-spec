@@ -1,4 +1,4 @@
-//! Executable Gate C contract coverage for the global and `parse` slices.
+//! Executable Gate C contract coverage for global, `parse`, and `collect`.
 
 use std::{
     fs, io,
@@ -10,7 +10,7 @@ use std::{
 
 use serde_json::Value;
 
-const EXECUTABLE_CASES: usize = 17;
+const EXECUTABLE_CASES: usize = 28;
 static TEMP_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
 #[derive(Debug)]
@@ -29,6 +29,7 @@ struct ContractCase {
 
 struct IsolatedRoot {
     path: PathBuf,
+    outside: PathBuf,
 }
 
 impl IsolatedRoot {
@@ -38,18 +39,25 @@ impl IsolatedRoot {
             Err(error) => error.duration().as_nanos(),
         };
         let sequence = TEMP_SEQUENCE.fetch_add(1, Ordering::Relaxed);
-        let path = std::env::temp_dir().join(format!(
+        let prefix = format!(
             "norm-spec-contract-{}-{timestamp}-{sequence}-{case_id}",
             std::process::id()
-        ));
+        );
+        let path = std::env::temp_dir().join(&prefix);
+        let outside = std::env::temp_dir().join(format!("{prefix}-outside"));
         fs::create_dir(&path)?;
-        Ok(Self { path })
+        fs::create_dir(&outside)?;
+        Ok(Self {
+            path: fs::canonicalize(path)?,
+            outside: fs::canonicalize(outside)?,
+        })
     }
 }
 
 impl Drop for IsolatedRoot {
     fn drop(&mut self) {
         let _result = fs::remove_dir_all(&self.path);
+        let _result = fs::remove_dir_all(&self.outside);
     }
 }
 
@@ -67,7 +75,7 @@ fn read_required(path: &Path) -> String {
     }
 }
 
-fn parse_cases(contract: &Path) -> Vec<ContractCase> {
+fn executable_cases(contract: &Path) -> Vec<ContractCase> {
     let manifest = read_required(&contract.join("manifest.tsv"));
     manifest
         .lines()
@@ -75,7 +83,7 @@ fn parse_cases(contract: &Path) -> Vec<ContractCase> {
         .filter_map(|line| {
             let columns: Vec<_> = line.split('\t').collect();
             assert_eq!(columns.len(), 11, "invalid contract manifest row: {line}");
-            if !matches!(columns[1], "global" | "parse") {
+            if !matches!(columns[1], "global" | "parse" | "collect") {
                 return None;
             }
             let exit_code = match columns[9].parse() {
@@ -98,17 +106,17 @@ fn parse_cases(contract: &Path) -> Vec<ContractCase> {
         .collect()
 }
 
-fn materialize_fixture(contract: &Path, case: &ContractCase, root: &Path) {
+fn materialize_fixture(contract: &Path, case: &ContractCase, isolated: &IsolatedRoot) {
     if case.fixture == "-" {
         return;
     }
     if case.fixture.starts_with("layouts/") {
-        materialize_layout(contract, &case.fixture, root);
+        materialize_layout(contract, &case.fixture, isolated);
         return;
     }
 
     let source = contract.join(&case.fixture);
-    let destination = root.join(".norm");
+    let destination = isolated.path.join(".norm");
     if let Err(error) = fs::copy(&source, &destination) {
         panic!(
             "case {} could not copy {} to {}: {error}",
@@ -119,7 +127,7 @@ fn materialize_fixture(contract: &Path, case: &ContractCase, root: &Path) {
     }
 }
 
-fn materialize_layout(contract: &Path, layout: &str, root: &Path) {
+fn materialize_layout(contract: &Path, layout: &str, isolated: &IsolatedRoot) {
     let recipe = read_required(&contract.join(layout));
     for line in recipe
         .lines()
@@ -127,17 +135,20 @@ fn materialize_layout(contract: &Path, layout: &str, root: &Path) {
     {
         let columns: Vec<_> = line.split('\t').collect();
         assert_eq!(columns.len(), 3, "invalid layout row in {layout}: {line}");
-        let destination = root.join(columns[1]);
+        let destination = isolated.path.join(columns[1]);
         match columns[0] {
-            "copy" => {
-                if let Some(parent) = destination.parent()
-                    && let Err(error) = fs::create_dir_all(parent)
-                {
+            "dir" => create_directory(layout, &destination),
+            "file" => {
+                create_parent(layout, &destination);
+                if let Err(error) = fs::write(&destination, columns[2]) {
                     panic!(
-                        "layout {layout} could not create {}: {error}",
-                        parent.display()
+                        "layout {layout} could not write {}: {error}",
+                        destination.display()
                     );
                 }
+            }
+            "copy" => {
+                create_parent(layout, &destination);
                 let source = contract.join(columns[2]);
                 if let Err(error) = fs::copy(&source, &destination) {
                     panic!(
@@ -147,42 +158,117 @@ fn materialize_layout(contract: &Path, layout: &str, root: &Path) {
                     );
                 }
             }
-            instruction => panic!(
-                "layout {layout} requires unsupported parse-runner instruction {instruction}"
+            "outside-dir" => assert_eq!(
+                columns[2], "-",
+                "layout {layout} outside directory must not have content"
             ),
+            "symlink-file" => {
+                create_parent(layout, &destination);
+                create_file_symlink(Path::new(columns[2]), &destination, layout);
+            }
+            "symlink-dir" => {
+                create_parent(layout, &destination);
+                let target = columns[2].replace("{outside}", &isolated.outside.to_string_lossy());
+                create_dir_symlink(Path::new(&target), &destination, layout);
+            }
+            instruction => panic!("layout {layout} requires unsupported instruction {instruction}"),
         }
     }
 }
 
-fn replace_argument_placeholders(value: &str, root: &Path) -> String {
-    let root = root.to_string_lossy();
+fn create_directory(layout: &str, path: &Path) {
+    if let Err(error) = fs::create_dir_all(path) {
+        panic!(
+            "layout {layout} could not create {}: {error}",
+            path.display()
+        );
+    }
+}
+
+fn create_parent(layout: &str, path: &Path) {
+    if let Some(parent) = path.parent()
+        && let Err(error) = fs::create_dir_all(parent)
+    {
+        panic!(
+            "layout {layout} could not create {}: {error}",
+            parent.display()
+        );
+    }
+}
+
+#[cfg(unix)]
+fn create_file_symlink(target: &Path, link: &Path, layout: &str) {
+    if let Err(error) = std::os::unix::fs::symlink(target, link) {
+        panic!(
+            "layout {layout} could not create file symlink {}: {error}",
+            link.display()
+        );
+    }
+}
+
+#[cfg(windows)]
+fn create_file_symlink(target: &Path, link: &Path, layout: &str) {
+    if let Err(error) = std::os::windows::fs::symlink_file(target, link) {
+        panic!(
+            "layout {layout} could not create file symlink {}: {error}",
+            link.display()
+        );
+    }
+}
+
+#[cfg(unix)]
+fn create_dir_symlink(target: &Path, link: &Path, layout: &str) {
+    if let Err(error) = std::os::unix::fs::symlink(target, link) {
+        panic!(
+            "layout {layout} could not create directory symlink {}: {error}",
+            link.display()
+        );
+    }
+}
+
+#[cfg(windows)]
+fn create_dir_symlink(target: &Path, link: &Path, layout: &str) {
+    if let Err(error) = std::os::windows::fs::symlink_dir(target, link) {
+        panic!(
+            "layout {layout} could not create directory symlink {}: {error}",
+            link.display()
+        );
+    }
+}
+
+fn replace_argument_placeholders(value: &str, isolated: &IsolatedRoot) -> String {
+    let root = isolated.path.to_string_lossy();
+    let outside = isolated.outside.to_string_lossy();
     value
         .replace("{fixture}", &format!("{root}/.norm"))
         .replace("{root}", &root)
+        .replace("{outside}", &outside)
         .replace("{missing}", &format!("{root}/missing"))
         .replace("{version}", env!("CARGO_PKG_VERSION"))
 }
 
-fn replace_expected_placeholders(value: &str) -> String {
+fn replace_expected_placeholders(value: &str, isolated: &IsolatedRoot) -> String {
+    let outside = isolated.outside.to_string_lossy().replace('\\', "/");
     value
         .replace("{fixture}", ".norm")
         .replace("{root}", ".")
+        .replace("{outside}", &outside)
         .replace("{missing}", "missing")
         .replace("{version}", env!("CARGO_PKG_VERSION"))
 }
 
-fn run_case(case: &ContractCase, root: &Path) -> Output {
+fn run_case(case: &ContractCase, isolated: &IsolatedRoot) -> Output {
     let arguments: Vec<String> = match serde_json::from_str(&case.args_json) {
         Ok(arguments) => arguments,
         Err(error) => panic!("case {} has invalid args JSON: {error}", case.id),
     };
     let arguments: Vec<_> = arguments
         .iter()
-        .map(|argument| replace_argument_placeholders(argument, root))
+        .map(|argument| replace_argument_placeholders(argument, isolated))
         .collect();
 
     let mut command = Command::new(env!("CARGO_BIN_EXE_norm"));
-    command.current_dir(root);
+    command.current_dir(&isolated.path);
     if case.command != "global" {
         command.arg(&case.command);
     }
@@ -206,6 +292,7 @@ fn assert_stream(
     actual: &str,
     expected_path: &str,
     match_mode: &str,
+    isolated: &IsolatedRoot,
 ) {
     if match_mode == "empty" {
         assert_eq!(
@@ -221,7 +308,8 @@ fn assert_stream(
         return;
     }
 
-    let expected = replace_expected_placeholders(&read_required(&contract.join(expected_path)));
+    let expected =
+        replace_expected_placeholders(&read_required(&contract.join(expected_path)), isolated);
     match match_mode {
         "exact" | "template" => assert_eq!(
             actual.trim_end(),
@@ -316,9 +404,9 @@ fn assert_machine_protocol(case: &ContractCase, stdout: &str) {
 }
 
 #[test]
-fn global_and_parse_contract_cases_execute_without_skips() {
+fn global_parse_and_collect_contract_cases_execute_without_skips() {
     let contract = contract_root();
-    let cases = parse_cases(&contract);
+    let cases = executable_cases(&contract);
     assert_eq!(
         cases.len(),
         EXECUTABLE_CASES,
@@ -333,8 +421,8 @@ fn global_and_parse_contract_cases_execute_without_skips() {
                 case.id
             ),
         };
-        materialize_fixture(&contract, case, &root.path);
-        let output = run_case(case, &root.path);
+        materialize_fixture(&contract, case, &root);
+        let output = run_case(case, &root);
         assert_eq!(
             output.status.code(),
             Some(case.exit_code),
@@ -351,6 +439,7 @@ fn global_and_parse_contract_cases_execute_without_skips() {
             stdout,
             &case.stdout,
             &case.stdout_match,
+            &root,
         );
         assert_stream(
             &contract,
@@ -359,6 +448,7 @@ fn global_and_parse_contract_cases_execute_without_skips() {
             stderr,
             &case.stderr,
             &case.stderr_match,
+            &root,
         );
         assert_machine_protocol(case, stdout);
     }
