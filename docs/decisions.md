@@ -186,3 +186,35 @@ engine and downstream consumers share one reviewable compatibility surface
 without copying implementation. Static completeness can be enforced before
 the CLI exists; Gate C then replaces presence checks with executable assertions
 one vertical command slice at a time.
+
+## D009 — Use maintained, bounded dependencies for the first parse slice
+
+**Decision.** The canonical parser uses Serde data models and
+`serde-saphyr` 0.0.29 with only its `deserialize` feature enabled. Parse
+responses use `serde_json::Value`, and the CLI uses the stable `clap` 4 derive
+surface. Dependency resolution is committed in `Cargo.lock`; no YAML
+serializer, general-purpose error framework, or command-test framework is
+added for this slice.
+
+The A1 parser accepts UTF-8 with an optional leading byte-order mark, skips
+leading blank lines before the opening fence, requires a closing fence, and
+trims the Markdown body. With `--legacy-format`, the contiguous leading blank
+and `#` comment/title lines are retained as the trimmed response body while the
+remaining document is parsed as YAML frontmatter. Without that flag, the same
+input fails as `norm/parse/not-a1`. This makes the body already frozen by the
+Gate B legacy fixture explicit rather than treating it as parser trivia.
+
+**Context.** The first Gate C vertical slice needs a production YAML parser,
+stable JSON envelopes, and a complete global/parse CLI surface. The previously
+common `serde-yaml` line is discontinued, while a framework-specific parser or
+hand-written YAML subset would either add maintenance risk or silently narrow
+the A1 format. The Gate B fixture for the pre-A1 format preserves its leading
+Markdown title in the parse response.
+
+**Rationale.** `serde-saphyr` provides direct Serde deserialization, malformed
+input handling without parser panics, no library `unsafe` code, and bounded
+parsing defaults while allowing the unused serializer graph to be disabled.
+`clap` supplies conventional cross-platform help, version, and subcommand
+behavior. Keeping the dependency set small and recording the legacy split
+before implementation preserves D002's behavior-first rule and D008's frozen
+contract.
