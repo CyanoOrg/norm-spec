@@ -8,29 +8,36 @@
   hosted Gate C baseline remains `71c2a88` until the local Gate D planning
   commits are pushed with an implementation candidate.
 - Current topic: `codex/feat-gate-d-api`; D1 high-level Rust consumption and
-  packaging are active.
+  packaging are complete locally and awaiting hosted CI after maintainer push.
 - The maintainer confirmed standalone-first product positioning, one canonical
   framework-neutral Skill in this repository, explicit failure without engine
   fallback, downstream host adapters, and standalone adoption as Gate D scope.
 - D012 embeds the seven repository-owned templates without ambient discovery
   and fixes scan's infrastructure ignore set, naming precedence, ordering,
   recurrence limit, coverage rounding, and no-inference boundary.
-- `norm-core` now owns parse, collect, schema/profile/semantic validation, init
-  and scan response contracts, plus deterministic scan aggregation. `norm-cli`
-  owns arguments, embedded assets, filesystem orchestration, presentation, and
-  exits.
+- `norm-spec-core` owns parse, collection rules, Schema/profile/semantic
+  validation, response contracts, and deterministic scan aggregation. The
+  repository-root `norm-spec` facade owns packaged Schema/template assets and
+  explicit collect/validation filesystem orchestration. `norm-spec-cli` owns
+  arguments, presentation, exits, and scan/init write orchestration.
 - All 4 global, 13 parse, 11 collect, 35 validate, 9 init, and 10 scan cases
   execute the compiled binary in isolated roots with no skips: 82 of 82 frozen
   cases.
-- All five production commands are functional. Gate D consumer-resolvable API,
-  compatibility, conformance, standalone adoption, and Skill work remain open;
-  Gate C completion does not claim those later gates.
+- All five production commands and the D1 consumer-resolvable Rust API are
+  functional. Compatibility, conformance, standalone adoption, and Skill work
+  remain open; D1 completion does not claim those later results.
 - D014 selected a repository-root `norm-spec` facade after an isolated D1.1
   spike. The facade layout packaged the existing root assets, passed Rust 1.97
   workspace candidate verification with the unpublished core package, and ran
   collect plus validation from an unrelated exact-revision Git consumer.
-- The production facade, CLI delegation, and permanent packaging tests are not
-  implemented yet; the spike is boundary evidence, not Gate D1 completion.
+- The production facade now exposes typed collect and validation requests,
+  packaged Schema/template access, completed validation results, and typed
+  pre-evaluation failures without process exit codes. The CLI delegates to it
+  and retains all 82 frozen observable cases.
+- `scripts/check-packages.sh` verifies required package contents, verifies the
+  core → facade → CLI workspace candidate through Cargo's temporary registry,
+  and runs collect plus validation from an unrelated exact-revision Git
+  consumer. Hosted D1 evidence is still pending.
 - The private GitHub repository and hosted Actions are established and green
   through integrated Gate C. Public visibility remains a maintainer checkpoint.
 
@@ -59,6 +66,24 @@ Full Gate C local verification on 2026-08-11:
   and scanned its isolated root with full coverage.
 - Hosted Linux, macOS, and Windows evidence for the final init/scan branch and
   integrated Gate C `main` is maintainer-confirmed green.
+
+Gate D1 local verification on 2026-08-12:
+
+- `cargo clippy --workspace --all-targets --all-features -- -D warnings` →
+  green.
+- `cargo test --workspace --all-features` → 53 Rust test functions passed;
+  all 82 compiled-binary cases still executed without skips.
+- `cargo package --workspace --allow-dirty` → core, facade, and CLI verified in
+  dependency order; their candidates contained 13, 31, and 14 files.
+- `bash scripts/check-packages.sh` → all required Schema/template assets were
+  present, no CLI contract bundle leaked into the facade, and an unrelated
+  exact-revision Git consumer completed two-level collect plus validation.
+- `cargo fmt --check`, `RUSTDOCFLAGS='-D warnings' cargo doc --workspace
+  --no-deps`, and `bash scripts/check-public-history.sh` → green.
+- strict repository self-validation → seven files, zero errors, zero warnings;
+  structural scan → 34 directories and seven `.norm` files.
+- Hosted Linux/macOS/Windows CI remains the only D1 batch evidence pending
+  before integration.
 
 ## Open-source readiness
 
@@ -92,7 +117,7 @@ Full Gate C local verification on 2026-08-11:
 - [x] Decide standalone-first product and canonical Skill ownership (D013).
 - [x] Select the packaged high-level Rust consumer boundary without
       sibling-path or copied-asset coupling (D014 and the isolated D1.1 spike).
-- [ ] Implement the selected facade, CLI delegation, and permanent external
+- [x] Implement the selected facade, CLI delegation, and permanent external
       package-consumer checks.
 - [ ] Add versioned compatibility discovery and arbitrary-candidate
       conformance without skips.

@@ -42,8 +42,10 @@ cargo fmt --check
 cargo clippy --workspace --all-targets --all-features -- -D warnings
 cargo test --workspace --all-features
 cargo doc --workspace --no-deps
+cargo package --workspace
 cargo run -p norm-spec-cli -- validate --all --strict
 cargo run -p norm-spec-cli -- scan --root . --text
+bash scripts/check-packages.sh
 bash scripts/check-public-history.sh
 ```
 
@@ -63,6 +65,7 @@ self-check green together with `docs/SPEC.md` and the contract fixtures.
 | in-flight state | `docs/planning/status.md` |
 | machine-readable rules | `schema/` |
 | behavior contract | `tests/contract/` |
+| public Rust consumer API | `docs/RUST-API.md` |
 
 ## Work loop
 

@@ -29,3 +29,7 @@ Versioning and keeps changes under `[Unreleased]` until release preparation.
 - Self-contained `norm init` with seven embedded, strictly validated profile
   templates; deterministic `norm scan` structure, naming, recurrence, symlink,
   and coverage reports; and all 19 frozen init/scan cases executable.
+- Repository-root `norm-spec` Rust facade with packaged Schema/template assets,
+  typed collect and validation requests and failures, CLI delegation without a
+  second orchestration copy, workspace package verification, and an
+  exact-revision external Cargo consumer gate.

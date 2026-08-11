@@ -16,7 +16,7 @@ Gate D closes five product boundaries:
 D013 defines the standalone and Skill ownership decision. This plan does not
 schedule downstream pi, Codex, OpenCode, or other host-adapter work.
 
-## Observed baseline
+## Observed baseline entering Gate D
 
 Gate C is complete on `main` at `71c2a88`:
 
@@ -26,7 +26,7 @@ Gate C is complete on `main` at `71c2a88`:
   green;
 - hosted Linux, macOS, and Windows CI is maintainer-confirmed green.
 
-Gate D is still open for concrete reasons:
+Gate D entered implementation with these concrete gaps:
 
 - `norm-spec-core` exposes semantic primitives, but canonical filesystem
   collection and packaged-schema orchestration remain private CLI modules;
@@ -41,7 +41,7 @@ Gate D is still open for concrete reasons:
   fixtures rather than exposed as an arbitrary-candidate conformance command;
 - the Rust product has no canonical Skill or Skill validation lane.
 
-Green workspace tests therefore prove the source checkout, not yet a complete
+Green workspace tests therefore proved the source checkout, not yet a complete
 repository-external consumer or distribution boundary.
 
 ## Scope boundaries
@@ -137,6 +137,27 @@ Production work must retain exact, root-anchored package include patterns so a
 root `README.md` pattern does not accidentally include nested files with the
 same basename. CLI packaging joins the workspace-package gate after its
 private Schema orchestration has moved behind the facade.
+
+### D1 implementation result — 2026-08-12
+
+The production result now matches D014:
+
+- the repository-root `norm-spec` package exposes typed collect and validation
+  requests, packaged Schema/template access, versioned response models, and
+  typed pre-evaluation failures without process exit codes;
+- `norm-spec-cli` delegates collect, validation, Schema, and template behavior
+  to the facade while retaining presentation, argument, and exit policy;
+- all 82 frozen CLI cases remain executable without skips;
+- the permanent package gate verifies core, facade, and CLI together via
+  Cargo's temporary workspace registry;
+- an unrelated Cargo project consumes the exact current Git revision and runs
+  inherited collection plus packaged validation without a sibling path;
+- `docs/RUST-API.md` declares the consumer boundary and does not claim D2/D3
+  compatibility or conformance work.
+
+D1 is locally complete. Hosted Linux, macOS, and Windows CI for the integrated
+branch remains the merge checkpoint; D2/D3 protocol design does not begin
+until that evidence is maintainer-confirmed.
 
 ## Result D2 — Versioned compatibility discovery
 
@@ -267,6 +288,9 @@ D does not create a second Skill repository or independent release process.
 The decision commit follows the bounded spike and precedes production movement.
 Behavior-changing and behavior-preserving refactors remain separate.
 
+Batch 1 is complete locally. Its final branch candidate awaits hosted CI after
+maintainer push.
+
 ### Batch 2 — Compatibility and conformance
 
 1. `docs(decisions): define compatibility and conformance protocols`
@@ -298,6 +322,7 @@ cargo clippy --workspace --all-targets --all-features -- -D warnings
 cargo test --workspace --all-features
 RUSTDOCFLAGS='-D warnings' cargo doc --workspace --no-deps
 cargo run -p norm-spec-cli -- validate --all --strict --json
+bash scripts/check-packages.sh
 bash scripts/check-public-history.sh
 ```
 

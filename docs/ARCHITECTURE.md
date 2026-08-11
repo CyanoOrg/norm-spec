@@ -15,7 +15,18 @@ The architecture prioritizes:
 
 ## Crate boundaries
 
-### `norm-core`
+### `norm-spec`
+
+The repository-root package is the public, high-level Rust facade. It owns
+explicit filesystem collection and validation orchestration plus the packaged
+Schema and template assets. It returns typed request failures without process
+exit codes and reuses `norm-spec-core` for every semantic decision.
+
+Relative collect and validation targets resolve from the caller-supplied root.
+The facade performs no environment, network, sibling-checkout, or framework
+discovery.
+
+### `norm-spec-core` (`crates/norm-core`)
 
 Owns parsing, typed format data, schema validation, semantic validation,
 collection rules, normalized paths, and versioned response models.
@@ -26,27 +37,30 @@ interfaces so behavior can be tested without ambient process state.
 
 ### `norm-cli`
 
-Owns CLI arguments, filesystem adapters, schema/template discovery,
-human-readable reporting, JSON serialization, and stable exit codes. It may
-depend on `norm-core`; the reverse dependency is forbidden.
+Owns CLI arguments, human-readable reporting, JSON serialization, and stable
+exit codes. It delegates filesystem collect and validation plus release-owned
+Schema/template access to `norm-spec`; both packages may depend on
+`norm-spec-core`, and reverse dependencies are forbidden.
 
-The CLI embeds the release schema bundle and may load an explicitly selected
+The facade embeds the release schema bundle and may load an explicitly selected
 bundle from disk. It passes parsed JSON resources into `norm-core`; the core
 compiles Draft 7 with format checks and an in-memory-only reference retriever.
 Missing references fail compilation rather than triggering filesystem or
 network fallback.
 
-The CLI also embeds the seven init templates and performs explicit filesystem
-traversal for scan. Template selection never discovers ambient files. Scan
-passes portable directory and symlink observations into `norm-core`, which owns
-naming classification, ordering, recurrence, and coverage aggregation.
+The facade also embeds the seven init templates. The CLI performs explicit
+filesystem traversal for scan. Template selection never discovers ambient
+files. Scan passes portable directory and symlink observations into
+`norm-spec-core`, which owns naming classification, ordering, recurrence, and
+coverage aggregation.
 
 ## Dependency direction
 
 ```text
-norm-cli ──> norm-core
-consumers ──> versioned norm-core or norm-cli contracts
-norm-core ──X consumer frameworks
+norm-cli ──> norm-spec ──> norm-spec-core
+    └──────────────────────> norm-spec-core
+consumers ──> norm-spec or versioned norm-cli contracts
+norm-spec-core ──X filesystems, process policy, and consumer frameworks
 ```
 
 ## Contract layers
