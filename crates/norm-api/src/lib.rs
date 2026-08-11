@@ -10,6 +10,7 @@ mod assets;
 mod collect;
 mod error;
 mod paths;
+mod validate;
 
 pub use assets::{
     PROFILE_NAMES, SchemaLoadError, embedded_schema_bundle, profile_template,
@@ -17,4 +18,8 @@ pub use assets::{
 };
 pub use collect::{CollectRequest, collect};
 pub use error::{ApiError, FailureClass};
-pub use norm_spec_core::{CollectResponse, CollectedNorm, ErrorDetail, ParsedNorm};
+pub use norm_spec_core::{
+    CollectResponse, CollectedNorm, Diagnostic, ErrorDetail, ParsedNorm, ValidateResponse,
+    ValidationResult, ValidationStatus, ValidationSummary,
+};
+pub use validate::{ValidateRequest, validate};
