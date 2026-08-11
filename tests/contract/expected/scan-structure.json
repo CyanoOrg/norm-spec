@@ -1,0 +1,46 @@
+{
+  "apiVersion": "norm-spec/scan/v1",
+  "root": ".",
+  "directory_count": 3,
+  "directories": [
+    {
+      "path": ".",
+      "depth": 0,
+      "file_count": 1,
+      "has_norm": false
+    },
+    {
+      "path": "docs",
+      "depth": 1,
+      "file_count": 1,
+      "has_norm": true
+    },
+    {
+      "path": "src",
+      "depth": 1,
+      "file_count": 1,
+      "has_norm": false
+    }
+  ],
+  "symlinks": [],
+  "naming": {
+    "directories": {
+      "lowercase": 2
+    },
+    "files": {
+      "UPPER": 2,
+      "lowercase": 1
+    }
+  },
+  "recurring_filenames": [
+    {
+      "name": "README.md",
+      "dir_count": 2
+    }
+  ],
+  "norm_coverage": {
+    "total_dirs": 3,
+    "dirs_with_norm": 1,
+    "ratio": 0.333
+  }
+}

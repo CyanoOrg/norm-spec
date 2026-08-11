@@ -1,0 +1,8 @@
+{
+  "apiVersion": "norm-spec/error/v1",
+  "command": "init",
+  "error": {
+    "code": "norm/init/output-exists",
+    "path": ".norm"
+  }
+}

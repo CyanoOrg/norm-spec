@@ -1,0 +1,6 @@
+Usage: norm
+parse
+collect
+validate
+init
+scan

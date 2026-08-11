@@ -1,0 +1,6 @@
+{
+  "apiVersion": "norm-spec/init/v1",
+  "profile": "module",
+  "path": ".norm",
+  "action": "overwritten"
+}

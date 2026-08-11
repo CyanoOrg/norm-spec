@@ -1,0 +1,2 @@
+# kind	path	value
+copy	.norm	fixtures/valid/minimal.norm

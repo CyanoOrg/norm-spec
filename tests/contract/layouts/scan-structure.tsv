@@ -1,0 +1,13 @@
+# kind	path	value
+dir	src	-
+dir	docs	-
+dir	node_modules/pkg	-
+dir	target/debug	-
+dir	__pycache__	-
+file	README.md	root readme
+file	src/README.md	source readme
+file	docs/guide.md	guide
+copy	docs/.norm	fixtures/valid/docs.norm.fixture
+file	node_modules/pkg/index.js	ignored
+file	target/debug/build	ignored
+file	__pycache__/cache.pyc	ignored
