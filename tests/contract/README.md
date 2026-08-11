@@ -13,15 +13,48 @@ Rules:
 - Human wording may improve, but stable error codes and field paths may not
   change without a protocol decision.
 
-The initial fixtures establish the A1 baseline. Gate B expands them to every
-documented CLI behavior before parser implementation begins.
+The initial fixtures establish the A1 baseline. Gate B freezes every documented
+CLI behavior before parser implementation begins.
 
-`manifest.tsv` is the language-neutral inventory. Each non-comment row binds a
-case ID, command, fixture (or `-` when no input fixture is needed), expected
-result, machine protocol, and exit code. The Rust Gate B integrity test checks
-that these paths exist, case IDs are unique, and every initial protocol has at
-least one expected result. Command execution assertions replace these static
-checks one vertical slice at a time during Gate C.
+`requirements.tsv` is the obligation inventory. Every requirement ID must be
+named by at least one `manifest.tsv` case. The manifest has eleven columns:
+
+1. `case_id`
+2. `command`
+3. `args_json`
+4. `fixture`
+5. `stdout`
+6. `stdout_match`
+7. `stderr`
+8. `stderr_match`
+9. `api_version`
+10. `exit_code`
+11. comma-separated `covers` requirement IDs
+
+Argument lists are JSON arrays of strings. Portable placeholders are
+`{fixture}`, `{root}`, `{outside}`, `{schema}`, `{output}`, `{missing}`, and
+`{version}`. Use `-` when an asset or protocol does not apply; an absent stream
+must use the `empty` match mode.
+
+JSON success fixtures use `json-exact`: object-key order is ignored but array
+order and values are exact. `json-subset` is for diagnostic results: objects
+are recursive subsets and arrays are ordered subsequences, allowing additional
+diagnostics without weakening the required code, field, or suggestion.
+Human-output `contains` fixtures are ordered required lines; `template` also
+expands the portable placeholders. `exact` is reserved for byte-for-byte human
+output.
+
+Layout fixtures under `layouts/` are three-column TSV recipes with instructions
+`dir`, `file`, `copy`, `outside-dir`, `symlink-dir`, and `symlink-file`.
+Runners materialize them in isolated roots; `outside-dir` creates a sibling
+outside the root and binds `{outside}` to it. A single-file fixture is copied to
+an isolated `.norm`, so expected paths never expose the repository checkout.
+
+The Rust Gate B integrity test rejects missing or duplicate requirements/cases,
+unknown placeholders and match modes, invalid layout instructions, absent
+assets, protocol/command/exit inconsistencies, and incomplete success, error,
+or human-mode coverage. Gate C replaces presence checks with executable command
+assertions one vertical slice at a time.
 
 Intentionally malformed inputs use a suffix such as `.norm.invalid` so
 repository-wide dogfood validation does not mistake them for live conventions;

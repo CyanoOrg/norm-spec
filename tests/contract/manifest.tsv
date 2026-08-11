@@ -1,7 +1,83 @@
-# case_id	command	fixture	expected	api_version	exit_code
-parse-minimal	parse	fixtures/valid/minimal.norm	expected/parse-minimal.json	norm-spec/parse/v1	0
-collect-minimal	collect	fixtures/valid/minimal.norm	expected/collect-minimal.json	norm-spec/collect/v1	0
-validate-minimal	validate	fixtures/valid/minimal.norm	expected/validate-minimal.json	norm-spec/validate/v1	0
-init-module	init	-	expected/init-module.json	norm-spec/init/v1	0
-scan-minimal	scan	fixtures/scan/minimal	expected/scan-minimal.json	norm-spec/scan/v1	0
-parse-missing-closing-fence	parse	fixtures/invalid/missing-closing-fence.norm.invalid	expected/error-parse-missing-closing-fence.json	norm-spec/error/v1	1
+# case_id	command	args_json	fixture	stdout	stdout_match	stderr	stderr_match	api_version	exit_code	covers
+global-version	global	["--version"]	-	expected/global-version.txt	template	-	empty	-	0	global.version
+global-help	global	["--help"]	-	expected/global-help.txt	contains	-	empty	-	0	global.help
+global-short-version	global	["-V"]	-	expected/global-version.txt	template	-	empty	-	0	global.short-version
+global-short-help	global	["-h"]	-	expected/global-help.txt	contains	-	empty	-	0	global.short-help
+parse-minimal	parse	["{fixture}"]	fixtures/valid/minimal.norm	expected/parse-minimal.json	json-exact	-	empty	norm-spec/parse/v1	0	parse.machine
+parse-leading-blanks-pretty	parse	["{fixture}","--pretty"]	fixtures/valid/leading-blanks.norm	expected/parse-minimal.json	json-exact	-	empty	norm-spec/parse/v1	0	parse.pretty,parse.leading-blanks
+parse-missing-required-path	parse	[]	-	expected/error-parse-missing-argument.json	json-subset	-	empty	norm-spec/error/v1	2	parse.required-path
+parse-bom	parse	["{fixture}"]	fixtures/valid/bom.norm	expected/parse-minimal.json	json-exact	-	empty	norm-spec/parse/v1	0	parse.bom
+parse-directory	parse	["{root}"]	layouts/parse-directory.tsv	expected/parse-minimal.json	json-exact	-	empty	norm-spec/parse/v1	0	parse.directory
+parse-legacy-accepted	parse	["{fixture}","--legacy-format"]	fixtures/valid/minimal.norm.legacy	expected/parse-legacy-minimal.json	json-exact	-	empty	norm-spec/parse/v1	0	parse.legacy-accepted
+parse-legacy-rejected	parse	["{fixture}"]	fixtures/valid/minimal.norm.legacy	expected/error-parse-not-a1.json	json-subset	-	empty	norm-spec/error/v1	1	parse.legacy-rejected
+parse-missing-closing-fence	parse	["{fixture}"]	fixtures/invalid/missing-closing-fence.norm.invalid	expected/error-parse-missing-closing-fence.json	json-subset	-	empty	norm-spec/error/v1	1	parse.missing-closing-fence
+parse-empty-file	parse	["{fixture}"]	fixtures/invalid/empty.norm.invalid	expected/error-parse-empty.json	json-subset	-	empty	norm-spec/error/v1	1	parse.empty
+parse-empty-frontmatter	parse	["{fixture}"]	fixtures/invalid/empty-frontmatter.norm.invalid	expected/error-parse-empty.json	json-subset	-	empty	norm-spec/error/v1	1	parse.empty-frontmatter
+parse-root-not-mapping	parse	["{fixture}"]	fixtures/invalid/root-sequence.norm.invalid	expected/error-parse-root-type.json	json-subset	-	empty	norm-spec/error/v1	1	parse.root-not-mapping
+parse-yaml-error	parse	["{fixture}"]	fixtures/invalid/yaml-error.norm.invalid	expected/error-parse-yaml.json	json-subset	-	empty	norm-spec/error/v1	1	parse.yaml-error
+parse-missing-path	parse	["{missing}"]	-	expected/error-parse-path-not-found.json	json-subset	-	empty	norm-spec/error/v1	1	parse.missing-path
+collect-inheritance	collect	["--root","{root}","--target","docs/module"]	layouts/collect-inheritance.tsv	expected/collect-inheritance.json	json-exact	-	empty	norm-spec/collect/v1	0	collect.machine,collect.inheritance-order,collect.target-relative-root
+collect-pretty	collect	["--root","{root}","--target","docs/module","--pretty"]	layouts/collect-inheritance.tsv	expected/collect-inheritance.json	json-exact	-	empty	norm-spec/collect/v1	0	collect.pretty
+collect-default-root	collect	["--target","docs/module"]	layouts/collect-inheritance.tsv	expected/collect-inheritance.json	json-exact	-	empty	norm-spec/collect/v1	0	collect.default-root
+collect-missing-required-target	collect	[]	-	expected/error-collect-missing-argument.json	json-subset	-	empty	norm-spec/error/v1	2	collect.required-target
+collect-file-target	collect	["--root","{root}","--target","docs/module/file.txt"]	layouts/collect-inheritance.tsv	expected/collect-file-target.json	json-exact	-	empty	norm-spec/collect/v1	0	collect.file-target
+collect-legacy	collect	["--root","{root}","--target","docs","--legacy-format"]	layouts/collect-legacy.tsv	expected/collect-legacy.json	json-exact	-	empty	norm-spec/collect/v1	0	collect.legacy
+collect-outside-root	collect	["--root","{root}","--target","{outside}"]	layouts/collect-outside-root.tsv	expected/error-collect-outside-root.json	json-subset	-	empty	norm-spec/error/v1	2	collect.outside-root
+collect-missing-target	collect	["--root","{root}","--target","missing"]	layouts/empty.tsv	expected/error-collect-path-not-found.json	json-subset	-	empty	norm-spec/error/v1	1	collect.missing-target
+collect-malformed-norm	collect	["--root","{root}","--target","docs/module"]	layouts/collect-malformed.tsv	expected/error-collect-malformed.json	json-subset	-	empty	norm-spec/error/v1	1	collect.malformed-norm
+validate-human-valid	validate	["{fixture}"]	fixtures/valid/minimal.norm	expected/validate-human-valid.txt	contains	-	empty	-	0	validate.human
+validate-machine-valid	validate	["{fixture}","--json"]	fixtures/valid/minimal.norm	expected/validate-minimal.json	json-exact	-	empty	norm-spec/validate/v1	0	validate.machine
+validate-directory	validate	["{root}","--json"]	layouts/parse-directory.tsv	expected/validate-minimal.json	json-exact	-	empty	norm-spec/validate/v1	0	validate.directory
+validate-all	validate	["--all","--root","{root}","--json"]	layouts/parse-directory.tsv	expected/validate-minimal.json	json-exact	-	empty	norm-spec/validate/v1	0	validate.all
+validate-legacy	validate	["{fixture}","--legacy-format","--json"]	fixtures/valid/minimal.norm.legacy	expected/validate-minimal.json	json-exact	-	empty	norm-spec/validate/v1	0	validate.legacy
+validate-pretty	validate	["{fixture}","--json","--pretty"]	fixtures/valid/minimal.norm	expected/validate-minimal.json	json-exact	-	empty	norm-spec/validate/v1	0	validate.pretty
+validate-missing-required-input	validate	["--json"]	-	expected/error-validate-missing-argument.json	json-subset	-	empty	norm-spec/error/v1	2	validate.required-input
+validate-unknown-key-error	validate	["{fixture}","--json"]	fixtures/invalid/unknown-key.norm.invalid	expected/validate-unknown-key-error.json	json-subset	-	empty	norm-spec/validate/v1	1	validate.unknown-key-error,validate.unknown-key-suggestion
+validate-unknown-key-warning	validate	["{fixture}","--compat-keys","--json"]	fixtures/invalid/unknown-key.norm.invalid	expected/validate-unknown-key-warning.json	json-subset	-	empty	norm-spec/validate/v1	0	validate.unknown-key-warning
+validate-strict-warning	validate	["{fixture}","--compat-keys","--strict","--json"]	fixtures/invalid/unknown-key.norm.invalid	expected/validate-unknown-key-warning.json	json-subset	-	empty	norm-spec/validate/v1	1	validate.strict-warning
+validate-version-format	validate	["{fixture}","--json"]	fixtures/invalid/bad-version.norm.invalid	expected/validate-version-format.json	json-subset	-	empty	norm-spec/validate/v1	1	validate.version-format
+validate-free-layer	validate	["{fixture}","--json"]	fixtures/valid/minimal.norm	expected/validate-minimal.json	json-exact	-	empty	norm-spec/validate/v1	0	validate.free-layer
+validate-explicit-profile	validate	["{fixture}","--json"]	fixtures/valid/profile-known.norm	expected/validate-minimal.json	json-exact	-	empty	norm-spec/validate/v1	0	validate.explicit-profile
+validate-profile-flag	validate	["{fixture}","--profile","module","--json"]	fixtures/valid/minimal.norm	expected/validate-profile-warning.json	json-subset	-	empty	norm-spec/validate/v1	0	validate.profile-flag
+validate-unknown-profile-warning	validate	["{fixture}","--json"]	fixtures/invalid/unknown-profile.norm.invalid	expected/validate-unknown-profile-warning.json	json-subset	-	empty	norm-spec/validate/v1	0	validate.unknown-profile-warning
+validate-lifecycle-duplicate-state	validate	["{fixture}","--json"]	fixtures/invalid/lifecycle-duplicate-state.norm.invalid	expected/validate-lifecycle-error.json	json-subset	-	empty	norm-spec/validate/v1	1	validate.lifecycle-duplicate-state
+validate-lifecycle-unknown-initial	validate	["{fixture}","--json"]	fixtures/invalid/lifecycle-unknown-initial.norm.invalid	expected/validate-lifecycle-error.json	json-subset	-	empty	norm-spec/validate/v1	1	validate.lifecycle-unknown-initial
+validate-lifecycle-unknown-terminal	validate	["{fixture}","--json"]	fixtures/invalid/lifecycle-unknown-terminal.norm.invalid	expected/validate-lifecycle-error.json	json-subset	-	empty	norm-spec/validate/v1	1	validate.lifecycle-unknown-terminal
+validate-lifecycle-unknown-source	validate	["{fixture}","--json"]	fixtures/invalid/lifecycle-unknown-source.norm.invalid	expected/validate-lifecycle-error.json	json-subset	-	empty	norm-spec/validate/v1	1	validate.lifecycle-unknown-source
+validate-lifecycle-unknown-target	validate	["{fixture}","--json"]	fixtures/invalid/lifecycle-unknown-target.norm.invalid	expected/validate-lifecycle-error.json	json-subset	-	empty	norm-spec/validate/v1	1	validate.lifecycle-unknown-target
+validate-lifecycle-duplicate-transition	validate	["{fixture}","--json"]	fixtures/invalid/lifecycle-duplicate-transition.norm.invalid	expected/validate-lifecycle-error.json	json-subset	-	empty	norm-spec/validate/v1	1	validate.lifecycle-duplicate-transition
+validate-lifecycle-terminal-outgoing	validate	["{fixture}","--json"]	fixtures/invalid/lifecycle-terminal-outgoing.norm.invalid	expected/validate-lifecycle-error.json	json-subset	-	empty	norm-spec/validate/v1	1	validate.lifecycle-terminal-outgoing
+validate-lifecycle-legacy-list	validate	["{fixture}","--json"]	fixtures/valid/lifecycle-legacy-list.norm.fixture	expected/validate-lifecycle-legacy-warning.json	json-subset	-	empty	norm-spec/validate/v1	0	validate.lifecycle-legacy-list
+validate-ssot-duplicate	validate	["{fixture}","--json"]	fixtures/invalid/ssot-duplicate.norm.invalid	expected/validate-ssot-duplicate.json	json-subset	-	empty	norm-spec/validate/v1	1	validate.ssot-duplicate
+validate-reference-missing	validate	["{fixture}","--root","{root}","--json"]	fixtures/invalid/reference-missing.norm.invalid	expected/validate-reference-missing.json	json-subset	-	empty	norm-spec/validate/v1	1	validate.reference-missing
+validate-reference-outside	validate	["{root}/.norm","--root","{root}","--json"]	layouts/validate-reference-outside.tsv	expected/validate-reference-outside.json	json-subset	-	empty	norm-spec/validate/v1	1	validate.reference-outside
+validate-reference-duplicate	validate	["{fixture}","--json"]	fixtures/invalid/reference-duplicate.norm.invalid	expected/validate-reference-duplicate.json	json-subset	-	empty	norm-spec/validate/v1	1	validate.reference-duplicate
+validate-reference-description	validate	["{fixture}","--json"]	fixtures/invalid/reference-missing-description.norm.invalid	expected/validate-reference-description.json	json-subset	-	empty	norm-spec/validate/v1	1	validate.reference-description
+validate-reference-external	validate	["{fixture}","--json"]	fixtures/invalid/reference-external.norm.invalid	expected/validate-reference-external.json	json-subset	-	empty	norm-spec/validate/v1	1	validate.reference-external
+validate-schema-dir	validate	["{fixture}","--schema-dir","{schema}","--json"]	fixtures/valid/minimal.norm	expected/validate-minimal.json	json-exact	-	empty	norm-spec/validate/v1	0	validate.schema-dir
+validate-schema-not-found	validate	["{fixture}","--schema-dir","{missing}","--json"]	fixtures/valid/minimal.norm	expected/error-validate-schema-not-found.json	json-subset	-	empty	norm-spec/error/v1	2	validate.schema-not-found
+validate-missing-path	validate	["{missing}","--json"]	-	expected/error-validate-path-not-found.json	json-subset	-	empty	norm-spec/error/v1	1	validate.missing-path
+validate-path-all-conflict	validate	["{fixture}","--all"]	fixtures/valid/minimal.norm	-	empty	expected/usage-validate-path-all.txt	contains	-	2	flags.validate-path-all
+validate-pretty-without-json	validate	["{fixture}","--pretty"]	fixtures/valid/minimal.norm	-	empty	expected/usage-pretty-requires-json.txt	contains	-	2	flags.validate-pretty-requires-json
+init-human-create	init	["--profile","module","--output","{root}/nested/.norm"]	layouts/empty.tsv	expected/init-human-created.txt	contains	-	empty	-	0	init.human,init.create,init.output-parent
+init-machine-create	init	["--profile","module","--output","{output}","--json"]	layouts/empty.tsv	expected/init-module.json	json-exact	-	empty	norm-spec/init/v1	0	init.machine
+init-default-output	init	["--profile","module","--json"]	layouts/empty.tsv	expected/init-module.json	json-exact	-	empty	norm-spec/init/v1	0	init.default-output
+init-pretty	init	["--profile","module","--output","{output}","--json","--pretty"]	layouts/empty.tsv	expected/init-module.json	json-exact	-	empty	norm-spec/init/v1	0	init.pretty
+init-missing-required-profile	init	["--json"]	-	expected/error-init-missing-argument.json	json-subset	-	empty	norm-spec/error/v1	2	init.required-profile
+init-force-overwrite	init	["--profile","module","--output","{root}/.norm","--force","--json"]	layouts/init-existing.tsv	expected/init-overwritten.json	json-exact	-	empty	norm-spec/init/v1	0	init.force-overwrite
+init-unknown-profile	init	["--profile","missing","--output","{output}"]	layouts/empty.tsv	-	empty	expected/init-unknown-profile.txt	contains	-	1	init.unknown-profile
+init-output-exists	init	["--profile","module","--output","{root}/.norm","--json"]	layouts/init-existing.tsv	expected/error-init-output-exists.json	json-subset	-	empty	norm-spec/error/v1	1	init.output-exists
+init-pretty-without-json	init	["--profile","module","--pretty"]	layouts/empty.tsv	-	empty	expected/usage-pretty-requires-json.txt	contains	-	2	flags.init-pretty-requires-json
+scan-minimal	scan	["--root","{fixture}"]	fixtures/scan/minimal	expected/scan-minimal.json	json-exact	-	empty	norm-spec/scan/v1	0	scan.machine,scan.naming,scan.coverage
+scan-text	scan	["--root","{fixture}","--text"]	fixtures/scan/minimal	expected/scan-text.txt	contains	-	empty	-	0	scan.text
+scan-default-root	scan	[]	layouts/scan-structure.tsv	expected/scan-structure.json	json-exact	-	empty	norm-spec/scan/v1	0	scan.default-root
+scan-pretty	scan	["--root","{fixture}","--pretty"]	fixtures/scan/minimal	expected/scan-minimal.json	json-exact	-	empty	norm-spec/scan/v1	0	scan.pretty
+scan-structure	scan	["--root","{root}"]	layouts/scan-structure.tsv	expected/scan-structure.json	json-exact	-	empty	norm-spec/scan/v1	0	scan.ignore-infrastructure,scan.naming,scan.recurring,scan.coverage
+scan-invalid-root	scan	["--root","{missing}"]	-	expected/error-scan-path-not-found.json	json-subset	-	empty	norm-spec/error/v1	1	scan.invalid-root
+scan-file-root	scan	["--root","{fixture}"]	fixtures/valid/minimal.norm	expected/error-scan-not-directory.json	json-subset	-	empty	norm-spec/error/v1	1	path.not-directory
+scan-text-pretty-conflict	scan	["--root","{fixture}","--text","--pretty"]	fixtures/scan/minimal	-	empty	expected/usage-scan-text-pretty.txt	contains	-	2	flags.scan-text-pretty
+scan-directory-symlink	scan	["--root","{root}"]	layouts/scan-directory-symlink.tsv	expected/scan-directory-symlink.json	json-exact	-	empty	norm-spec/scan/v1	0	symlink.directory-reported
+collect-symlink-norm	collect	["--root","{root}","--target","docs"]	layouts/symlink-norm.tsv	expected/error-collect-symlink-norm.json	json-subset	-	empty	norm-spec/error/v1	1	symlink.collect-norm-rejected
+validate-symlink-norm	validate	["{root}/docs/.norm","--root","{root}","--json"]	layouts/symlink-norm.tsv	expected/error-validate-symlink-norm.json	json-subset	-	empty	norm-spec/error/v1	1	symlink.validate-norm-rejected
+scan-symlink-norm	scan	["--root","{root}"]	layouts/symlink-norm.tsv	expected/error-scan-symlink-norm.json	json-subset	-	empty	norm-spec/error/v1	1	symlink.scan-norm-rejected
+collect-symlink-escape	collect	["--root","{root}","--target","linked-outside"]	layouts/symlink-escape.tsv	expected/error-collect-outside-root.json	json-subset	-	empty	norm-spec/error/v1	2	symlink.canonical-containment

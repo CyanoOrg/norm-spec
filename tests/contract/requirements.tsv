@@ -1,0 +1,92 @@
+# requirement_id	description
+global.help	Global help lists the five initial commands and stable flag names.
+global.version	Global version reports the norm product version.
+global.short-help	The short help alias is equivalent to long help.
+global.short-version	The short version alias is equivalent to long version.
+parse.machine	Parse emits the versioned machine response by default.
+parse.pretty	Parse pretty mode changes JSON whitespace only.
+parse.required-path	Parse reports a missing required path through its machine error protocol.
+parse.bom	Parse accepts a UTF-8 BOM before the opening fence.
+parse.leading-blanks	Parse accepts blank lines before the opening fence.
+parse.missing-closing-fence	Parse rejects an unclosed A1 frontmatter fence.
+parse.empty	Parse rejects an empty file.
+parse.empty-frontmatter	Parse rejects empty frontmatter.
+parse.root-not-mapping	Parse rejects a non-mapping frontmatter root.
+parse.legacy-rejected	Parse rejects pre-A1 input without legacy mode.
+parse.legacy-accepted	Parse accepts pre-A1 input with legacy mode.
+parse.yaml-error	Parse reports malformed YAML with a stable code.
+parse.directory	A parse directory argument resolves to directory .norm.
+parse.missing-path	Parse reports a missing input path.
+collect.machine	Collect emits the versioned machine response by default.
+collect.pretty	Collect pretty mode changes JSON whitespace only.
+collect.default-root	Collect defaults root to the current directory.
+collect.required-target	Collect reports a missing required target through its machine error protocol.
+collect.inheritance-order	Collected norms are ordered most-specific first.
+collect.file-target	A file target collects from its parent while preserving the input target.
+collect.target-relative-root	A relative collect target resolves from the declared root.
+collect.outside-root	Collect rejects an operation target outside root.
+collect.missing-target	Collect reports a missing target.
+collect.malformed-norm	Collect reports a malformed discovered norm.
+collect.legacy	Collect legacy mode parses pre-A1 discovered norms.
+validate.human	Validate defaults to human-readable output.
+validate.machine	Validate json mode emits a versioned report.
+validate.directory	Validate accepts a directory and resolves its .norm file.
+validate.all	Validate all recursively evaluates norms below the declared root.
+validate.legacy	Validate legacy mode accepts a pre-A1 input.
+validate.pretty	Validate pretty mode changes JSON whitespace only.
+validate.required-input	Validate requires exactly one path or all selection.
+validate.unknown-key-error	Unknown top-level keys are errors by default.
+validate.unknown-key-warning	Compat keys mode downgrades unknown top-level keys to warnings.
+validate.unknown-key-suggestion	Unknown-key diagnostics preserve a closest-match hint.
+validate.version-format	Metadata version outside MAJOR.MINOR is rejected.
+validate.free-layer	Free-form metadata layer values are accepted.
+validate.explicit-profile	A known explicit metadata profile is applied.
+validate.profile-flag	The profile flag overrides metadata profile selection.
+validate.unknown-profile-warning	An unknown explicit metadata profile warns.
+validate.strict-warning	Strict mode returns one when warnings are present.
+validate.lifecycle-duplicate-state	Lifecycle state IDs must be unique.
+validate.lifecycle-unknown-initial	Lifecycle initial state must resolve.
+validate.lifecycle-unknown-terminal	Lifecycle terminal states must resolve.
+validate.lifecycle-unknown-source	Lifecycle transition sources must resolve.
+validate.lifecycle-unknown-target	Lifecycle transition targets must resolve.
+validate.lifecycle-duplicate-transition	Lifecycle transitions must be unique.
+validate.lifecycle-terminal-outgoing	Terminal lifecycle states have no outgoing transitions.
+validate.lifecycle-legacy-list	Legacy lifecycle string lists warn.
+validate.ssot-duplicate	Single-source-of-truth domains must be unique.
+validate.reference-missing	Required local reference targets must exist.
+validate.reference-outside	Local reference targets must stay within root.
+validate.reference-duplicate	Typed reference targets must not be duplicated.
+validate.reference-description	Reference descriptions are required when policy says so.
+validate.reference-external	External references are rejected when policy disallows them.
+validate.schema-dir	Validate accepts an explicit schema directory.
+validate.schema-not-found	Validate rejects an unavailable explicit schema directory as configuration failure.
+validate.missing-path	Validate reports a missing input before evaluation.
+init.human	Init defaults to human-readable output.
+init.machine	Init json mode emits the versioned response.
+init.default-output	Init defaults output to .norm in the current directory.
+init.pretty	Init pretty mode changes JSON whitespace only.
+init.required-profile	Init reports a missing required profile through its machine error protocol.
+init.create	Init creates a profile template.
+init.force-overwrite	Init force reports overwrite rather than create.
+init.output-parent	Init creates missing output parent directories.
+init.unknown-profile	Init rejects an unknown profile.
+init.output-exists	Init rejects an existing output without force.
+scan.machine	Scan emits the versioned machine response by default.
+scan.text	Scan text mode emits the human report.
+scan.default-root	Scan defaults root to the current directory.
+scan.pretty	Scan pretty mode changes JSON whitespace only.
+scan.ignore-infrastructure	Scan ignores infrastructure directories.
+scan.naming	Scan reports deterministic naming classifications.
+scan.recurring	Scan reports recurring filenames.
+scan.coverage	Scan reports norm coverage.
+scan.invalid-root	Scan reports a missing root.
+path.not-directory	Directory-only operations reject file roots.
+flags.validate-path-all	Validate path and all are mutually exclusive.
+flags.validate-pretty-requires-json	Validate pretty requires json mode.
+flags.init-pretty-requires-json	Init pretty requires json mode.
+flags.scan-text-pretty	Scan text and pretty are mutually exclusive.
+symlink.canonical-containment	Canonical target containment rejects a symlink escape.
+symlink.collect-norm-rejected	Collect rejects a discovered symlink norm.
+symlink.validate-norm-rejected	Validate rejects an explicit symlink norm.
+symlink.scan-norm-rejected	Scan rejects a discovered symlink norm.
+symlink.directory-reported	Scan does not follow directory symlinks and reports them deterministically.
