@@ -1,6 +1,6 @@
 ---
 metadata:
-  layer: root
+  layer: consumer
   scope: ./
   version: "1.0"
 ---
