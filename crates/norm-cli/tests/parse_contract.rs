@@ -239,11 +239,13 @@ fn create_dir_symlink(target: &Path, link: &Path, layout: &str) {
 fn replace_argument_placeholders(value: &str, isolated: &IsolatedRoot) -> String {
     let root = isolated.path.to_string_lossy();
     let outside = isolated.outside.to_string_lossy();
+    let fixture = isolated.path.join(".norm").to_string_lossy().into_owned();
+    let missing = isolated.path.join("missing").to_string_lossy().into_owned();
     value
-        .replace("{fixture}", &format!("{root}/.norm"))
+        .replace("{fixture}", &fixture)
         .replace("{root}", &root)
         .replace("{outside}", &outside)
-        .replace("{missing}", &format!("{root}/missing"))
+        .replace("{missing}", &missing)
         .replace("{version}", env!("CARGO_PKG_VERSION"))
 }
 
