@@ -1,0 +1,11 @@
+{
+  "apiVersion": "norm-spec/parse/v1",
+  "frontmatter": {
+    "metadata": {
+      "layer": "example",
+      "scope": "./",
+      "version": "1.0"
+    }
+  },
+  "body": "# Minimal project"
+}

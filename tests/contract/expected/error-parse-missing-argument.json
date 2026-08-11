@@ -1,0 +1,8 @@
+{
+  "apiVersion": "norm-spec/error/v1",
+  "command": "parse",
+  "error": {
+    "code": "norm/usage/missing-argument",
+    "field": "path"
+  }
+}

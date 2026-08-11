@@ -1,0 +1,40 @@
+{
+  "apiVersion": "norm-spec/collect/v1",
+  "root": ".",
+  "target": "docs/module",
+  "norms": [
+    {
+      "path": "docs/module/.norm",
+      "frontmatter": {
+        "metadata": {
+          "layer": "fixture-module",
+          "scope": "docs/module/",
+          "version": "1.0"
+        }
+      },
+      "body": "# Fixture module"
+    },
+    {
+      "path": "docs/.norm",
+      "frontmatter": {
+        "metadata": {
+          "layer": "fixture-docs",
+          "scope": "docs/",
+          "version": "1.0"
+        }
+      },
+      "body": "# Fixture docs"
+    },
+    {
+      "path": ".norm",
+      "frontmatter": {
+        "metadata": {
+          "layer": "fixture-root",
+          "scope": "./",
+          "version": "1.0"
+        }
+      },
+      "body": "# Fixture root"
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+# Minimal project
+
+metadata:
+  layer: example
+  scope: ./
+  version: "1.0"

@@ -1,0 +1,3 @@
+# kind	path	value
+dir	docs	-
+copy	docs/.norm	fixtures/valid/minimal.norm.legacy

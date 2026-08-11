@@ -1,0 +1,6 @@
+# kind	path	value
+dir	docs/module	-
+copy	.norm	fixtures/valid/root.norm.fixture
+copy	docs/.norm	fixtures/valid/docs.norm.fixture
+copy	docs/module/.norm	fixtures/valid/module.norm.fixture
+file	docs/module/file.txt	fixture

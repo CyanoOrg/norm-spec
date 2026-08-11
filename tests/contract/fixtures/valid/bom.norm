@@ -1,0 +1,10 @@
+﻿---
+metadata:
+  layer: example
+  scope: ./
+  version: "1.0"
+---
+
+# Minimal project
+
+A valid A1 document with a Markdown body.

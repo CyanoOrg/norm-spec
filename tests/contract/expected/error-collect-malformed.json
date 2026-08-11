@@ -1,0 +1,8 @@
+{
+  "apiVersion": "norm-spec/error/v1",
+  "command": "collect",
+  "error": {
+    "code": "norm/parse/missing-closing-fence",
+    "path": "docs/module/.norm"
+  }
+}
