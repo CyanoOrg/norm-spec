@@ -2,12 +2,11 @@
 
 ## Resume here
 
-- Stage: `0.1.0-alpha.1`; Gate B and Gate C's first executable vertical slice
-  are complete.
-- Integration branch: `main`; the maintainer pushed the Gate C branch and
-  verified hosted CI across all jobs, then the branch was fast-forwarded into
-  local `main`. The updated `main` still awaits push and its resulting hosted
-  CI run.
+- Stage: `0.1.0-alpha.1`; Gate B plus Gate C's parse and collect executable
+  vertical slices are complete locally.
+- Integration branch: `main`; current work is on the short-lived branch
+  `codex/feat-gate-c-collect`, based on the synchronized integration branch.
+  The collect branch awaits maintainer push, hosted CI, review, and merge.
 - Completed objective: the five-command behavior contract (parse, collect,
   validate, init, scan) is frozen before parser implementation. D006 records
   baseline deviations, D007 resolves symbolic-link semantics, and D008 binds
@@ -18,38 +17,40 @@
   versioned parse/error models; `norm parse`, global help, and global version
   are executable. All 4 global and 13 parse manifest cases run as isolated
   black-box tests with no skips.
-- Next implementation objective: implement deterministic,
-  root-contained `collect` and its executable contract cases. Draft 7 validator
-  selection remains a maintainer checkpoint for the validation slice.
+- Completed collect slice: `norm-core` owns normalized candidate ordering and
+  collect/v1 models; `norm collect` canonicalizes roots and targets, rejects
+  containment and symlink violations, and reads inherited conventions in
+  most-specific-first order. All 11 collect cases execute without skips.
+- Next implementation objective after this branch integrates: select the Draft
+  7 validator dependency, then implement schema, profile, and semantic
+  validation. Dependency selection remains a maintainer checkpoint.
 - The private GitHub repository, initial `main` push, and first hosted Actions
   run are complete and green.
 - GitHub repository bootstrap is complete; public visibility remains a
   maintainer checkpoint after the initial functional slice.
-- `parse` is the first complete production CLI subcommand. `collect`,
-  `validate`, `init`, and `scan` remain explicit exit-2 stubs.
+- `parse` and `collect` are complete production CLI subcommands. `validate`,
+  `init`, and `scan` remain explicit exit-2 stubs.
 
 ## Verification
 
-Gate C parse-slice verification on 2026-08-11:
+Gate C collect-slice verification on 2026-08-11:
 
 - `cargo fmt --check` → green.
 - `cargo clippy --workspace --all-targets --all-features -- -D warnings` → green.
-- `cargo test --workspace --all-features` → 19 tests passed. In addition to the
-  static 91-requirement / 82-case inventory gate, all 4 global and 13 parse
-  cases now execute the compiled binary in isolated roots with asserted
-  streams, protocols, output data, and exit codes.
+- `cargo test --workspace --all-features` → 27 tests passed. In addition to the
+  static 91-requirement / 82-case inventory gate, all 4 global, 13 parse, and
+  11 collect cases now execute the compiled binary in isolated roots with
+  asserted streams, protocols, output data, and exit codes.
 - `RUSTDOCFLAGS='-D warnings' cargo doc --workspace --no-deps` → green.
 - `bash scripts/check-public-history.sh` → green across the current index and
   all reachable commits.
 - Legacy strict validation against this repository → 16 files, 0 errors,
   0 warnings. This is transitional evidence, not Rust self-hosting.
 - `cargo install --path crates/norm-cli --root <isolated> --locked` → green;
-  the installed binary returned the expected version/help, parsed the minimal
-  A1 fixture, and returned the frozen JSON error with exit `1` for a malformed
-  fence.
-- The maintainer reported the Gate C branch's Node 24 quality and
-  cross-platform hosted jobs green without annotations. The integrated `main`
-  run remains pending until push.
+  the installed binary collected this repository's `docs/.norm` and root
+  `.norm` in the expected order.
+- The previous parse branch's hosted jobs were green without annotations. The
+  current collect branch's cross-platform hosted CI remains pending until push.
 
 ## Open-source readiness
 
@@ -75,7 +76,8 @@ Gate C parse-slice verification on 2026-08-11:
 - [ ] Select and spike the Draft 7 validator dependency.
 - [x] Implement A1/legacy parse, canonical structured parse errors, and all
       executable global/parse contract cases.
-- [ ] Implement path-scoped collect.
+- [x] Implement deterministic path-scoped collect and all executable collect
+      contract cases.
 - [ ] Implement schema, profile, and semantic validation.
 - [ ] Implement init and structural scan.
 - [ ] Provide consumer-resolvable Rust/machine contracts and a conformance

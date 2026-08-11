@@ -20,3 +20,6 @@ Versioning and keeps changes under `[Unreleased]` until release preparation.
   support, and versioned parse/error response models in `norm-core`.
 - Executable global help/version and `norm parse`, with all 17 frozen
   global/parse cases asserted against the compiled binary in isolated roots.
+- Deterministic, root-contained `norm collect` with file targets, explicit
+  legacy parsing, canonical outside-root rejection, `.norm` symlink rejection,
+  most-specific-first inheritance, and all 11 frozen collect cases executable.
