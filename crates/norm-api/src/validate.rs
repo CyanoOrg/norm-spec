@@ -223,12 +223,15 @@ fn reject_norm_symlink(root: &Path, path: &Path) -> Result<(), ApiError> {
         ))
     })?;
     if metadata.file_type().is_symlink() {
+        let path = path
+            .strip_prefix(root)
+            .map_or_else(|_| display_path(Some(root), path), project_path);
         return Err(ApiError::operation(
             ErrorDetail::new(
                 "norm/path/symlink-norm",
                 "A .norm convention file must not be a symbolic link.",
             )
-            .with_path(display_path(Some(root), path)),
+            .with_path(path),
         ));
     }
     Ok(())

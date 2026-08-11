@@ -7,6 +7,18 @@ use std::path::Path;
 use norm_spec::{FailureClass, ValidateRequest, validate};
 use support::{Fixture, root_norm, write_standard_fixture};
 
+#[cfg(unix)]
+fn create_file_symlink(target: &Path, link: &Path) {
+    std::os::unix::fs::symlink(target, link)
+        .unwrap_or_else(|error| panic!("file symlink should be created: {error}"));
+}
+
+#[cfg(windows)]
+fn create_file_symlink(target: &Path, link: &Path) {
+    std::os::windows::fs::symlink_file(target, link)
+        .unwrap_or_else(|error| panic!("file symlink should be created: {error}"));
+}
+
 #[test]
 fn packaged_schemas_validate_one_or_all_conventions() {
     let fixture = Fixture::new().unwrap_or_else(|error| panic!("fixture should exist: {error}"));
@@ -57,4 +69,24 @@ fn unavailable_schema_is_a_typed_usage_failure() {
     assert_eq!(error.class(), FailureClass::Usage);
     assert_eq!(error.detail().code, "norm/usage/schema-not-found");
     assert_eq!(error.detail().path.as_deref(), Some("missing-schema"));
+}
+
+#[test]
+fn symlink_failure_reports_the_requested_convention_path() {
+    let fixture = Fixture::new().unwrap_or_else(|error| panic!("fixture should exist: {error}"));
+    fixture
+        .write("docs/actual.norm", root_norm())
+        .unwrap_or_else(|error| panic!("symlink target should be written: {error}"));
+    create_file_symlink(Path::new("actual.norm"), &fixture.path.join("docs/.norm"));
+
+    let result = validate(ValidateRequest::path(
+        &fixture.path,
+        Path::new("docs/.norm"),
+    ));
+    let Err(error) = result else {
+        panic!("symlink convention must fail");
+    };
+    assert_eq!(error.class(), FailureClass::Operation);
+    assert_eq!(error.detail().code, "norm/path/symlink-norm");
+    assert_eq!(error.detail().path.as_deref(), Some("docs/.norm"));
 }
