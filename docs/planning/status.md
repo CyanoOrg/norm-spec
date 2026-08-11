@@ -4,13 +4,10 @@
 
 - Stage: `0.1.0-alpha.1`; Gate B plus Gate C's parse, collect, and validate
   executable vertical slices are complete locally.
-- Integration branch: `main` at `09b0488`. The maintainer pushed the collect
-  integration, verified every hosted CI job including Windows, and removed the
-  remote topic branch.
-- Current branch: `codex/feat-gate-c-validate`. It contains the approved Draft
-  7 dependency boundary, validation core and CLI, 35 executable validate
-  cases, and this documentation closeout. Maintainer push, hosted CI, and
-  integration remain the checkpoint for this slice.
+- Integration branch: local `main` at `a8f52fb`. The validate topic branch was
+  fast-forwarded after the maintainer verified hosted Linux, macOS, and Windows
+  CI. Pushing integrated `main` and removing the remote topic branch remain
+  maintainer operations.
 - D010 selects `jsonschema` 0.49.9 with default features disabled, explicit
   Draft 7 compilation, format checks, and caller-supplied in-memory resources.
   Missing references fail; the core has no filesystem or network fallback.
@@ -28,11 +25,11 @@
   repository with both its embedded and explicit repository schema bundles.
 - The first hosted Windows validate run exposed string-based expansion of
   composite absolute-path placeholders in the language-neutral test runner.
-  Commit `59f32b7` now joins placeholder suffixes with native path APIs; the
-  hosted Windows rerun remains pending.
+  Commit `59f32b7` joins placeholder suffixes with native path APIs; the hosted
+  Windows rerun passed.
 - The private GitHub repository, initial `main` push, and hosted Actions are
-  established and green through the collect slice. Public visibility remains
-  a maintainer checkpoint after the initial functional slice.
+  established and green through the validate topic branch. Public visibility
+  remains a maintainer checkpoint after the initial functional slice.
 
 ## Verification
 
@@ -54,8 +51,8 @@ Gate C validate-slice local verification on 2026-08-11:
   all reachable commits.
 - `cargo install --path crates/norm-cli --root <isolated> --locked` → green;
   the installed binary strictly validated this repository.
-- Hosted Linux, macOS, and Windows evidence for the validate slice remains
-  pending until the maintainer pushes this branch.
+- Hosted Linux, macOS, and Windows jobs for the validate topic branch → green.
+  The integrated `main` run remains pending until push.
 
 ## Open-source readiness
 
