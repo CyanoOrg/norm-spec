@@ -9,7 +9,10 @@ mod schema;
 
 pub use collector::{CollectPathError, collect_candidate_paths, project_path};
 pub use parser::{ParseError, ParseOptions, ParsedNorm, parse_norm};
-pub use protocol::{CollectResponse, CollectedNorm, ErrorDetail, ErrorResponse, ParseResponse};
+pub use protocol::{
+    CollectResponse, CollectedNorm, Diagnostic, ErrorDetail, ErrorResponse, ParseResponse,
+    ValidateResponse, ValidationResult, ValidationStatus, ValidationSummary,
+};
 pub use schema::{SchemaCompileError, SchemaViolation, validate_draft7};
 
 /// Identifier for the initial `.norm` format contract.

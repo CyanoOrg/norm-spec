@@ -3,7 +3,9 @@
 use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
-use crate::{COLLECT_API_VERSION, ERROR_API_VERSION, PARSE_API_VERSION, ParsedNorm};
+use crate::{
+    COLLECT_API_VERSION, ERROR_API_VERSION, PARSE_API_VERSION, ParsedNorm, VALIDATE_API_VERSION,
+};
 
 /// Successful `parse` machine response.
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
@@ -73,6 +75,153 @@ impl CollectResponse {
             root: ".".to_owned(),
             target: target.into(),
             norms,
+        }
+    }
+}
+
+/// Stable diagnostic emitted by schema, profile, or semantic validation.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct Diagnostic {
+    /// Stable machine-readable diagnostic code.
+    pub code: String,
+    /// Human-readable detail; not intended for machine matching.
+    pub message: String,
+    /// Dot-and-index path to the affected frontmatter field, when available.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub field: Option<String>,
+    /// Machine-actionable correction hint, when available.
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub suggestion: Option<String>,
+}
+
+impl Diagnostic {
+    /// Construct a diagnostic with no field or suggestion.
+    #[must_use]
+    pub fn new(code: impl Into<String>, message: impl Into<String>) -> Self {
+        Self {
+            code: code.into(),
+            message: message.into(),
+            field: None,
+            suggestion: None,
+        }
+    }
+
+    /// Attach an affected field path.
+    #[must_use]
+    pub fn with_field(mut self, field: impl Into<String>) -> Self {
+        self.field = Some(field.into());
+        self
+    }
+
+    /// Attach a machine-actionable correction hint.
+    #[must_use]
+    pub fn with_suggestion(mut self, suggestion: impl Into<String>) -> Self {
+        self.suggestion = Some(suggestion.into());
+        self
+    }
+}
+
+/// Overall classification of one validated `.norm` file.
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+#[serde(rename_all = "lowercase")]
+pub enum ValidationStatus {
+    /// No errors or warnings were emitted.
+    Ok,
+    /// Warnings were emitted without errors.
+    Warning,
+    /// At least one error was emitted.
+    Error,
+}
+
+/// Validation outcome for one root-relative `.norm` path.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct ValidationResult {
+    /// Root-relative convention-file path.
+    pub path: String,
+    /// Highest diagnostic severity for this file.
+    pub status: ValidationStatus,
+    /// Deterministically ordered hard validation failures.
+    pub errors: Vec<Diagnostic>,
+    /// Deterministically ordered non-fatal validation findings.
+    pub warnings: Vec<Diagnostic>,
+}
+
+impl ValidationResult {
+    /// Construct and deterministically order a per-file validation result.
+    #[must_use]
+    pub fn new(
+        path: impl Into<String>,
+        mut errors: Vec<Diagnostic>,
+        mut warnings: Vec<Diagnostic>,
+    ) -> Self {
+        errors.sort_by(diagnostic_order);
+        warnings.sort_by(diagnostic_order);
+        let status = if errors.is_empty() {
+            if warnings.is_empty() {
+                ValidationStatus::Ok
+            } else {
+                ValidationStatus::Warning
+            }
+        } else {
+            ValidationStatus::Error
+        };
+        Self {
+            path: path.into(),
+            status,
+            errors,
+            warnings,
+        }
+    }
+}
+
+fn diagnostic_order(left: &Diagnostic, right: &Diagnostic) -> std::cmp::Ordering {
+    left.field
+        .cmp(&right.field)
+        .then_with(|| left.code.cmp(&right.code))
+        .then_with(|| left.suggestion.cmp(&right.suggestion))
+        .then_with(|| left.message.cmp(&right.message))
+}
+
+/// Aggregate counts for a validation response.
+#[derive(Clone, Copy, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct ValidationSummary {
+    /// Number of convention files evaluated.
+    pub files: usize,
+    /// Total number of hard validation diagnostics.
+    pub errors: usize,
+    /// Total number of warning diagnostics.
+    pub warnings: usize,
+}
+
+/// Versioned machine response for a completed `validate` evaluation.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct ValidateResponse {
+    /// Version of the validation response protocol.
+    #[serde(rename = "apiVersion")]
+    pub api_version: String,
+    /// Root marker for all paths in the response.
+    pub root: String,
+    /// Deterministically ordered per-file results.
+    pub results: Vec<ValidationResult>,
+    /// Aggregate file and diagnostic counts.
+    pub summary: ValidationSummary,
+}
+
+impl ValidateResponse {
+    /// Construct a validation response ordered by portable path.
+    #[must_use]
+    pub fn new(mut results: Vec<ValidationResult>) -> Self {
+        results.sort_by(|left, right| left.path.cmp(&right.path));
+        let summary = ValidationSummary {
+            files: results.len(),
+            errors: results.iter().map(|result| result.errors.len()).sum(),
+            warnings: results.iter().map(|result| result.warnings.len()).sum(),
+        };
+        Self {
+            api_version: VALIDATE_API_VERSION.to_owned(),
+            root: ".".to_owned(),
+            results,
+            summary,
         }
     }
 }
@@ -148,7 +297,10 @@ mod tests {
     use serde::Serialize;
     use serde_json::json;
 
-    use super::{CollectResponse, CollectedNorm, ErrorDetail, ErrorResponse, ParseResponse};
+    use super::{
+        CollectResponse, CollectedNorm, Diagnostic, ErrorDetail, ErrorResponse, ParseResponse,
+        ValidateResponse, ValidationResult, ValidationStatus,
+    };
     use crate::ParsedNorm;
 
     fn json_value(value: impl Serialize) -> serde_json::Value {
@@ -235,5 +387,38 @@ mod tests {
                 ]
             })
         );
+    }
+
+    #[test]
+    fn validate_response_orders_paths_diagnostics_and_counts_findings() {
+        let response = ValidateResponse::new(vec![
+            ValidationResult::new(
+                "docs/.norm",
+                Vec::new(),
+                vec![
+                    Diagnostic::new("norm/profile/z", "z").with_field("template"),
+                    Diagnostic::new("norm/profile/a", "a").with_field("agent_rules"),
+                ],
+            ),
+            ValidationResult::new(
+                ".norm",
+                vec![Diagnostic::new(
+                    "norm/schema/version-format",
+                    "invalid version",
+                )],
+                Vec::new(),
+            ),
+        ]);
+        assert_eq!(response.results[0].path, ".norm");
+        assert_eq!(response.results[0].status, ValidationStatus::Error);
+        assert_eq!(response.results[1].status, ValidationStatus::Warning);
+        assert_eq!(
+            response.results[1].warnings[0].field.as_deref(),
+            Some("agent_rules")
+        );
+        assert_eq!(response.summary.files, 2);
+        assert_eq!(response.summary.errors, 1);
+        assert_eq!(response.summary.warnings, 2);
+        assert_eq!(json_value(response)["apiVersion"], "norm-spec/validate/v1");
     }
 }
