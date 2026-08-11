@@ -16,8 +16,9 @@ release history.
 
 ## Current state
 
-The repository is in bootstrap. Version `0.1.0-alpha.1` establishes governance,
-architecture, and language-neutral contracts before implementing behavior. No
+Version `0.1.0-alpha.1` has completed Gate B: governance, architecture, and the
+language-neutral five-command behavior contract are frozen before behavior
+implementation. Gate C implements one executable command slice at a time. No
 CLI subcommand is complete until the execution plan and tests say so.
 
 Read first:
