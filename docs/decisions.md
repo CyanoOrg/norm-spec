@@ -270,3 +270,43 @@ for every dependency keyword would couple `validate/v1` to a third-party enum.
 validation or expanding the protocol on every dependency release. Stable field
 paths preserve machine actionability; specialized cases remain available where
 the contract requires a correction hint.
+
+## D012 — Embed init templates and keep structural scan deterministic
+
+**Decision.** `norm init` embeds the seven repository-owned profile templates
+at build time and selects them from an explicit name-to-content table. It does
+not search the current directory, a sibling checkout, or an environment path,
+and an unknown profile fails instead of falling back to an empty or generic
+template. Init creates missing parent directories, reports paths relative to
+the current working directory when contained, refuses an existing output
+without `--force`, and applies D007's `.norm` symbolic-link rejection.
+
+`norm-core` owns scan classification and aggregation over explicit filesystem
+observations; `norm-cli` owns the no-follow traversal. Scan ignores only the
+declared infrastructure directory names `.git`, `__pycache__`, `.venv`,
+`venv`, `node_modules`, `.mypy_cache`, `.pytest_cache`, `.idea`, `.vscode`,
+`dist`, `build`, and `target`. Hidden files do not contribute to file counts or
+naming, while a regular `.norm` contributes to coverage. Non-root directory
+names and visible filename stems are classified, in precedence order, as
+`date_prefix`, `kebab-case`, `snake_case`, `UPPER`, `PascalCase`, `camelCase`,
+`lowercase`, or `mixed`. An untraversed directory symlink contributes its name
+to the directory classification and is reported separately.
+
+Directories and symlinks are ordered by portable relative path. Recurring
+filenames appear in at least two directories, sort by descending directory
+count and then ascending filename, and are capped at twenty. Coverage ratios
+are rounded to three decimal places. The scan reports observations only; it
+does not infer sources of truth, lifecycle, or project intent.
+
+**Context.** Gate B froze init and scan protocols plus representative outputs,
+but the final Gate C slice still needs package-independent template discovery
+and general rules behind the naming, infrastructure, recurrence, and coverage
+examples. The private Python prototype is useful reference evidence under
+D002, not a runtime dependency or an authority for unspecified behavior.
+
+**Rationale.** Compile-time template selection makes installed binaries
+self-contained and fail-closed. Keeping traversal in the CLI and aggregation
+in the deterministic core preserves the architecture boundary, while explicit
+classification, ordering, and rounding rules make scan results portable across
+Linux, macOS, and Windows without turning structural observation into semantic
+guessing.
