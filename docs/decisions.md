@@ -310,3 +310,55 @@ in the deterministic core preserves the architecture boundary, while explicit
 classification, ordering, and rounding rules make scan results portable across
 Linux, macOS, and Windows without turning structural observation into semantic
 guessing.
+
+## D013 — Keep norm-spec standalone-first and ship one canonical Skill
+
+**Decision.** norm-spec is a standalone format, Rust engine, CLI, and
+conformance product. Its usefulness and release readiness must be demonstrable
+without installing pi-norm-spec or any other agent-host plugin. Gate D therefore
+includes a repository-external adoption lane that installs a candidate in an
+isolated environment and exercises scan, init, collect, validation, stable
+failure output, and compatibility discovery without a host adapter.
+
+This repository will also own one framework-neutral `norm-spec` Skill as a
+Gate D result. The Skill is the canonical cognitive workflow for collecting,
+interpreting, validating, authoring, and diagnosing `.norm` conventions. It is
+released with this product rather than as a separate repository or independent
+release line. Its instructions must invoke a compatible versioned CLI or Rust
+contract. A missing or failed engine is explicit failure: the Skill must not
+reimplement YAML parsing, directory inheritance, schema validation, or return
+an empty ruleset or successful skip.
+
+Host lifecycle integration remains downstream. Session or turn events, tool
+target extraction, automatic context injection, enforcement, feedback,
+permissions, user interface, and marketplace packaging belong in separately
+versioned adapters after a host-specific capability and spike checkpoint. This
+repository may document generic integration contracts, but it does not schedule
+or contain pi, Codex, OpenCode, or other host implementation work.
+
+The Skill is an assisted-use surface, not an enforcement boundary. Project
+instructions may improve discovery, and a host may select the Skill explicitly
+or implicitly, but neither mechanism proves mandatory path-aware collection or
+unbypassable tool policy. Those claims require evidence from the relevant host
+adapter.
+
+**Context.** Gate C made all five CLI commands executable and completed the 82
+frozen cases, but self-validation and repository-internal tests do not prove
+that an installed candidate works in an unrelated project. The private Python
+prototype included a useful `collect → obey → validate → author` Skill, but it
+also allowed manual parse/collect fallback and described the Skill as an
+enforcement layer. Carrying those fallbacks into the Rust product would create
+a second semantic implementation and overstate what a discoverable instruction
+bundle can guarantee.
+
+The first downstream runtime adapter is still incomplete, and additional host
+adapters have different event, tool, trust, and distribution surfaces. Making
+plugins the only meaningful use path would turn the independent norm-spec
+product into an internal SDK and couple its roadmap to host churn.
+
+**Rationale.** A deterministic CLI and conformance boundary give humans,
+automation, CI, and custom consumers value before any plugin exists. Keeping
+the canonical Skill beside the specification and commands makes its workflow
+reviewable against the same release while avoiding a second repository for one
+small artifact. Keeping automatic host behavior downstream preserves the
+single-engine rule, independent versioning, and honest evidence boundaries.
