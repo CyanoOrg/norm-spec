@@ -12,12 +12,15 @@ portable CLI with explicit format and machine contracts.
 - Path-scoped collect with deterministic output.
 - Draft 7 schema and semantic validation.
 - `init` and structural `scan` parity.
+- Consumer-resolvable Rust and machine compatibility discovery.
+- Consumer-neutral conformance and standalone adoption evidence.
+- One canonical framework-neutral norm-spec Skill.
 
 ### Beta
 
 - Linux, macOS, and Windows release artifacts.
 - A1 contract coverage across the frozen fixture set.
-- Consumer conformance evidence against a pinned Rust and machine contract.
+- Real downstream consumer evidence against a pinned Rust and machine contract.
 - Self-hosted validation of this repository.
 
 ### Stable
