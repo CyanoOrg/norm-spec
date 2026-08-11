@@ -7,10 +7,10 @@ The project starts with one deterministic semantic engine. Its specification,
 schemas, templates, fixtures, and machine contracts live in this repository;
 framework adapters consume those contracts without becoming format authorities.
 
-> Status: `0.1.0-alpha.1`. Gate C is integrated and hosted cross-platform CI is
-> green. Gate D1 is complete locally: the packaged high-level Rust facade,
-> delegated CLI, workspace package verification, and an exact-revision external
-> consumer are green. Hosted evidence for this Gate D batch is pending.
+> Status: `0.1.0-alpha.1`. Gate C is integrated. Gate D1 is complete: the
+> packaged high-level Rust facade, delegated CLI, workspace package
+> verification, and an exact-revision external consumer are green; hosted
+> Linux, macOS, and Windows CI for candidate `07a95c6` is maintainer-confirmed.
 
 ## Crates
 

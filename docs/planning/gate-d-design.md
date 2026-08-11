@@ -155,9 +155,9 @@ The production result now matches D014:
 - `docs/RUST-API.md` declares the consumer boundary and does not claim D2/D3
   compatibility or conformance work.
 
-D1 is locally complete. Hosted Linux, macOS, and Windows CI for the integrated
-branch remains the merge checkpoint; D2/D3 protocol design does not begin
-until that evidence is maintainer-confirmed.
+D1 is complete. Hosted Linux, macOS, and Windows CI for candidate `07a95c6` is
+maintainer-confirmed green. This later verification record is documentation
+only; D2/D3 protocol design remains the next human checkpoint.
 
 ## Result D2 — Versioned compatibility discovery
 
@@ -288,8 +288,9 @@ D does not create a second Skill repository or independent release process.
 The decision commit follows the bounded spike and precedes production movement.
 Behavior-changing and behavior-preserving refactors remain separate.
 
-Batch 1 is complete locally. Its final branch candidate awaits hosted CI after
-maintainer push.
+Batch 1 is complete. Candidate `07a95c6` passed hosted Linux, macOS, and Windows
+CI; the documentation-only verification record may be fast-forwarded without a
+second hosted run under the repository's agreed documentation policy.
 
 ### Batch 2 — Compatibility and conformance
 

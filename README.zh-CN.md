@@ -5,9 +5,10 @@
 本项目从单一、确定性的语义引擎开始。规范、Schema、模板、fixtures 和
 机器协议都在本仓库内自足维护；框架适配器消费这些契约，但不成为格式权威。
 
-> 当前状态：`0.1.0-alpha.1`。Gate C 已集成并通过远端跨平台 CI。
-> Gate D1 已在本地完成：高层 Rust facade、CLI 委托、workspace package
-> 验证以及精确 Git revision 外部 consumer 均为绿色；本批次仍待远端 CI。
+> 当前状态：`0.1.0-alpha.1`。Gate C 已集成。Gate D1 已完成：高层 Rust
+> facade、CLI 委托、workspace package 验证以及精确 Git revision 外部
+> consumer 均为绿色；维护者已确认候选 `07a95c6` 的 Linux、macOS、Windows
+> CI 全部通过。
 
 ## Rust API
 

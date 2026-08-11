@@ -4,11 +4,12 @@
 
 - Stage: `0.1.0-alpha.1`; Gate B and Gate C are complete. Gate D integration
   readiness planning is active.
-- Integration branch: local `main` at `edd08c6`; the maintainer-confirmed
-  hosted Gate C baseline remains `71c2a88` until the local Gate D planning
-  commits are pushed with an implementation candidate.
-- Current topic: `codex/feat-gate-d-api`; D1 high-level Rust consumption and
-  packaging are complete locally and awaiting hosted CI after maintainer push.
+- Integration state: the Gate D planning baseline is local; hosted candidate
+  `07a95c6` contains D1 implementation and documentation and is ready for
+  fast-forward integration with this documentation-only verification record.
+- Current resume point: D1 high-level Rust consumption and packaging are
+  complete. D2/D3 compatibility and conformance protocols are the next human
+  design checkpoint; no protocol behavior has been implemented ahead of it.
 - The maintainer confirmed standalone-first product positioning, one canonical
   framework-neutral Skill in this repository, explicit failure without engine
   fallback, downstream host adapters, and standalone adoption as Gate D scope.
@@ -37,9 +38,9 @@
 - `scripts/check-packages.sh` verifies required package contents, verifies the
   core → facade → CLI workspace candidate through Cargo's temporary registry,
   and runs collect plus validation from an unrelated exact-revision Git
-  consumer. Hosted D1 evidence is still pending.
-- The private GitHub repository and hosted Actions are established and green
-  through integrated Gate C. Public visibility remains a maintainer checkpoint.
+  consumer. Hosted D1 evidence is maintainer-confirmed green.
+- The private GitHub repository and hosted Actions are green through D1
+  candidate `07a95c6`. Public visibility remains a maintainer checkpoint.
 
 ## Verification
 
@@ -82,8 +83,9 @@ Gate D1 local verification on 2026-08-12:
   --no-deps`, and `bash scripts/check-public-history.sh` → green.
 - strict repository self-validation → seven files, zero errors, zero warnings;
   structural scan → 34 directories and seven `.norm` files.
-- Hosted Linux/macOS/Windows CI remains the only D1 batch evidence pending
-  before integration.
+- Hosted Linux, macOS, and Windows CI for D1 candidate `07a95c6` →
+  maintainer-confirmed green. This verification record is documentation-only
+  and does not change the tested implementation candidate.
 
 ## Open-source readiness
 
