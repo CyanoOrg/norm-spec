@@ -149,3 +149,40 @@ filesystem state from users and consumers.
 is deterministic, auditable, and implementable on Linux, macOS, and Windows.
 It preserves a strict trust boundary without treating all symlink presence as
 fatal.
+
+## D008 — Freeze Gate B as a language-neutral observable contract
+
+**Decision.** The five-command Gate B surface is frozen by
+`tests/contract/requirements.tsv`, `tests/contract/manifest.tsv`, its fixtures
+and expected results, and the protocol identifiers exported by `norm-core`.
+Every requirement must resolve to at least one case, every flag must be
+exercised, and missing assets or applicable runners fail rather than skip. A
+future observable change requires a new decision plus synchronized contract
+assets and tests.
+
+A completed `validate --json` evaluation emits `norm-spec/validate/v1` even
+when validation errors or strict warnings produce exit `1`. Only failures that
+prevent evaluation (for example, a missing input or schema) use
+`norm-spec/error/v1`. JSON success comparisons are exact after object-key
+normalization; diagnostic subset comparisons retain ordered arrays and require
+stable codes, fields, and machine-actionable suggestions while allowing human
+messages to improve.
+
+Human output is frozen by ordered semantic cues rather than byte-for-byte
+prototype text. The Rust output uses stable ASCII classifications and error
+codes, root-relative paths, and summary counts; it does not make Unicode glyphs
+or host-absolute paths part of compatibility. This is an intentional baseline
+deviation alongside D006.
+
+**Context.** Initial protocol seeds proved only that six envelope identifiers
+existed. They did not prove flag completeness, cross-cutting error behavior,
+human/machine stream selection, filesystem layout semantics, or traceability
+from an obligation to a fixture. The Python prototype also mixed stable data
+with host paths and presentation details that should not constrain an
+independent Rust product.
+
+**Rationale.** A language-neutral requirement-to-case inventory lets the Rust
+engine and downstream consumers share one reviewable compatibility surface
+without copying implementation. Static completeness can be enforced before
+the CLI exists; Gate C then replaces presence checks with executable assertions
+one vertical command slice at a time.

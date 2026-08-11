@@ -1,24 +1,25 @@
 # Gate B — Behavior Contract Working Document
 
-> Status: mutable working document. The authoritative contract lives in
-> `docs/SPEC.md`, `schema/`, `tests/contract/`, and `docs/decisions.md`. This
-> file coordinates the Gate B freeze and is superseded once the contract
-> fixtures and runner land.
+> Status: frozen on 2026-08-11 (D008). The authoritative contract lives in
+> `docs/SPEC.md`, `schema/`, `tests/contract/`, and `docs/decisions.md`. Amend
+> observable behavior only through a new decision plus synchronized contract
+> assets and tests.
 
 ## Purpose
 
 Gate B freezes the observable behavior of the five initial CLI commands
 (`parse`, `collect`, `validate`, `init`, `scan`) before any parser or validator
-implementation. This document is the working surface for that freeze: flag
+implementation. This document records that freeze: flag
 matrix, machine envelopes, exit codes, error codes, fixture inventory, runner
-specification, and open decisions.
+specification, resolved decisions, and closure evidence.
 
 ## Baseline statement
 
 The contract is grounded in the A1 behavior captured from the private Python
 prototype. Per D002 the prototype is a **reference input only** — not a runtime
 dependency, not an authority, and not imported into this repository. The Rust
-product ports observable behavior and records intentional deviations in D006.
+product ports observable behavior and records intentional deviations and
+filesystem semantics in D006–D008.
 
 ## Command flag matrix
 
@@ -52,12 +53,15 @@ default to machine mode, while `validate` and `init` select it with `--json`.
 the default `validate` report, and the default `init` confirmation) is not a
 versioned envelope.
 
-Handled failures in machine mode emit exactly one `norm-spec/error/v1` object
-to stdout, followed by a newline, and leave stderr empty. Human-mode usage and
-operation failures emit their diagnostic on stderr; regular validation results
-and summaries remain on stdout. Panics, aborts, and operating-system process
-failures are outside the machine protocol and must never be converted into an
-empty success response.
+Handled failures that prevent a command-specific machine response emit exactly
+one `norm-spec/error/v1` object to stdout, followed by a newline, and leave
+stderr empty. A completed `validate --json` evaluation emits
+`norm-spec/validate/v1` even when validation errors or strict warnings make its
+exit status `1`; preflight failures such as a missing input or schema use
+`norm-spec/error/v1`. Human-mode usage and operation failures emit their
+diagnostic on stderr; regular validation results and summaries remain on
+stdout. Panics, aborts, and operating-system process failures are outside the
+machine protocol and must never be converted into an empty success response.
 
 ### `norm-spec/parse/v1`
 
@@ -101,7 +105,15 @@ are ordered most-specific first.
 ```
 
 `status` is one of `ok`, `warning`, `error`. Each diagnostic carries a stable
-`code` (see Error codes) and a human `message`.
+`code` (see Error codes), an affected `field` when one is available, and a
+human `message`. A diagnostic may also carry a stable `suggestion` when the
+consumer needs a machine-actionable correction (for example, `agent_rules`
+for a misspelled key or `MAJOR.MINOR` for a version-format error).
+
+Human output is not a machine compatibility surface. Human-output fixtures use
+ordered required lines: commands may improve surrounding prose, but command
+identity, stable error code, affected path, result classification, and summary
+counts remain observable.
 
 ### `norm-spec/init/v1`
 
@@ -169,22 +181,27 @@ containment check happens before reading `.norm` data and returns `2`.
 ## Error codes
 
 Stable machine strings. Human wording may improve; codes and field paths may
-not change without a protocol decision. Seed list, to expand during fixture
-work:
+not change without a protocol decision. Frozen Gate B list:
 
 | Code | Meaning |
 |---|---|
 | `norm/parse/empty` | Empty file or empty frontmatter. |
 | `norm/parse/missing-closing-fence` | A1 frontmatter opened with no closing `---`. |
 | `norm/parse/not-a1` | First non-blank line is not `---`; needs `--legacy-format`. |
+| `norm/parse/root-type` | Parsed frontmatter root is not a mapping. |
 | `norm/parse/yaml` | YAML parse error in frontmatter. |
 | `norm/schema/unknown-key` | Unknown top-level key (error by default; warn with `--compat-keys`; suggest closest match). |
 | `norm/schema/version-format` | `metadata.version` is not `MAJOR.MINOR`. |
 | `norm/profile/unknown-explicit` | `metadata.profile` names no known profile. |
+| `norm/profile/recommended-field` | A selected profile omits a recommended field. |
 | `norm/semantic/lifecycle` | Lifecycle state machine invariant violated. |
+| `norm/semantic/lifecycle-legacy` | Legacy lifecycle string-list form remains accepted but should migrate. |
 | `norm/semantic/ssot-duplicate` | `single_source_of_truth` domain declared more than once. |
 | `norm/reference/not-found` | Reference target does not exist. |
 | `norm/reference/outside-root` | Reference target escapes the project root. |
+| `norm/reference/duplicate` | The same typed reference target is declared more than once. |
+| `norm/reference/description-required` | Reference policy requires a missing description. |
+| `norm/reference/external-not-allowed` | External reference is disallowed by policy. |
 | `norm/path/outside-root` | Operation target is outside the root. |
 | `norm/path/not-found` | Required input path does not exist. |
 | `norm/path/not-directory` | An operation requiring a directory received another path type. |
@@ -229,10 +246,17 @@ expected result under `tests/contract/expected/`. Invalid inputs use the
 
 ## Runner specification
 
-The language-neutral `tests/contract/manifest.tsv` inventories contract cases
-and binds each implemented case to a fixture, expected output, protocol, and
-exit code. A Rust integration test under `crates/norm-cli/tests/` validates the
-manifest and expected protocol files during Gate B.
+The language-neutral `tests/contract/requirements.tsv` inventories every Gate B
+obligation. `tests/contract/manifest.tsv` binds each case to command arguments,
+a fixture or layout recipe, stdout/stderr expectations and comparison modes, a
+machine protocol when applicable, an exit code, and one or more requirement
+IDs. A Rust integration test under `crates/norm-cli/tests/` validates that all
+requirements are covered and all referenced assets are present during Gate B.
+
+Manifest argument lists are JSON arrays with portable placeholders such as
+`{fixture}`, `{root}`, `{outside}`, `{schema}`, and `{output}`. Layout recipes
+are tab-separated, language-neutral instructions for constructing directory,
+file, outside-root, and symbolic-link cases in an isolated temporary root.
 
 Command runners land with each vertical implementation slice in Gate C. They
 invoke the `norm` binary, compare stdout as canonical JSON (object-key order
@@ -247,9 +271,9 @@ Discipline:
 - A missing manifest, fixture, or expected file is a test failure (`panic`),
   never a skip.
 - `#[ignore]` is forbidden for contract tests.
-- Gate B must provide at least one statically checked success contract for all
-  five commands and one machine error contract. It is not complete until every
-  cross-cutting case above has a manifest row and expected result.
+- Gate B is complete only when every requirement has at least one manifest
+  case, all five commands have success contracts, human and machine modes are
+  represented, and machine failures include `norm-spec/error/v1` coverage.
 - Gate C replaces static presence checks with executable command assertions one
   command at a time; an applicable but unavailable runner fails rather than
   skipping.
@@ -258,3 +282,15 @@ Discipline:
 
 - **Symbolic links.** Canonical containment, no recursive directory-link
   traversal, rejected `.norm` links, and deterministic scan reporting (D007).
+- **Contract freeze.** Requirement-to-case traceability, machine response
+  selection, comparison semantics, and human-output stability (D008).
+
+## Closure evidence
+
+Gate B closed on 2026-08-11 with 91 requirements, 82 manifest cases, 54 stream
+expectations, 32 direct fixture files, and 12 layout recipes. The Rust static
+integrity test proves complete requirement and flag coverage, per-command
+machine success/error coverage, applicable human-mode coverage, valid
+protocol/exit/stream combinations, portable placeholders and paths, valid
+layout instructions, and the absence of missing or orphan expected assets.
+Executable command assertions replace these presence checks during Gate C.

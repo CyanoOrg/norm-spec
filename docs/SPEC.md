@@ -4,10 +4,13 @@
 
 A `.norm` file is a structured declaration placed in a project directory. An AI agent collects it before working there so it knows the directory's conventions — required files, single sources of truth, update order, document lifecycle, references. norm-spec defines this format and ships a validator. It is **format- and tooling-only**; how a consumer collects, injects, and obeys `.norm` is the consumer's concern, not the spec's.
 
-## Planned CLI surface
+## Frozen CLI surface (implementation pending)
 
-The production CLI is under development. Once each command is marked complete
-in the execution plan, its public form is:
+Gate B has frozen the public form of the five initial commands; their production
+implementation lands during Gate C. The authoritative behavior inventory is
+`tests/contract/requirements.tsv` plus `tests/contract/manifest.tsv`, with
+rationale in `docs/decisions.md` (D006–D008) and working detail in
+`docs/planning/gate-b-contract.md`.
 
 ```bash
 # Create a .norm from a profile template
@@ -43,6 +46,20 @@ norm collect --root . --target docs/modules/example --pretty
 # Structural scan (raw material for writing .norm; no inference)
 norm scan --root . --text
 ```
+
+Machine responses use `norm-spec/parse/v1`, `norm-spec/collect/v1`,
+`norm-spec/validate/v1`, `norm-spec/init/v1`, `norm-spec/scan/v1`, or the common
+`norm-spec/error/v1` envelope. JSON object key order is not semantic; ordered
+collections remain ordered. Output paths are root-relative, and exit codes are
+`0` for success, `1` for input, data, validation, or operation failure, and `2`
+for usage, configuration, or CLI root-containment failure. A completed
+validation report keeps `norm-spec/validate/v1` even at exit `1`; preflight
+machine failures use `norm-spec/error/v1`.
+
+Filesystem operations canonicalize roots and targets. They do not recursively
+follow directory symbolic links, reject a `.norm` that is itself a symbolic
+link, and reject operation targets outside the declared root. Scan reports
+untraversed directory links deterministically.
 
 ## Concepts
 

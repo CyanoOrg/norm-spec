@@ -9,7 +9,7 @@ in this repository. Its authority is self-contained:
 - `tests/contract/` captures stable inputs, outputs, errors, ordering, and exit
   behavior.
 
-The bootstrap fixtures seed that contract. Gate B expands coverage across the
-complete initial CLI surface before parser and validator implementation lands.
+The bootstrap fixtures seeded that contract. Gate B expanded coverage across
+the complete initial CLI surface before parser and validator implementation.
 Required fixtures and applicable binaries must execute successfully; missing
 inputs are failures rather than skips.
