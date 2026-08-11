@@ -2,11 +2,13 @@
 
 #![forbid(unsafe_code)]
 
+mod collector;
 mod parser;
 mod protocol;
 
+pub use collector::{CollectPathError, collect_candidate_paths, project_path};
 pub use parser::{ParseError, ParseOptions, ParsedNorm, parse_norm};
-pub use protocol::{ErrorDetail, ErrorResponse, ParseResponse};
+pub use protocol::{CollectResponse, CollectedNorm, ErrorDetail, ErrorResponse, ParseResponse};
 
 /// Identifier for the initial `.norm` format contract.
 pub const FORMAT_ID: &str = "norm-spec/a1";
