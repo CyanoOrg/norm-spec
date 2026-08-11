@@ -21,6 +21,7 @@ jobs:
       - run: cargo fmt --check
       - run: cargo clippy --workspace --all-targets --all-features -- -D warnings
       - run: cargo test --workspace --all-features
+      - run: bash scripts/check-packages.sh
       - run: cargo doc --workspace --no-deps
         env:
           RUSTDOCFLAGS: -D warnings

@@ -1,0 +1,8 @@
+[package]
+name = "norm-spec-external-consumer"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[dependencies]
+norm-spec = { git = "__NORM_SPEC_GIT_URL__", rev = "__NORM_SPEC_GIT_REV__" }

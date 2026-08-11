@@ -17,6 +17,9 @@ include = [
     "/schema/norm-schema.json",
     "/schema/profiles/*.json",
     "/templates/profiles/*.norm",
+    "/tests/collect_api.rs",
+    "/tests/support/**",
+    "/tests/validate_api.rs",
 ]
 
 [lib]

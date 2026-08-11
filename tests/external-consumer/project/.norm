@@ -1,0 +1,8 @@
+---
+metadata:
+  layer: root
+  scope: ./
+  version: "1.0"
+---
+
+# External consumer root
