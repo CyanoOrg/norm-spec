@@ -362,3 +362,50 @@ the canonical Skill beside the specification and commands makes its workflow
 reviewable against the same release while avoiding a second repository for one
 small artifact. Keeping automatic host behavior downstream preserves the
 single-engine rule, independent versioning, and honest evidence boundaries.
+
+## D014 — Package the high-level Rust facade at the workspace root
+
+**Decision.** The public high-level Rust package is `norm-spec`, rooted at the
+repository workspace with an explicit library path under
+`crates/norm-api/src/`. It owns explicit filesystem orchestration and embeds
+the canonical root `schema/` and `templates/` assets from their existing
+single-source locations. It depends on `norm-spec-core`, which remains the
+deterministic, I/O-free semantic package. `norm-spec-cli` will depend on the
+facade for collect and validation orchestration while retaining argument
+parsing, presentation, JSON serialization, and exit-code mapping.
+
+The facade exposes typed requests, versioned response models, and a typed
+failure classification that distinguishes invalid usage from an unavailable
+operation without exposing process exit codes. All roots, targets, optional
+schema directories, and behavior flags are supplied explicitly; the facade
+does not inspect environment state or perform network or sibling discovery.
+
+Package verification is performed as a workspace candidate so Cargo can stage
+the unpublished `norm-spec-core` dependency in its temporary registry before
+verifying `norm-spec`. Exact-revision Git consumption is a separate Gate D
+check. Registry publication order remains a Gate E concern: core precedes the
+facade and CLI. A registry name lookup found no current `norm-spec` or
+`norm-spec-core` record, but that observation is not a reservation or release
+claim.
+
+**Context.** A bounded D1.1 spike compared three layouts. A workspace-root
+package included the existing Schema and template trees, passed Rust 1.97
+workspace package verification with its core dependency, and built an
+unrelated exact-Git-revision consumer that collected and validated two
+inherited conventions. Cargo excluded `../../schema/**` and
+`../../templates/**` from both an extended core package and a new nested
+runtime package because package contents cannot escape their package root.
+
+Moving the canonical assets under a nested runtime crate would make that
+layout packageable, but it would relocate repository-level sources of truth
+and broaden the change without improving the public boundary. Keeping the
+filesystem adapter private to the CLI would force Rust consumers to manage a
+second process and binary distribution. Copying or generating a second asset
+tree would create split authority.
+
+**Rationale.** The workspace root is the only compared package root that
+naturally contains the existing release assets and can provide one public
+facade without copies or parent-tree access. The explicit dependency direction
+keeps semantics single-sourced in core, gives CLI and library consumers the
+same orchestration, and preserves independent tests for Git consumption,
+package contents, and eventual registry publication.

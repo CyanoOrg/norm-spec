@@ -4,11 +4,11 @@
 
 - Stage: `0.1.0-alpha.1`; Gate B and Gate C are complete. Gate D integration
   readiness planning is active.
-- Integration branch: `main` at `71c2a88`. The maintainer pushed integrated
-  Gate C, verified hosted Linux, macOS, and Windows CI, and removed the remote
-  init/scan topic branch.
-- Current topic: `codex/docs-gate-d-plan`; D013 and the Gate D execution design
-  are documentation-only and precede implementation.
+- Integration branch: local `main` at `edd08c6`; the maintainer-confirmed
+  hosted Gate C baseline remains `71c2a88` until the local Gate D planning
+  commits are pushed with an implementation candidate.
+- Current topic: `codex/feat-gate-d-api`; D1 high-level Rust consumption and
+  packaging are active.
 - The maintainer confirmed standalone-first product positioning, one canonical
   framework-neutral Skill in this repository, explicit failure without engine
   fallback, downstream host adapters, and standalone adoption as Gate D scope.
@@ -25,10 +25,12 @@
 - All five production commands are functional. Gate D consumer-resolvable API,
   compatibility, conformance, standalone adoption, and Skill work remain open;
   Gate C completion does not claim those later gates.
-- `cargo package --list` shows that the current core and CLI packages omit the
-  root Schema, template, and contract assets. A workspace-green build is not
-  yet a publishable external-consumer boundary; Gate D1 must resolve it without
-  copies or sibling paths.
+- D014 selected a repository-root `norm-spec` facade after an isolated D1.1
+  spike. The facade layout packaged the existing root assets, passed Rust 1.97
+  workspace candidate verification with the unpublished core package, and ran
+  collect plus validation from an unrelated exact-revision Git consumer.
+- The production facade, CLI delegation, and permanent packaging tests are not
+  implemented yet; the spike is boundary evidence, not Gate D1 completion.
 - The private GitHub repository and hosted Actions are established and green
   through integrated Gate C. Public visibility remains a maintainer checkpoint.
 
@@ -88,8 +90,10 @@ Full Gate C local verification on 2026-08-11:
 - [x] Implement self-contained init and deterministic structural scan plus all
       executable init/scan cases.
 - [x] Decide standalone-first product and canonical Skill ownership (D013).
-- [ ] Select and prove a packaged high-level Rust consumer surface without
-      sibling-path or copied-asset coupling.
+- [x] Select the packaged high-level Rust consumer boundary without
+      sibling-path or copied-asset coupling (D014 and the isolated D1.1 spike).
+- [ ] Implement the selected facade, CLI delegation, and permanent external
+      package-consumer checks.
 - [ ] Add versioned compatibility discovery and arbitrary-candidate
       conformance without skips.
 - [ ] Prove standalone adoption from an isolated candidate without a plugin.

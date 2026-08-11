@@ -116,6 +116,28 @@ Select the layout only after all of these pass:
 The package name and public registry availability are not assumed by this
 planning document. They are part of D1.1 and the later publication checkpoint.
 
+### D1.1 result — 2026-08-12
+
+D014 selects the workspace-root facade with library source under
+`crates/norm-api/src/`. The isolated spike established:
+
+- a root package includes the existing `schema/` and `templates/` sources
+  without copies;
+- extending `norm-spec-core` or adding a nested runtime crate cannot include
+  `../../schema/**` or `../../templates/**` in its package;
+- an unrelated Cargo project consumed the root facade at an exact local Git
+  revision and completed a two-level collect plus validation run;
+- Rust 1.97 `cargo package --workspace` staged the unpublished core package in
+  a temporary registry and verified both core and facade outside their source
+  directories;
+- the currently unregistered package names are observations only, not a
+  reservation or publication claim.
+
+Production work must retain exact, root-anchored package include patterns so a
+root `README.md` pattern does not accidentally include nested files with the
+same basename. CLI packaging joins the workspace-package gate after its
+private Schema orchestration has moved behind the facade.
+
 ## Result D2 — Versioned compatibility discovery
 
 An installed candidate needs one deterministic machine response that reports
@@ -290,8 +312,9 @@ Gate D additionally requires:
 
 ## Human checkpoints
 
-1. **D1.1 package layout** — approve the facade package boundary after the
-   packaging spike and before moving production orchestration.
+1. **D1.1 package layout** — satisfied by the maintainer's authorization to
+   continue into implementation and the evidence recorded in D014 after the
+   packaging spike.
 2. **D2/D3 protocols** — approve the compatibility command/envelope and
    conformance report before freezing new observable behavior.
 3. **First real adoption project** — choose a real non-plugin repository after
