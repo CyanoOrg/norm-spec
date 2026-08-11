@@ -268,7 +268,7 @@ mod tests {
     use serde_json::json;
 
     use super::{ReferenceResolver, ReferenceStatus, validate_frontmatter};
-    use crate::{SchemaBundle, ValidationOptions};
+    use crate::{ValidationOptions, test_support::schemas};
 
     struct Resolver {
         status: ReferenceStatus,
@@ -278,15 +278,6 @@ mod tests {
         fn resolve(&self, _target: &str) -> ReferenceStatus {
             self.status
         }
-    }
-
-    fn schemas() -> SchemaBundle {
-        let root: serde_json::Value = serde_json::from_str(include_str!(concat!(
-            env!("CARGO_MANIFEST_DIR"),
-            "/../../schema/norm-schema.json"
-        )))
-        .unwrap_or_else(|error| panic!("root schema fixture should parse: {error}"));
-        SchemaBundle::new(root, [])
     }
 
     fn valid() -> serde_json::Value {

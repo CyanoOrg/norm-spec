@@ -283,21 +283,8 @@ fn pointer_to_field(pointer: &str) -> String {
 mod tests {
     use serde_json::json;
 
-    use super::{SchemaBundle, ValidationOptions, validate_structure};
-
-    fn schemas() -> SchemaBundle {
-        let root: serde_json::Value = serde_json::from_str(include_str!(concat!(
-            env!("CARGO_MANIFEST_DIR"),
-            "/../../schema/norm-schema.json"
-        )))
-        .unwrap_or_else(|error| panic!("root schema fixture should parse: {error}"));
-        let convention: serde_json::Value = serde_json::from_str(include_str!(concat!(
-            env!("CARGO_MANIFEST_DIR"),
-            "/../../schema/profiles/convention.json"
-        )))
-        .unwrap_or_else(|error| panic!("profile schema fixture should parse: {error}"));
-        SchemaBundle::new(root, [("convention".to_owned(), convention)])
-    }
+    use super::{ValidationOptions, validate_structure};
+    use crate::test_support::schemas;
 
     fn valid() -> serde_json::Value {
         json!({"metadata": {"layer": "example", "scope": "./", "version": "1.0"}})

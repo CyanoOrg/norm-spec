@@ -8,6 +8,8 @@ mod protocol;
 mod scan;
 mod schema;
 mod semantics;
+#[cfg(test)]
+mod test_support;
 mod validator;
 
 pub use collector::{CollectPathError, collect_candidate_paths, project_path};
