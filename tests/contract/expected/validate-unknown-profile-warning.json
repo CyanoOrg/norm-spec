@@ -1,0 +1,20 @@
+{
+  "apiVersion": "norm-spec/validate/v1",
+  "results": [
+    {
+      "path": ".norm",
+      "status": "warning",
+      "warnings": [
+        {
+          "code": "norm/profile/unknown-explicit",
+          "field": "metadata.profile"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "files": 1,
+    "errors": 0,
+    "warnings": 1
+  }
+}

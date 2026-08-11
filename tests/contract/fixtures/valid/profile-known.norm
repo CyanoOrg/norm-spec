@@ -1,0 +1,11 @@
+---
+metadata:
+  layer: custom
+  profile: convention
+  scope: ./
+  version: "1.0"
+template:
+  required_files: []
+---
+
+# Known profile

@@ -1,0 +1,19 @@
+{
+  "apiVersion": "norm-spec/validate/v1",
+  "results": [
+    {
+      "path": ".norm",
+      "status": "error",
+      "errors": [
+        {
+          "code": "norm/reference/description-required",
+          "field": "strong_references[0].description"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "files": 1,
+    "errors": 1
+  }
+}

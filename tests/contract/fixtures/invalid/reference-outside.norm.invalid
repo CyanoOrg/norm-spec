@@ -1,0 +1,14 @@
+---
+metadata: {layer: custom, scope: ./, version: "1.0"}
+agent_rules:
+  reference_policy:
+    target_must_exist: true
+    allow_external: false
+    require_description: true
+strong_references:
+  - type: source
+    target: ../outside-project
+    sync: auto_pull
+    validation: strict
+    description: Escaping fixture target
+---

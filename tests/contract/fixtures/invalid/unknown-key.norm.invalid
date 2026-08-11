@@ -1,0 +1,7 @@
+---
+metadata:
+  layer: example
+  scope: ./
+  version: "1.0"
+agent_rulez: {}
+---

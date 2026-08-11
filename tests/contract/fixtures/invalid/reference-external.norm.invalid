@@ -1,0 +1,12 @@
+---
+metadata: {layer: custom, scope: ./, version: "1.0"}
+agent_rules:
+  reference_policy:
+    allow_external: false
+strong_references:
+  - type: source
+    target: https://example.invalid/reference
+    sync: auto_pull
+    validation: strict
+    description: External fixture target
+---

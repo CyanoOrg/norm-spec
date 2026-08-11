@@ -1,0 +1,7 @@
+---
+metadata:
+  layer: custom
+  profile: missing-profile
+  scope: ./
+  version: "1.0"
+---

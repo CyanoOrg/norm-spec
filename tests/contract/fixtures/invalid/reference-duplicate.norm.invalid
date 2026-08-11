@@ -1,0 +1,14 @@
+---
+metadata: {layer: custom, scope: ./, version: "1.0"}
+strong_references:
+  - type: source
+    target: README.md
+    sync: auto_pull
+    validation: strict
+    description: First declaration
+  - type: source
+    target: README.md
+    sync: auto_pull
+    validation: strict
+    description: Duplicate declaration
+---

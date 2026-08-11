@@ -1,0 +1,2 @@
+OK .norm
+1 file(s) checked: 0 error(s), 0 warning(s)

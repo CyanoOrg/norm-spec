@@ -1,0 +1,12 @@
+---
+metadata:
+  layer: custom
+  scope: ./
+  version: "1.0"
+agent_rules:
+  document_lifecycle:
+    - draft -> current
+    - current -> archived
+---
+
+# Legacy lifecycle

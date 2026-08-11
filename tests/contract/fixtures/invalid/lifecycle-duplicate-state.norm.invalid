@@ -1,0 +1,10 @@
+---
+metadata: {layer: custom, scope: ./, version: "1.0"}
+agent_rules:
+  document_lifecycle:
+    state_field: state
+    states: [{id: draft}, {id: draft}]
+    initial: draft
+    terminal: []
+    transitions: [{from: draft, to: draft}]
+---

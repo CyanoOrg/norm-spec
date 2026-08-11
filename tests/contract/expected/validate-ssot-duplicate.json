@@ -1,0 +1,19 @@
+{
+  "apiVersion": "norm-spec/validate/v1",
+  "results": [
+    {
+      "path": ".norm",
+      "status": "error",
+      "errors": [
+        {
+          "code": "norm/semantic/ssot-duplicate",
+          "field": "template.single_source_of_truth"
+        }
+      ]
+    }
+  ],
+  "summary": {
+    "files": 1,
+    "errors": 1
+  }
+}
