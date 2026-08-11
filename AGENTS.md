@@ -16,16 +16,22 @@ release history.
 
 ## Current state
 
-Version `0.1.0-alpha.1` has completed Gate B and the full Gate C implementation
-locally: governance, architecture, the language-neutral five-command behavior
-contract, and all five production commands are in place. All 82 frozen cases
-execute the compiled binary without skips. The final init/scan topic branch
-still requires hosted cross-platform CI and maintainer integration.
+Version `0.1.0-alpha.1` has completed Gate B and Gate C: governance,
+architecture, the language-neutral five-command behavior contract, and all
+five production commands are in place. All 82 frozen cases execute the
+compiled binary without skips, and the integrated candidate is green on hosted
+Linux, macOS, and Windows CI.
+
+Gate D is active. It makes the Rust surface and machine contracts consumable
+outside this repository, adds consumer-neutral conformance and standalone
+adoption evidence, and ships one canonical framework-neutral Skill under D013.
+Host-specific injection and enforcement remain downstream.
 
 Read first:
 
 - `docs/planning/status.md` for live state.
 - `docs/planning/v0.1-execution.md` for the active plan.
+- `docs/planning/gate-d-design.md` for the active integration-readiness design.
 - `docs/ARCHITECTURE.md` for code boundaries.
 - `docs/decisions.md` for immutable decisions.
 

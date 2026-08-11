@@ -2,13 +2,16 @@
 
 ## Resume here
 
-- Stage: `0.1.0-alpha.1`; Gate B and the full Gate C implementation are
-  complete and integrated locally.
-- Integration branch: local `main` at `8b74ae2`. The final init/scan topic was
-  fast-forwarded after the maintainer verified hosted Linux, macOS, and Windows
-  CI. Pushing integrated `main`, verifying hosted `main` CI, and removing the
-  remote init/scan topic branch remain maintainer operations.
-- Current branch: `main`; no local Gate C topic branch remains.
+- Stage: `0.1.0-alpha.1`; Gate B and Gate C are complete. Gate D integration
+  readiness planning is active.
+- Integration branch: `main` at `71c2a88`. The maintainer pushed integrated
+  Gate C, verified hosted Linux, macOS, and Windows CI, and removed the remote
+  init/scan topic branch.
+- Current topic: `codex/docs-gate-d-plan`; D013 and the Gate D execution design
+  are documentation-only and precede implementation.
+- The maintainer confirmed standalone-first product positioning, one canonical
+  framework-neutral Skill in this repository, explicit failure without engine
+  fallback, downstream host adapters, and standalone adoption as Gate D scope.
 - D012 embeds the seven repository-owned templates without ambient discovery
   and fixes scan's infrastructure ignore set, naming precedence, ordering,
   recurrence limit, coverage rounding, and no-inference boundary.
@@ -19,12 +22,15 @@
 - All 4 global, 13 parse, 11 collect, 35 validate, 9 init, and 10 scan cases
   execute the compiled binary in isolated roots with no skips: 82 of 82 frozen
   cases.
-- All five production commands are functional. Gate D consumer-resolvable
-  contracts/conformance and Gate E distribution/release readiness remain open;
+- All five production commands are functional. Gate D consumer-resolvable API,
+  compatibility, conformance, standalone adoption, and Skill work remain open;
   Gate C completion does not claim those later gates.
+- `cargo package --list` shows that the current core and CLI packages omit the
+  root Schema, template, and contract assets. A workspace-green build is not
+  yet a publishable external-consumer boundary; Gate D1 must resolve it without
+  copies or sibling paths.
 - The private GitHub repository and hosted Actions are established and green
-  through the final Gate C topic branch. Public visibility remains a
-  maintainer checkpoint.
+  through integrated Gate C. Public visibility remains a maintainer checkpoint.
 
 ## Verification
 
@@ -49,8 +55,8 @@ Full Gate C local verification on 2026-08-11:
 - `cargo install --path crates/norm-cli --root <isolated> --locked` → green;
   the installed binary initialized a module template, strictly validated it,
   and scanned its isolated root with full coverage.
-- Hosted Linux, macOS, and Windows evidence for the final init/scan branch is
-  green. Hosted evidence for integrated `main` remains pending maintainer push.
+- Hosted Linux, macOS, and Windows evidence for the final init/scan branch and
+  integrated Gate C `main` is maintainer-confirmed green.
 
 ## Open-source readiness
 
@@ -81,7 +87,13 @@ Full Gate C local verification on 2026-08-11:
       validate cases.
 - [x] Implement self-contained init and deterministic structural scan plus all
       executable init/scan cases.
-- [ ] Provide consumer-resolvable Rust/machine contracts and a conformance
-      entry point without sibling-path coupling (Gate D).
+- [x] Decide standalone-first product and canonical Skill ownership (D013).
+- [ ] Select and prove a packaged high-level Rust consumer surface without
+      sibling-path or copied-asset coupling.
+- [ ] Add versioned compatibility discovery and arbitrary-candidate
+      conformance without skips.
+- [ ] Prove standalone adoption from an isolated candidate without a plugin.
+- [ ] Add and validate the canonical framework-neutral norm-spec Skill without
+      parser, collect, or validation fallback.
 - [ ] Complete cross-platform distribution and release-readiness review
       (Gate E).
