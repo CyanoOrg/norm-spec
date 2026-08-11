@@ -5,8 +5,6 @@ mod init;
 mod output;
 mod paths;
 mod scan;
-mod schemas;
-mod templates;
 mod validate;
 
 use std::{fs, path::PathBuf, process::ExitCode};

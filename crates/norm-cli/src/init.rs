@@ -8,12 +8,12 @@ use std::{
 };
 
 use clap::Args;
+use norm_spec::profile_template;
 use norm_spec_core::{ErrorDetail, InitAction, InitResponse};
 
 use crate::{
     output::{EXIT_OPERATION, EXIT_USAGE, emit_error, emit_json},
     paths::portable_path,
-    templates,
 };
 
 #[derive(Debug, Args)]
@@ -67,7 +67,7 @@ pub(crate) fn run(args: &InitArgs) -> ExitCode {
             },
         );
     };
-    let Some(contents) = templates::get(profile) else {
+    let Some(contents) = profile_template(profile) else {
         return emit_failure(
             args,
             InitFailure {

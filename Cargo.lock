@@ -553,6 +553,7 @@ name = "norm-spec-cli"
 version = "0.1.0-alpha.1"
 dependencies = [
  "clap",
+ "norm-spec",
  "norm-spec-core",
  "serde",
  "serde_json",
