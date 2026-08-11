@@ -176,26 +176,232 @@ The response must not use absolute paths, network state, registry availability,
 or object-key order as compatibility. A new decision must freeze the envelope,
 discovery command, ordering, and compatibility rules before implementation.
 
-The initial recommendation is an additive `norm compatibility --json` command.
-Gate B froze the five initial commands, not a permanent five-command ceiling;
-the new observable command still requires its own requirements, fixtures, and
-cross-platform tests.
+### D2 protocol proposal — awaiting maintainer approval
+
+The proposed discovery command is additive and machine-only:
+
+```text
+norm compatibility [--pretty]
+```
+
+Compact JSON is the default. `--pretty` changes whitespace only. The proposal
+does not add a redundant `--json` selector or a second human presentation that
+consumers could accidentally scrape. Gate B froze the five initial commands,
+not a permanent five-command ceiling; this command receives separate
+compatibility-v1 fixtures and cross-platform tests.
+
+The proposed compact response is structurally equivalent to:
+
+```json
+{
+  "apiVersion": "norm-spec/compatibility/v1",
+  "product": {
+    "name": "norm-spec",
+    "version": "0.1.0-alpha.1"
+  },
+  "formats": [
+    "norm-spec/a1"
+  ],
+  "rustApi": {
+    "id": "norm-spec/rust-api/v1",
+    "package": "norm-spec",
+    "version": "0.1.0-alpha.1"
+  },
+  "machineApis": [
+    "norm-spec/collect/v1",
+    "norm-spec/compatibility/v1",
+    "norm-spec/error/v1",
+    "norm-spec/init/v1",
+    "norm-spec/parse/v1",
+    "norm-spec/scan/v1",
+    "norm-spec/validate/v1"
+  ],
+  "conformance": {
+    "bundleApi": "norm-spec/contract-bundle/v1",
+    "reportApi": "norm-spec/conformance/v1",
+    "suite": "norm-spec/a1-cli/v1",
+    "caseCount": 82,
+    "contractDigest": "sha256:<64-lowercase-hex>"
+  }
+}
+```
+
+The current product version is illustrative; the compiled candidate supplies
+its own exact package version. The initial envelope deliberately omits source
+commit and build metadata. A Git revision or artifact digest remains an
+external transport pin until the build can inject and reproduce source
+identity rather than infer it from a checkout.
+
+The proposed compatibility rules are:
+
+- the envelope, format, Rust API, machine APIs, bundle API, report API, and
+  suite are
+  compared by exact identifier, not product-version inference;
+- `caseCount` and `contractDigest` must both match the requested frozen suite;
+- product and Rust package versions are exact identity and diagnostic data,
+  not substitutes for the identifiers;
+- producers emit identifier arrays in lexical order, while consumers compare
+  them as sets and do not treat array or object-key order as compatibility;
+- consumers ignore unknown object fields but fail closed when a required field
+  or required identifier is absent, malformed, or unknown;
+- additive machine API identifiers may appear in a compatibility-v1 response;
+  changing the meaning of an existing identifier requires that identifier to
+  advance;
+- no path, environment, network, registry, or ambient repository state enters
+  the response.
+
+The compatibility command is not recursively included in the 82-case A1 CLI
+suite that it reports. Its own compatibility-v1 fixtures prove the command and
+envelope; the D3 runner performs that check as a preflight and then executes
+the already frozen 82 cases.
 
 ## Result D3 — Consumer-neutral conformance
 
 Provide a cross-platform runner that accepts an arbitrary `norm` candidate and
 executes the exact frozen contract assets owned by this repository. The
-recommended invocation shape is:
+proposed invocation shape is:
 
 ```text
 norm-spec-conformance \
   --candidate <path-to-norm> \
   --contract-dir <exact-contract-bundle> \
-  --json
+  [--pretty]
 ```
 
-Its report uses a new `norm-spec/conformance/v1` envelope and includes suite
-identity, candidate identity, totals, failures, and completion state.
+Compact JSON is the default and `--pretty` changes whitespace only. The runner
+is proposed as a second binary in the `norm-spec-cli` package, not a `norm`
+subcommand or part of the public Rust facade. That keeps candidate behavior
+separate from the independent process, fixture, and comparison machinery that
+verifies it.
+
+### Exact contract bundle
+
+The current executable test is not repository-independent: it resolves the
+candidate through `CARGO_BIN_EXE_norm` and the explicit Schema case through the
+repository-root `schema/` tree. D3 therefore needs a deterministic exported
+bundle rather than a renamed copy of the integration test.
+
+The proposed bundle contains:
+
+```text
+bundle.lock.json
+requirements.tsv
+manifest.tsv
+expected/
+fixtures/
+layouts/
+schema/
+```
+
+`schema/` is copied into a disposable export from its canonical repository
+source; it is not checked in as another editable Schema tree. The lock lists
+every execution-owned file by portable relative path and lowercase SHA-256.
+Paths are lexical, use `/`, and may not be absolute or contain `..`.
+
+The suite digest is SHA-256 over this UTF-8 identity stream:
+
+```text
+norm-spec/contract-digest/v1
+suite=norm-spec/a1-cli/v1
+cases=82
+<path> NUL <lowercase-file-sha256>
+...
+```
+
+The `NUL` separator is one zero byte; every logical row ends with one LF byte.
+File rows are in lexical path order. The lock file itself is excluded to avoid
+recursion. Repository attributes pin execution-owned text to LF before the
+digest is frozen. The runner embeds the expected suite ID, count, and digest,
+then rejects a missing, altered, extra, or path-unsafe bundle entry. Exporting
+from source and verifying an exported directory become permanent gates; no
+sibling lookup or network repair exists.
+
+### D3 report proposal
+
+The proposed success report is structurally equivalent to:
+
+```json
+{
+  "apiVersion": "norm-spec/conformance/v1",
+  "suite": {
+    "id": "norm-spec/a1-cli/v1",
+    "caseCount": 82,
+    "contractDigest": "sha256:<64-lowercase-hex>"
+  },
+  "candidate": {
+    "name": "norm-spec",
+    "version": "0.1.0-alpha.1",
+    "compatibility": "compatible"
+  },
+  "status": "pass",
+  "complete": true,
+  "summary": {
+    "declared": 82,
+    "executed": 82,
+    "passed": 82,
+    "failed": 0,
+    "notExecuted": 0
+  },
+  "issues": [],
+  "failures": []
+}
+```
+
+`issues` contain stable `norm/conformance/*` codes for preflight, bundle, or
+runner failures. `failures` contain a manifest case ID and one or more stable
+checks from `execution`, `exit`, `stdout`, `stderr`, and `apiVersion`; mutable
+messages and raw host paths are not compatibility fields. Known isolated paths
+are normalized, and the machine report does not copy arbitrary candidate
+streams that could leak host-absolute paths.
+
+Initial issue codes are frozen as:
+
+- `norm/conformance/usage`;
+- `norm/conformance/candidate-unavailable`;
+- `norm/conformance/compatibility-unavailable`;
+- `norm/conformance/candidate-incompatible`;
+- `norm/conformance/bundle-unavailable`;
+- `norm/conformance/bundle-mismatch`;
+- `norm/conformance/bundle-unsafe-path`;
+- `norm/conformance/case-setup`;
+- `norm/conformance/runner-unsupported`.
+
+Each issue has required `code` and non-empty `message` fields. Each case
+failure has required `caseId` and non-empty ordered `checks`; one case produces
+at most one failure entry. Candidate `name` and `version` are strings when a
+valid compatibility response provides them and JSON `null` otherwise.
+Candidate `compatibility` is exactly `compatible`, `incompatible`, or
+`unavailable`.
+
+Summary invariants are `executed = passed + failed` and
+`declared = executed + notExecuted`. `complete` is true only when every
+declared case was executed and no global runner or bundle issue prevented the
+suite. A compatibility issue may make the overall status `fail` while the
+suite remains complete and all case checks pass.
+
+The proposed status and exit rules are:
+
+- `pass`, complete, exit `0`: compatibility preflight passes and all 82 cases
+  execute and match;
+- `fail`, complete, exit `1`: the candidate is executable and every case is
+  attempted, but compatibility or one or more case checks fail;
+- `error`, incomplete, exit `2`: runner usage, candidate availability, bundle
+  integrity, fixture materialization, or process support prevents complete
+  execution.
+
+An incompatible but executable candidate is still exercised across all 82
+cases so the report does not hide behavioral evidence. A missing or invalid
+candidate/bundle yields explicit `notExecuted` counts and an incomplete error,
+never a skip or successful empty result. Case mismatches do not stop later
+cases. Issues use stable preflight order; case failures use manifest order and
+the fixed check order shown above. Candidate version substitution comes only
+from a valid compatibility response and never falls back to scraping help or
+guessing from the runner version. The candidate path is resolved before case
+working directories change and is never emitted as a host-absolute report
+field.
+
+The `norm-spec/conformance/v1` report therefore includes suite identity,
+candidate identity, totals, failures, and completion state.
 
 Required properties:
 
