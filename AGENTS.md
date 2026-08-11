@@ -19,7 +19,7 @@ release history.
 Version `0.1.0-alpha.1` has completed Gate B: governance, architecture, and the
 language-neutral five-command behavior contract are frozen. Gate C implements
 one executable command slice at a time. Global help/version, `parse`, and
-`collect` are complete; `validate`, `init`, and `scan` remain explicit stubs
+`collect`, and `validate` are complete; `init` and `scan` remain explicit stubs
 until their execution-plan items and executable contract cases close.
 
 Read first:
@@ -36,12 +36,12 @@ cargo fmt --check
 cargo clippy --workspace --all-targets --all-features -- -D warnings
 cargo test --workspace --all-features
 cargo doc --workspace --no-deps
+cargo run -p norm-spec-cli -- validate --all --strict
 bash scripts/check-public-history.sh
 ```
 
-Before the Rust validator is complete, read applicable `.norm` files directly
-and review changes against `docs/SPEC.md` and the contract fixtures. Do not
-claim self-hosted validation until the repository's own validator exists.
+The Rust CLI now validates this repository without a legacy runtime. Keep that
+self-check green together with `docs/SPEC.md` and the contract fixtures.
 
 ## Sources of truth
 
@@ -143,6 +143,6 @@ When the format changes, update in order: decision → `docs/SPEC.md` → `schem
 ## `.norm` awareness
 
 Before operating in a directory, collect `.norm` files from that directory to
-the repository root and honor their frontmatter and body. Until the Rust CLI is
-self-hosting, perform that collection directly from the filesystem and treat
-the repository's specification and contract fixtures as authoritative.
+the repository root and honor their frontmatter and body. The Rust `collect`
+and `validate` commands are the executable self-hosting paths; the repository's
+specification and contract fixtures remain authoritative.

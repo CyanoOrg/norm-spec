@@ -23,3 +23,6 @@ Versioning and keeps changes under `[Unreleased]` until release preparation.
 - Deterministic, root-contained `norm collect` with file targets, explicit
   legacy parsing, canonical outside-root rejection, `.norm` symlink rejection,
   most-specific-first inheritance, and all 11 frozen collect cases executable.
+- Offline Draft 7, profile, lifecycle, single-source, and reference validation;
+  versioned human/machine `norm validate` output; embedded or explicitly
+  selected schema bundles; and all 35 frozen validate cases executable.

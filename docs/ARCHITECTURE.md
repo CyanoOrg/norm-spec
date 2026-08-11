@@ -30,6 +30,12 @@ Owns CLI arguments, filesystem adapters, schema/template discovery,
 human-readable reporting, JSON serialization, and stable exit codes. It may
 depend on `norm-core`; the reverse dependency is forbidden.
 
+The CLI embeds the release schema bundle and may load an explicitly selected
+bundle from disk. It passes parsed JSON resources into `norm-core`; the core
+compiles Draft 7 with format checks and an in-memory-only reference retriever.
+Missing references fail compilation rather than triggering filesystem or
+network fallback.
+
 ## Dependency direction
 
 ```text

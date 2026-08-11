@@ -8,10 +8,10 @@ A `.norm` file is a structured declaration placed in a project directory. An AI 
 
 Gate B has frozen the public form of the five initial commands; their production
 implementation lands one vertical slice at a time during Gate C. Global
-help/version, `parse`, and `collect` are implemented and executable; `validate`,
-`init`, and `scan` remain explicit stubs. The authoritative behavior inventory is
+help/version, `parse`, `collect`, and `validate` are implemented and executable;
+`init` and `scan` remain explicit stubs. The authoritative behavior inventory is
 `tests/contract/requirements.tsv` plus `tests/contract/manifest.tsv`, with
-rationale in `docs/decisions.md` (D006–D009) and working detail in
+rationale in `docs/decisions.md` (D006–D011) and working detail in
 `docs/planning/gate-b-contract.md`.
 
 ```bash
