@@ -1,17 +1,17 @@
 //! Entry point for the `norm` command.
 
-use std::{
-    env, fs,
-    path::{Path, PathBuf},
-    process::ExitCode,
-};
+mod output;
+mod paths;
+
+use std::{fs, path::PathBuf, process::ExitCode};
 
 use clap::{Args, Parser, Subcommand};
-use norm_spec_core::{ErrorDetail, ErrorResponse, ParseOptions, ParseResponse, parse_norm};
-use serde::Serialize;
+use norm_spec_core::{ErrorDetail, ParseOptions, ParseResponse, parse_norm};
 
-const EXIT_OPERATION: u8 = 1;
-const EXIT_USAGE: u8 = 2;
+use crate::{
+    output::{EXIT_OPERATION, EXIT_USAGE, emit_error, emit_json},
+    paths::portable_path,
+};
 
 #[derive(Debug, Parser)]
 #[command(
@@ -68,7 +68,7 @@ fn run_parse(args: ParseArgs) -> ExitCode {
             "The parse command requires a path.",
         )
         .with_field("path");
-        return emit_error(error, args.pretty, EXIT_USAGE);
+        return emit_error("parse", error, args.pretty, EXIT_USAGE);
     };
 
     let path = if input_path.is_dir() {
@@ -84,7 +84,7 @@ fn run_parse(args: ParseArgs) -> ExitCode {
             format!("The input path does not exist: {display_path}"),
         )
         .with_path(display_path);
-        return emit_error(error, args.pretty, EXIT_OPERATION);
+        return emit_error("parse", error, args.pretty, EXIT_OPERATION);
     }
 
     let contents = match fs::read_to_string(&path) {
@@ -95,7 +95,7 @@ fn run_parse(args: ParseArgs) -> ExitCode {
                 format!("The input path could not be read: {error}"),
             )
             .with_path(display_path);
-            return emit_error(detail, args.pretty, EXIT_OPERATION);
+            return emit_error("parse", detail, args.pretty, EXIT_OPERATION);
         }
     };
 
@@ -108,67 +108,11 @@ fn run_parse(args: ParseArgs) -> ExitCode {
         Ok(parsed) => parsed,
         Err(error) => {
             let detail = ErrorDetail::new(error.code(), error.message()).with_path(display_path);
-            return emit_error(detail, args.pretty, EXIT_OPERATION);
+            return emit_error("parse", detail, args.pretty, EXIT_OPERATION);
         }
     };
 
     emit_json(&ParseResponse::from(parsed), args.pretty, 0)
-}
-
-fn emit_error(error: ErrorDetail, pretty: bool, exit_code: u8) -> ExitCode {
-    emit_json(&ErrorResponse::new("parse", error), pretty, exit_code)
-}
-
-fn emit_json(value: &impl Serialize, pretty: bool, exit_code: u8) -> ExitCode {
-    let serialized = if pretty {
-        serde_json::to_string_pretty(value)
-    } else {
-        serde_json::to_string(value)
-    };
-
-    match serialized {
-        Ok(json) => {
-            println!("{json}");
-            ExitCode::from(exit_code)
-        }
-        Err(error) => {
-            eprintln!("norm internal serialization failure: {error}");
-            ExitCode::from(EXIT_OPERATION)
-        }
-    }
-}
-
-fn portable_path(path: &Path) -> String {
-    let comparable_path = canonical_display_path(path);
-    let current = env::current_dir()
-        .ok()
-        .map(|path| canonical_display_path(&path));
-    let relative = current
-        .as_deref()
-        .and_then(|current| comparable_path.strip_prefix(current).ok())
-        .unwrap_or(&comparable_path);
-    let display = relative.to_string_lossy().replace('\\', "/");
-    if display.is_empty() {
-        ".".to_owned()
-    } else {
-        display
-    }
-}
-
-fn canonical_display_path(path: &Path) -> PathBuf {
-    if let Ok(canonical) = fs::canonicalize(path) {
-        return canonical;
-    }
-    let Some(parent) = path.parent() else {
-        return path.to_path_buf();
-    };
-    let Some(name) = path.file_name() else {
-        return path.to_path_buf();
-    };
-    match fs::canonicalize(parent) {
-        Ok(parent) => parent.join(name),
-        Err(_) => path.to_path_buf(),
-    }
 }
 
 fn unimplemented_command(command: &str) -> ExitCode {
