@@ -17,9 +17,10 @@ release history.
 ## Current state
 
 Version `0.1.0-alpha.1` has completed Gate B: governance, architecture, and the
-language-neutral five-command behavior contract are frozen before behavior
-implementation. Gate C implements one executable command slice at a time. No
-CLI subcommand is complete until the execution plan and tests say so.
+language-neutral five-command behavior contract are frozen. Gate C implements
+one executable command slice at a time. Global help/version and `parse` are the
+first complete slice; `collect`, `validate`, `init`, and `scan` remain explicit
+stubs until their execution-plan items and executable contract cases close.
 
 Read first:
 

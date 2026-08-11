@@ -16,3 +16,7 @@ Versioning and keeps changes under `[Unreleased]` until release preparation.
 - Versioned five-command and error protocols with a static integrity gate that
   rejects missing coverage, invalid protocol/stream/exit combinations, and
   missing or orphan assets.
+- Maintained deserialize-only YAML parsing, A1 and explicit legacy-format
+  support, and versioned parse/error response models in `norm-core`.
+- Executable global help/version and `norm parse`, with all 17 frozen
+  global/parse cases asserted against the compiled binary in isolated roots.

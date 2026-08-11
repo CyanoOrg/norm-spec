@@ -4,12 +4,14 @@
 
 A `.norm` file is a structured declaration placed in a project directory. An AI agent collects it before working there so it knows the directory's conventions — required files, single sources of truth, update order, document lifecycle, references. norm-spec defines this format and ships a validator. It is **format- and tooling-only**; how a consumer collects, injects, and obeys `.norm` is the consumer's concern, not the spec's.
 
-## Frozen CLI surface (implementation pending)
+## Frozen CLI surface (Gate C implementation in progress)
 
 Gate B has frozen the public form of the five initial commands; their production
-implementation lands during Gate C. The authoritative behavior inventory is
+implementation lands one vertical slice at a time during Gate C. Global
+help/version and `parse` are implemented and executable; `collect`, `validate`,
+`init`, and `scan` remain explicit stubs. The authoritative behavior inventory is
 `tests/contract/requirements.tsv` plus `tests/contract/manifest.tsv`, with
-rationale in `docs/decisions.md` (D006–D008) and working detail in
+rationale in `docs/decisions.md` (D006–D009) and working detail in
 `docs/planning/gate-b-contract.md`.
 
 ```bash
