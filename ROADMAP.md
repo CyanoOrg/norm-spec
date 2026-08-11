@@ -17,7 +17,7 @@ portable CLI with explicit format and machine contracts.
 
 - Linux, macOS, and Windows release artifacts.
 - A1 contract coverage across the frozen fixture set.
-- `pi-norm-spec` integration against the Rust engine.
+- Consumer conformance evidence against a pinned Rust and machine contract.
 - Self-hosted validation of this repository.
 
 ### Stable

@@ -3,8 +3,8 @@
 ## Resume here
 
 - Stage: `0.1.0-alpha.1`; Gate B contract definition is next.
-- Integration branch: `main`; Node 24 CI maintenance is verified and ready to
-  integrate.
+- Integration branch: `main`; Node 24 CI maintenance is integrated and
+  verified. Non-trivial Gate B work uses a short-lived branch.
 - Current objective: freeze the five-command behavior contract (parse,
   collect, validate, init, scan) in one pass before implementing parser
   behavior. The matrix is grounded in the A1 baseline captured from the
@@ -63,5 +63,6 @@ Gate B contract-foundation verification on 2026-08-11:
 - [ ] Implement path-scoped collect.
 - [ ] Implement schema, profile, and semantic validation.
 - [ ] Implement init and structural scan.
-- [ ] Integrate the Rust engine with `pi-norm-spec`.
+- [ ] Provide consumer-resolvable Rust/machine contracts and a conformance
+      entry point without sibling-path coupling.
 - [ ] Complete cross-platform release-readiness review.
