@@ -1,4 +1,4 @@
-//! Executable Gate C contract coverage for global, `parse`, and `collect`.
+//! Executable Gate C contract coverage through `validate`.
 
 use std::{
     fs, io,
@@ -10,7 +10,7 @@ use std::{
 
 use serde_json::Value;
 
-const EXECUTABLE_CASES: usize = 28;
+const EXECUTABLE_CASES: usize = 63;
 static TEMP_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
 #[derive(Debug)]
@@ -83,7 +83,7 @@ fn executable_cases(contract: &Path) -> Vec<ContractCase> {
         .filter_map(|line| {
             let columns: Vec<_> = line.split('\t').collect();
             assert_eq!(columns.len(), 11, "invalid contract manifest row: {line}");
-            if !matches!(columns[1], "global" | "parse" | "collect") {
+            if !matches!(columns[1], "global" | "parse" | "collect" | "validate") {
                 return None;
             }
             let exit_code = match columns[9].parse() {
@@ -241,11 +241,16 @@ fn replace_argument_placeholders(value: &str, isolated: &IsolatedRoot) -> String
     let outside = isolated.outside.to_string_lossy();
     let fixture = isolated.path.join(".norm").to_string_lossy().into_owned();
     let missing = isolated.path.join("missing").to_string_lossy().into_owned();
+    let schema = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+        .join("../../schema")
+        .to_string_lossy()
+        .into_owned();
     value
         .replace("{fixture}", &fixture)
         .replace("{root}", &root)
         .replace("{outside}", &outside)
         .replace("{missing}", &missing)
+        .replace("{schema}", &schema)
         .replace("{version}", env!("CARGO_PKG_VERSION"))
 }
 
@@ -406,7 +411,7 @@ fn assert_machine_protocol(case: &ContractCase, stdout: &str) {
 }
 
 #[test]
-fn global_parse_and_collect_contract_cases_execute_without_skips() {
+fn implemented_contract_cases_execute_without_skips() {
     let contract = contract_root();
     let cases = executable_cases(&contract);
     assert_eq!(
