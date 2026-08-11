@@ -2,12 +2,12 @@
 
 ## Resume here
 
-- Stage: `0.1.0-alpha.1`; Gate B is complete and Gate C's first executable
-  vertical slice is implementation-complete locally.
-- Integration branch: `main`; current work is on the short-lived branch
-  `codex/feat-gate-c-parse`, based on the Gate B head that the maintainer pushed
-  and verified in hosted CI. The Gate C branch still awaits push, hosted CI,
-  review, and merge.
+- Stage: `0.1.0-alpha.1`; Gate B and Gate C's first executable vertical slice
+  are complete.
+- Integration branch: `main`; the maintainer pushed the Gate C branch and
+  verified hosted CI across all jobs, then the branch was fast-forwarded into
+  local `main`. The updated `main` still awaits push and its resulting hosted
+  CI run.
 - Completed objective: the five-command behavior contract (parse, collect,
   validate, init, scan) is frozen before parser implementation. D006 records
   baseline deviations, D007 resolves symbolic-link semantics, and D008 binds
@@ -18,7 +18,7 @@
   versioned parse/error models; `norm parse`, global help, and global version
   are executable. All 4 global and 13 parse manifest cases run as isolated
   black-box tests with no skips.
-- Next objective after this branch integrates: implement deterministic,
+- Next implementation objective: implement deterministic,
   root-contained `collect` and its executable contract cases. Draft 7 validator
   selection remains a maintainer checkpoint for the validation slice.
 - The private GitHub repository, initial `main` push, and first hosted Actions
@@ -47,8 +47,9 @@ Gate C parse-slice verification on 2026-08-11:
   the installed binary returned the expected version/help, parsed the minimal
   A1 fixture, and returned the frozen JSON error with exit `1` for a malformed
   fence.
-- The maintainer reported the Node 24 Gate B run green without annotations.
-  Current Gate C cross-platform hosted CI remains pending until push.
+- The maintainer reported the Gate C branch's Node 24 quality and
+  cross-platform hosted jobs green without annotations. The integrated `main`
+  run remains pending until push.
 
 ## Open-source readiness
 
