@@ -1,9 +1,11 @@
 //! Entry point for the `norm` command.
 
 mod collect;
+mod init;
 mod output;
 mod paths;
 mod schemas;
+mod templates;
 mod validate;
 
 use std::{fs, path::PathBuf, process::ExitCode};
@@ -13,6 +15,7 @@ use norm_spec_core::{ErrorDetail, ParseOptions, ParseResponse, parse_norm};
 
 use crate::{
     collect::CollectArgs,
+    init::InitArgs,
     output::{EXIT_OPERATION, EXIT_USAGE, emit_error, emit_json},
     paths::portable_path,
     validate::ValidateArgs,
@@ -39,7 +42,7 @@ enum Command {
     /// Validate one or more .norm files.
     Validate(ValidateArgs),
     /// Create a .norm file from a profile template.
-    Init,
+    Init(InitArgs),
     /// Scan a directory without inferring conventions.
     Scan,
 }
@@ -61,7 +64,7 @@ fn main() -> ExitCode {
         Command::Parse(args) => run_parse(args),
         Command::Collect(args) => collect::run(&args),
         Command::Validate(args) => validate::run(&args),
-        Command::Init => unimplemented_command("init"),
+        Command::Init(args) => init::run(&args),
         Command::Scan => unimplemented_command("scan"),
     }
 }

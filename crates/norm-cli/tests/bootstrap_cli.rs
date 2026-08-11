@@ -1,9 +1,13 @@
 //! Focused black-box tests for the first executable CLI slice.
 
 use std::{
+    fs,
     path::PathBuf,
     process::{Command, Output},
+    sync::atomic::{AtomicU64, Ordering},
 };
+
+static TEMP_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
 fn run_norm(args: &[&str]) -> Output {
     match Command::new(env!("CARGO_BIN_EXE_norm")).args(args).output() {
@@ -16,6 +20,22 @@ fn contract_fixture(path: &str) -> PathBuf {
     PathBuf::from(env!("CARGO_MANIFEST_DIR"))
         .join("../../tests/contract")
         .join(path)
+}
+
+fn temporary_root(label: &str) -> PathBuf {
+    for _ in 0..100 {
+        let sequence = TEMP_SEQUENCE.fetch_add(1, Ordering::Relaxed);
+        let path = std::env::temp_dir().join(format!(
+            "norm-spec-bootstrap-{label}-{}-{sequence}",
+            std::process::id()
+        ));
+        match fs::create_dir(&path) {
+            Ok(()) => return path,
+            Err(error) if error.kind() == std::io::ErrorKind::AlreadyExists => {}
+            Err(error) => panic!("failed to create temporary root: {error}"),
+        }
+    }
+    panic!("failed to allocate a unique temporary root")
 }
 
 #[test]
@@ -94,6 +114,27 @@ fn validate_emits_the_versioned_response() {
 }
 
 #[test]
+fn init_writes_an_embedded_template_and_versioned_response() {
+    let root = temporary_root("init");
+    let output = match Command::new(env!("CARGO_BIN_EXE_norm"))
+        .current_dir(&root)
+        .args(["init", "--profile", "module", "--json"])
+        .output()
+    {
+        Ok(output) => output,
+        Err(error) => panic!("failed to execute norm: {error}"),
+    };
+    assert!(output.status.success());
+    assert!(output.stderr.is_empty());
+    assert!(String::from_utf8_lossy(&output.stdout).contains("norm-spec/init/v1"));
+    let written = fs::read_to_string(root.join(".norm"))
+        .unwrap_or_else(|error| panic!("init output should be readable: {error}"));
+    assert!(written.contains("layer: module"));
+    fs::remove_dir_all(&root)
+        .unwrap_or_else(|error| panic!("temporary init root should be removable: {error}"));
+}
+
+#[test]
 fn missing_collect_target_is_a_machine_usage_error() {
     let output = run_norm(&["collect"]);
     assert_eq!(output.status.code(), Some(2));
@@ -130,10 +171,8 @@ fn missing_absolute_path_is_reported_relative_to_the_working_root() {
 }
 
 #[test]
-fn remaining_commands_fail_explicitly() {
-    for command in ["init", "scan"] {
-        let output = run_norm(&[command]);
-        assert_eq!(output.status.code(), Some(2));
-        assert!(String::from_utf8_lossy(&output.stderr).contains("not implemented yet"));
-    }
+fn scan_fails_explicitly() {
+    let output = run_norm(&["scan"]);
+    assert_eq!(output.status.code(), Some(2));
+    assert!(String::from_utf8_lossy(&output.stderr).contains("not implemented yet"));
 }
