@@ -129,7 +129,11 @@ fn init_writes_an_embedded_template_and_versioned_response() {
     assert!(String::from_utf8_lossy(&output.stdout).contains("norm-spec/init/v1"));
     let written = fs::read_to_string(root.join(".norm"))
         .unwrap_or_else(|error| panic!("init output should be readable: {error}"));
-    assert!(written.contains("layer: module"));
+    let expected = fs::read_to_string(
+        PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../templates/profiles/module.norm"),
+    )
+    .unwrap_or_else(|error| panic!("module template should be readable: {error}"));
+    assert_eq!(written, expected);
     fs::remove_dir_all(&root)
         .unwrap_or_else(|error| panic!("temporary init root should be removable: {error}"));
 }

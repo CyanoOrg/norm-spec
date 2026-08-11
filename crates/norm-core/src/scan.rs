@@ -362,7 +362,20 @@ mod tests {
 
     #[test]
     fn infrastructure_policy_is_explicit_and_bounded() {
-        for ignored in [".git", "node_modules", "__pycache__", "build", "target"] {
+        for ignored in [
+            ".git",
+            "__pycache__",
+            ".venv",
+            "venv",
+            "node_modules",
+            ".mypy_cache",
+            ".pytest_cache",
+            ".idea",
+            ".vscode",
+            "dist",
+            "build",
+            "target",
+        ] {
             assert!(is_ignored_directory(ignored));
         }
         assert!(!is_ignored_directory("docs"));
@@ -392,5 +405,22 @@ mod tests {
         );
         assert_eq!(response.naming.files.get("UPPER"), Some(&2));
         assert_eq!(response.symlinks[0].path, "linked-docs");
+    }
+
+    #[test]
+    fn recurring_filenames_are_stably_ordered_and_capped() {
+        let names = (0..=20)
+            .map(|index| format!("file-{index:02}"))
+            .collect::<Vec<_>>();
+        let response = ScanResponse::new(
+            vec![
+                DirectoryObservation::new("first", names.clone()),
+                DirectoryObservation::new("second", names),
+            ],
+            Vec::new(),
+        );
+        assert_eq!(response.recurring_filenames.len(), 20);
+        assert_eq!(response.recurring_filenames[0].name, "file-00");
+        assert_eq!(response.recurring_filenames[19].name, "file-19");
     }
 }

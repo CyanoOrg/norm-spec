@@ -200,3 +200,59 @@ fn emit_failure(args: &InitArgs, failure: InitFailure) -> ExitCode {
         ExitCode::from(failure.exit_code)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use std::{
+        fs,
+        path::{Path, PathBuf},
+        sync::atomic::{AtomicU64, Ordering},
+    };
+
+    use super::prepare_output;
+
+    static TEMP_SEQUENCE: AtomicU64 = AtomicU64::new(0);
+
+    fn temporary_root() -> PathBuf {
+        for _ in 0..100 {
+            let sequence = TEMP_SEQUENCE.fetch_add(1, Ordering::Relaxed);
+            let path = std::env::temp_dir().join(format!(
+                "norm-spec-init-symlink-{}-{sequence}",
+                std::process::id()
+            ));
+            match fs::create_dir(&path) {
+                Ok(()) => return path,
+                Err(error) if error.kind() == std::io::ErrorKind::AlreadyExists => {}
+                Err(error) => panic!("failed to create init test root: {error}"),
+            }
+        }
+        panic!("failed to allocate a unique init test root")
+    }
+
+    #[cfg(unix)]
+    fn create_file_symlink(target: &Path, link: &Path) {
+        std::os::unix::fs::symlink(target, link)
+            .unwrap_or_else(|error| panic!("file symlink should be created: {error}"));
+    }
+
+    #[cfg(windows)]
+    fn create_file_symlink(target: &Path, link: &Path) {
+        std::os::windows::fs::symlink_file(target, link)
+            .unwrap_or_else(|error| panic!("file symlink should be created: {error}"));
+    }
+
+    #[test]
+    fn init_rejects_a_symlink_output_even_under_force() {
+        let root = temporary_root();
+        fs::write(root.join("actual.norm"), "original")
+            .unwrap_or_else(|error| panic!("symlink target should be written: {error}"));
+        create_file_symlink(Path::new("actual.norm"), &root.join(".norm"));
+        let failure = match prepare_output(&root.join(".norm"), true) {
+            Ok(action) => panic!("symlink output unexpectedly allowed action {action:?}"),
+            Err(failure) => failure,
+        };
+        assert_eq!(failure.error.code, "norm/path/symlink-norm");
+        fs::remove_dir_all(&root)
+            .unwrap_or_else(|error| panic!("init test root should be removable: {error}"));
+    }
+}
