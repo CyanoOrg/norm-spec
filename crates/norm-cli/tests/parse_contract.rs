@@ -1,4 +1,4 @@
-//! Executable Gate C contract coverage through `validate`.
+//! Executable Gate C coverage for the complete frozen five-command contract.
 
 use std::{
     fs, io,
@@ -10,7 +10,7 @@ use std::{
 
 use serde_json::Value;
 
-const EXECUTABLE_CASES: usize = 63;
+const EXECUTABLE_CASES: usize = 82;
 static TEMP_SEQUENCE: AtomicU64 = AtomicU64::new(0);
 
 #[derive(Debug)]
@@ -83,7 +83,10 @@ fn executable_cases(contract: &Path) -> Vec<ContractCase> {
         .filter_map(|line| {
             let columns: Vec<_> = line.split('\t').collect();
             assert_eq!(columns.len(), 11, "invalid contract manifest row: {line}");
-            if !matches!(columns[1], "global" | "parse" | "collect" | "validate") {
+            if !matches!(
+                columns[1],
+                "global" | "parse" | "collect" | "validate" | "init" | "scan"
+            ) {
                 return None;
             }
             let exit_code = match columns[9].parse() {
@@ -106,16 +109,20 @@ fn executable_cases(contract: &Path) -> Vec<ContractCase> {
         .collect()
 }
 
-fn materialize_fixture(contract: &Path, case: &ContractCase, isolated: &IsolatedRoot) {
+fn materialize_fixture(contract: &Path, case: &ContractCase, isolated: &IsolatedRoot) -> PathBuf {
     if case.fixture == "-" {
-        return;
+        return isolated.path.join(".norm");
     }
     if case.fixture.starts_with("layouts/") {
         materialize_layout(contract, &case.fixture, isolated);
-        return;
+        return isolated.path.join(".norm");
     }
 
     let source = contract.join(&case.fixture);
+    if source.is_dir() {
+        copy_fixture_directory(&source, &isolated.path, &case.id);
+        return isolated.path.clone();
+    }
     let destination = isolated.path.join(".norm");
     if let Err(error) = fs::copy(&source, &destination) {
         panic!(
@@ -124,6 +131,57 @@ fn materialize_fixture(contract: &Path, case: &ContractCase, isolated: &Isolated
             source.display(),
             destination.display()
         );
+    }
+    destination
+}
+
+fn copy_fixture_directory(source: &Path, destination: &Path, case_id: &str) {
+    let mut entries = fs::read_dir(source)
+        .unwrap_or_else(|error| {
+            panic!(
+                "case {case_id} could not read fixture directory {}: {error}",
+                source.display()
+            )
+        })
+        .collect::<Result<Vec<_>, _>>()
+        .unwrap_or_else(|error| {
+            panic!(
+                "case {case_id} could not read an entry under {}: {error}",
+                source.display()
+            )
+        });
+    entries.sort_by_key(fs::DirEntry::file_name);
+    for entry in entries {
+        let source_path = entry.path();
+        let destination_path = destination.join(entry.file_name());
+        let file_type = entry.file_type().unwrap_or_else(|error| {
+            panic!(
+                "case {case_id} could not inspect fixture {}: {error}",
+                source_path.display()
+            )
+        });
+        if file_type.is_dir() {
+            fs::create_dir(&destination_path).unwrap_or_else(|error| {
+                panic!(
+                    "case {case_id} could not create fixture directory {}: {error}",
+                    destination_path.display()
+                )
+            });
+            copy_fixture_directory(&source_path, &destination_path, case_id);
+        } else if file_type.is_file() {
+            fs::copy(&source_path, &destination_path).unwrap_or_else(|error| {
+                panic!(
+                    "case {case_id} could not copy fixture {} to {}: {error}",
+                    source_path.display(),
+                    destination_path.display()
+                )
+            });
+        } else {
+            panic!(
+                "case {case_id} directory fixture contains unsupported entry {}",
+                source_path.display()
+            );
+        }
     }
 }
 
@@ -236,16 +294,17 @@ fn create_dir_symlink(target: &Path, link: &Path, layout: &str) {
     }
 }
 
-fn replace_argument_placeholders(value: &str, isolated: &IsolatedRoot) -> String {
+fn replace_argument_placeholders(value: &str, isolated: &IsolatedRoot, fixture: &Path) -> String {
     let schema = PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("../../schema");
-    let fixture = isolated.path.join(".norm");
+    let output = isolated.path.join(".norm");
     let missing = isolated.path.join("missing");
     for (placeholder, base) in [
-        ("{fixture}", fixture.as_path()),
+        ("{fixture}", fixture),
         ("{root}", isolated.path.as_path()),
         ("{outside}", isolated.outside.as_path()),
         ("{missing}", missing.as_path()),
         ("{schema}", schema.as_path()),
+        ("{output}", output.as_path()),
     ] {
         if let Some(path) = replace_path_placeholder(value, placeholder, base) {
             return path;
@@ -266,24 +325,50 @@ fn replace_path_placeholder(value: &str, placeholder: &str, base: &Path) -> Opti
     Some(path.to_string_lossy().into_owned())
 }
 
-fn replace_expected_placeholders(value: &str, isolated: &IsolatedRoot) -> String {
+fn replace_expected_placeholders(
+    value: &str,
+    isolated: &IsolatedRoot,
+    case: &ContractCase,
+    fixture: &Path,
+) -> String {
     let outside = isolated.outside.to_string_lossy().replace('\\', "/");
+    let fixture_display = display_relative_to_root(fixture, isolated);
+    let output = expected_output_path(case, isolated, fixture);
     value
-        .replace("{fixture}", ".norm")
+        .replace("{fixture}", &fixture_display)
         .replace("{root}", ".")
         .replace("{outside}", &outside)
+        .replace("{output}", &output)
         .replace("{missing}", "missing")
         .replace("{version}", env!("CARGO_PKG_VERSION"))
 }
 
-fn run_case(case: &ContractCase, isolated: &IsolatedRoot) -> Output {
+fn expected_output_path(case: &ContractCase, isolated: &IsolatedRoot, fixture: &Path) -> String {
+    let arguments: Vec<String> = serde_json::from_str(&case.args_json)
+        .unwrap_or_else(|error| panic!("case {} has invalid args JSON: {error}", case.id));
+    let raw_output = arguments
+        .windows(2)
+        .find_map(|pair| (pair[0] == "--output").then_some(pair[1].as_str()))
+        .unwrap_or(".norm");
+    let expanded = replace_argument_placeholders(raw_output, isolated, fixture);
+    display_relative_to_root(Path::new(&expanded), isolated)
+}
+
+fn display_relative_to_root(path: &Path, isolated: &IsolatedRoot) -> String {
+    path.strip_prefix(&isolated.path).map_or_else(
+        |_| path.to_string_lossy().replace('\\', "/"),
+        norm_spec_core::project_path,
+    )
+}
+
+fn run_case(case: &ContractCase, isolated: &IsolatedRoot, fixture: &Path) -> Output {
     let arguments: Vec<String> = match serde_json::from_str(&case.args_json) {
         Ok(arguments) => arguments,
         Err(error) => panic!("case {} has invalid args JSON: {error}", case.id),
     };
     let arguments: Vec<_> = arguments
         .iter()
-        .map(|argument| replace_argument_placeholders(argument, isolated))
+        .map(|argument| replace_argument_placeholders(argument, isolated, fixture))
         .collect();
 
     let mut command = Command::new(env!("CARGO_BIN_EXE_norm"));
@@ -309,10 +394,14 @@ fn assert_stream(
     case: &ContractCase,
     stream_name: &str,
     actual: &str,
-    expected_path: &str,
-    match_mode: &str,
     isolated: &IsolatedRoot,
+    fixture: &Path,
 ) {
+    let (expected_path, match_mode) = if stream_name == "stdout" {
+        (case.stdout.as_str(), case.stdout_match.as_str())
+    } else {
+        (case.stderr.as_str(), case.stderr_match.as_str())
+    };
     if match_mode == "empty" {
         assert_eq!(
             expected_path, "-",
@@ -327,8 +416,12 @@ fn assert_stream(
         return;
     }
 
-    let expected =
-        replace_expected_placeholders(&read_required(&contract.join(expected_path)), isolated);
+    let expected = replace_expected_placeholders(
+        &read_required(&contract.join(expected_path)),
+        isolated,
+        case,
+        fixture,
+    );
     match match_mode {
         "exact" | "template" => assert_eq!(
             actual.trim_end(),
@@ -440,8 +533,8 @@ fn implemented_contract_cases_execute_without_skips() {
                 case.id
             ),
         };
-        materialize_fixture(&contract, case, &root);
-        let output = run_case(case, &root);
+        let fixture = materialize_fixture(&contract, case, &root);
+        let output = run_case(case, &root, &fixture);
         assert_eq!(
             output.status.code(),
             Some(case.exit_code),
@@ -451,24 +544,8 @@ fn implemented_contract_cases_execute_without_skips() {
 
         let stdout = utf8_stream(case, "stdout", &output.stdout);
         let stderr = utf8_stream(case, "stderr", &output.stderr);
-        assert_stream(
-            &contract,
-            case,
-            "stdout",
-            stdout,
-            &case.stdout,
-            &case.stdout_match,
-            &root,
-        );
-        assert_stream(
-            &contract,
-            case,
-            "stderr",
-            stderr,
-            &case.stderr,
-            &case.stderr_match,
-            &root,
-        );
+        assert_stream(&contract, case, "stdout", stdout, &root, &fixture);
+        assert_stream(&contract, case, "stderr", stderr, &root, &fixture);
         assert_machine_protocol(case, stdout);
     }
 }
