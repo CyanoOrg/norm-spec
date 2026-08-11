@@ -1,5 +1,6 @@
 //! Entry point for the `norm` command.
 
+mod collect;
 mod output;
 mod paths;
 
@@ -9,6 +10,7 @@ use clap::{Args, Parser, Subcommand};
 use norm_spec_core::{ErrorDetail, ParseOptions, ParseResponse, parse_norm};
 
 use crate::{
+    collect::CollectArgs,
     output::{EXIT_OPERATION, EXIT_USAGE, emit_error, emit_json},
     paths::portable_path,
 };
@@ -30,7 +32,7 @@ enum Command {
     /// Parse a .norm file into a versioned JSON response.
     Parse(ParseArgs),
     /// Collect inherited .norm files for a target directory.
-    Collect,
+    Collect(CollectArgs),
     /// Validate one or more .norm files.
     Validate,
     /// Create a .norm file from a profile template.
@@ -54,7 +56,7 @@ struct ParseArgs {
 fn main() -> ExitCode {
     match Cli::parse().command {
         Command::Parse(args) => run_parse(args),
-        Command::Collect => unimplemented_command("collect"),
+        Command::Collect(args) => collect::run(&args),
         Command::Validate => unimplemented_command("validate"),
         Command::Init => unimplemented_command("init"),
         Command::Scan => unimplemented_command("scan"),
