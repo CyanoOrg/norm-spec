@@ -1,6 +1,6 @@
 ---
 metadata:
-  layer: convention
+  layer: adoption
   scope: docs/
   version: "1.0"
 agent_rules:
