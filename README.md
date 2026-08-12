@@ -11,7 +11,7 @@ framework adapters consume those contracts without becoming format authorities.
 > adoption and the canonical framework-neutral Skill are implemented; final
 > candidate `7e052ae` is green on hosted quality, Linux, macOS, and Windows CI.
 > A real OpenCode-assisted run also used the Skill against pi-norm-spec without
-> the pi plugin. Gate E distribution and release readiness are next.
+> the pi plugin. Gate E distribution and release readiness are active.
 
 ## Crates
 
@@ -86,11 +86,15 @@ norm-spec-conformance \
 
 This is an alpha development install. The five initial commands, compatibility
 discovery, Rust facade, arbitrary-candidate conformance, packaged standalone
-adoption lane, and canonical Skill are functional locally. Distribution remains
-Gate E work; Gate D closure still requires integrated hosted CI.
+adoption lane, and canonical Skill are functional locally. Gate E adds
+target-specific, self-verifying candidate archives; CI artifacts remain review
+evidence until a maintainer approves a public release.
 
 See `docs/INTEGRATION.md` for plugin-free project adoption, canonical Skill
 installation, failure behavior, and downstream host-adapter boundaries.
+
+See `docs/INSTALLATION.md` for release archives, checksums, source installation,
+MSRV, upgrades, rollback, and uninstall.
 
 See `ROADMAP.md`, `docs/ARCHITECTURE.md`, and
 `docs/planning/v0.1-execution.md` before contributing.

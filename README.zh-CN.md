@@ -9,7 +9,7 @@
 > adoption 与 framework-neutral canonical Skill 已实现；最终候选 `7e052ae`
 > 的 hosted quality、Linux、macOS、Windows CI 全部通过。一次真实的 OpenCode
 > 辅助运行也在不启用 pi plugin 的情况下，对 pi-norm-spec 使用了该 Skill。
-> 下一阶段是 Gate E 分发与发布准备。
+> Gate E 分发与发布准备正在进行中。
 
 ## Rust API
 
@@ -74,10 +74,14 @@ norm-spec-conformance \
 
 这是 alpha 开发安装。五个初始命令、compatibility discovery、Rust facade、
 任意候选 conformance、packaged standalone adoption lane 与 canonical Skill
-目前都已在本地可用。分发仍属于 Gate E；Gate D 关闭仍需 integrated hosted CI。
+目前都已在本地可用。Gate E 增加按目标区分、可自证的候选归档；在维护者批准
+公开发布前，CI artifacts 仍只是评审证据。
 
 无插件项目采用、canonical Skill 安装、失败行为与下游 host adapter 边界见
 `docs/INTEGRATION.md`。
+
+发行归档、checksum、源码安装、MSRV、升级、回滚与卸载见
+`docs/INSTALLATION.md`。
 
 参与开发前请先阅读 `AGENTS.md`、`ROADMAP.md`、`docs/ARCHITECTURE.md` 和
 `docs/planning/v0.1-execution.md`。

@@ -37,6 +37,7 @@ Read first:
 - `docs/planning/gate-d-design.md` for the active integration-readiness design.
 - `docs/planning/gate-e-design.md` for the active distribution design.
 - `docs/ARCHITECTURE.md` for code boundaries.
+- `docs/INSTALLATION.md` for binary, source, Skill, and upgrade procedures.
 - `docs/decisions.md` for immutable decisions.
 
 ## Common commands
@@ -54,6 +55,8 @@ bash scripts/check-contract-bundle.sh
 bash scripts/check-packages.sh
 bash scripts/check-standalone-adoption.sh
 bash scripts/check-public-history.sh
+scripts/build-release-archive.sh "$(rustc -vV | sed -n 's/^host: //p')" dist
+scripts/check-release-archive.sh <archive> <rust-target> <source-revision>
 ```
 
 The Rust CLI now validates this repository without a legacy runtime. Keep that

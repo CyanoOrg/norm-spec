@@ -25,6 +25,10 @@ Until the first public release and registry publication, install from an exact
 Git revision or an explicitly reviewed checkout. Do not use an unpinned moving
 branch as a production dependency.
 
+For target-specific release archives, checksum and conformance verification,
+the canonical Skill, MSRV, upgrades, rollback, and uninstall, see
+`docs/INSTALLATION.md`.
+
 From an exact checkout:
 
 ```bash
