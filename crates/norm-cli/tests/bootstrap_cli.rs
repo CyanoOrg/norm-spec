@@ -49,6 +49,16 @@ fn version_is_available() {
 }
 
 #[test]
+fn package_default_run_preserves_the_norm_development_command() {
+    let manifest = fs::read_to_string(PathBuf::from(env!("CARGO_MANIFEST_DIR")).join("Cargo.toml"))
+        .unwrap_or_else(|error| panic!("CLI manifest should be readable: {error}"));
+    assert!(
+        manifest.contains("default-run = \"norm\""),
+        "adding another binary must not make cargo run ambiguous"
+    );
+}
+
+#[test]
 fn help_lists_the_frozen_command_surface() {
     let output = run_norm(&["--help"]);
     assert!(output.status.success());

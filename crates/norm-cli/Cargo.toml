@@ -1,6 +1,7 @@
 [package]
 name = "norm-spec-cli"
 description = "Portable command-line interface for norm-spec"
+default-run = "norm"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
