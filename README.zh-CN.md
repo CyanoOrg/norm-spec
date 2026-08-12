@@ -5,9 +5,11 @@
 本项目从单一、确定性的语义引擎开始。规范、Schema、模板、fixtures 和
 机器协议都在本仓库内自足维护；框架适配器消费这些契约，但不成为格式权威。
 
-> 当前状态：`0.1.0-alpha.1`。Gate C 与 Gate D1-D3 已集成。Gate D Batch 3
-> 已在本地完成：packaged standalone adoption 与 framework-neutral canonical
-> Skill 均已实现并通过测试；Gate D 正式关闭前仍需 integrated hosted CI。
+> 当前状态：`0.1.0-alpha.1`。Gate C 与 Gate D 均已完成。packaged standalone
+> adoption 与 framework-neutral canonical Skill 已实现；最终候选 `7e052ae`
+> 的 hosted quality、Linux、macOS、Windows CI 全部通过。一次真实的 OpenCode
+> 辅助运行也在不启用 pi plugin 的情况下，对 pi-norm-spec 使用了该 Skill。
+> 下一阶段是 Gate E 分发与发布准备。
 
 ## Rust API
 

@@ -550,8 +550,8 @@ skill-creator quick validation is green. Permanent Rust tests prove exact
 structure and frontmatter, portable one-level references, isolated directory
 installation, absence of host/local/initializer residue, execution of all six
 documented commands, nested collection, authoring, invalid-reference repair,
-and missing-CLI fail-closed behavior. Local evidence is green through candidate
-`2b8f7ff`; hosted matrix evidence remains pending.
+and missing-CLI fail-closed behavior. Final candidate `7e052ae` passed hosted
+quality, Linux, macOS, and Windows CI.
 
 ## Merge-ready implementation batches
 
@@ -599,10 +599,11 @@ Each batch is independently reviewable and locally green. Hosted CI may run per
 batch branch; Gate D closes only after the integrated candidate is green on all
 three operating systems.
 
-Batch 3 is locally complete through implementation/documentation candidate
-`2b8f7ff`. Its semantic commits separate standalone adoption, canonical Skill,
-artifact/command checks, forward workflows, integration documentation, and this
-status record. Integrated hosted CI is the remaining closure gate.
+Batch 3 is complete. Its semantic commits separate standalone adoption,
+canonical Skill, artifact/command checks, forward workflows, integration
+documentation, and status records. Final candidate `7e052ae` passed hosted
+quality plus Linux, macOS, and Windows CI; the later verification record is
+documentation-only.
 
 ## Quality gates
 
@@ -634,12 +635,15 @@ Gate D additionally requires:
    packaging spike.
 2. **D2/D3 protocols** — satisfied by the maintainer's approval and D015 before
    compatibility and conformance implementation.
-3. **First real adoption project** — choose a real non-plugin repository after
-   the disposable lane is green; it is additional evidence, not a hidden build
-   dependency.
-4. **Public visibility and upstream pin** — after integrated Gate D hosted CI,
-   decide whether to make norm-spec public and allow downstream exact-SHA/tag
-   consumption.
+3. **First real adoption project** — satisfied by a read-only OpenCode run in
+   pi-norm-spec. OpenCode loaded the project-local canonical Skill, used the
+   installed engine for compatibility, most-specific-first collection, and
+   strict validation, and did not activate the pi plugin or modify files. The
+   run also found stale downstream manual-collection guidance, demonstrating a
+   real diagnostic result rather than a scripted happy path.
+4. **Public visibility and upstream pin** — Gate D hosted CI is complete;
+   deciding whether to make norm-spec public and allow downstream exact-SHA/tag
+   consumption is the next maintainer checkpoint.
 5. **Publication** — crates.io, tags, and release artifacts remain Gate E.
 
 ## Gate D exit
@@ -648,3 +652,12 @@ Gate D is complete only when all five results are implemented, documented, and
 verified; the integrated `main` candidate is green on Linux, macOS, and Windows;
 the workspace and package/external-consumer paths agree; no task remains hidden
 behind a skip, copied asset, sibling path, private fallback, or host plugin.
+
+### Exit result — 2026-08-12
+
+All five results are complete. Candidate `7e052ae` passed the full local gates
+and hosted quality, Linux, macOS, and Windows CI. Package, exact-revision Rust
+consumer, arbitrary-candidate conformance, source-free standalone adoption, and
+real OpenCode-assisted pi-norm-spec evidence agree. No Gate D result depends on
+a sibling checkout, copied semantics, successful skip, or activated host
+plugin. Gate D is closed; Gate E owns distribution and release readiness.

@@ -22,12 +22,13 @@ five production commands are in place. All 82 frozen cases execute the
 compiled binary without skips, and the integrated candidate is green on hosted
 Linux, macOS, and Windows CI.
 
-Gate D is active. D1-D5 are locally complete: Rust consumption, compatibility
-discovery, consumer-neutral conformance, packaged standalone adoption, and the
-canonical framework-neutral Skill. Full local gates are green through Batch 3
-implementation/documentation candidate `2b8f7ff`; integrated hosted quality,
-Linux, macOS, and Windows CI remains the Gate D closure condition. Host-specific
-injection and enforcement stay downstream.
+Gate D is complete: Rust consumption, compatibility discovery,
+consumer-neutral conformance, packaged standalone adoption, and the canonical
+framework-neutral Skill are implemented. Final candidate `7e052ae` passed
+hosted quality, Linux, macOS, and Windows CI, and a real OpenCode-assisted run
+used the Skill against pi-norm-spec without the pi plugin. Gate E distribution
+and release readiness are next. Host-specific injection and enforcement stay
+downstream.
 
 Read first:
 

@@ -2,16 +2,15 @@
 
 ## Resume here
 
-- Stage: `0.1.0-alpha.1`; Gate B and Gate C are complete. Gate D D1-D5 are
-  locally complete, but Gate D remains open pending integrated hosted CI.
-- Integration state: local and `origin/main` are synchronized at the D2/D3
-  hosted verification record `415a7da`. Batch 3 implementation and integration
-  documentation are complete on the short-lived branch through candidate
-  `2b8f7ff`; this status update is documentation-only.
-- Current resume point: full Batch 3 local gates are green. Push the final
-  branch candidate and require hosted quality, Linux, macOS, and Windows CI.
-  Only after all four hosted jobs pass may the maintainer fast-forward `main`,
-  delete the branch, and record Gate D as closed.
+- Stage: `0.1.0-alpha.1`; Gate B, Gate C, and Gate D are complete. Gate E
+  distribution and release readiness are next.
+- Integration state: final Gate D candidate `7e052ae` is maintainer-confirmed
+  green on hosted quality, Linux, macOS, and Windows CI. This hosted/adoption
+  record is documentation-only and may be fast-forwarded without a second
+  hosted run under the repository's agreed documentation policy.
+- Current resume point: fast-forward this record to `main`, archive the Batch 3
+  branch, then plan Gate E. Public visibility, publication, MSRV, and release
+  artifacts remain maintainer checkpoints.
 - The maintainer confirmed standalone-first product positioning, one canonical
   framework-neutral Skill in this repository, explicit failure without engine
   fallback, downstream host adapters, and standalone adoption as Gate D scope.
@@ -41,9 +40,8 @@
   verifies the core → facade → CLI workspace candidate through a fresh isolated
   Cargo registry, and runs collect plus validation from an unrelated
   exact-revision Git consumer. Hosted D1 evidence is maintainer-confirmed green.
-- The private GitHub repository and hosted Actions are green through D2/D3
-  candidate `1326dbe`. Batch 3 hosted evidence and public visibility remain
-  maintainer checkpoints.
+- The private GitHub repository and hosted Actions are green through final Gate
+  D candidate `7e052ae`. Public visibility remains a maintainer checkpoint.
 - D015's machine-default compatibility discovery, exact identifier membership,
   locked 82-case A1 bundle, separate `norm-spec-conformance` binary, explicit
   complete/incomplete reports, and no-fallback rules are implemented and green
@@ -144,8 +142,25 @@ Gate D4/D5 local verification on 2026-08-12:
   structural scan → 41 directories, seven `.norm` files, no symlinks, and
   `0.171` coverage after removing the initializer's empty host-metadata
   directory.
-- public-history scan → green. Hosted quality, Linux, macOS, and Windows CI for
-  the final Batch 3 candidate remains required before Gate D closure.
+- public-history scan → green.
+- hosted quality, Linux, macOS, and Windows CI for final candidate `7e052ae` →
+  maintainer-confirmed green.
+
+First real non-plugin adoption evidence on 2026-08-12:
+
+- OpenCode `1.18.14` ran from the independent pi-norm-spec repository with the
+  canonical Skill installed project-locally and the pi plugin left inactive.
+- installed `norm 0.1.0-alpha.1` returned
+  `norm-spec/compatibility/v1`; required collect and validate APIs were present,
+  with exit `0` and empty stderr.
+- collecting `docs/planning/status.md` returned `docs/.norm` then `.norm`, and
+  the agent applied both layers rather than replacing collection with a manual
+  filesystem walk.
+- strict validation returned two files, zero errors, and zero warnings; the
+  read-only run modified no project files.
+- the assisted review found real downstream narrative drift: pi-norm-spec's
+  `AGENTS.md` still described pre-self-hosting manual collection. That follow-up
+  belongs to pi-norm-spec and does not change canonical format semantics here.
 
 ## Open-source readiness
 
@@ -188,7 +203,7 @@ Gate D4/D5 local verification on 2026-08-12:
 - [x] Prove standalone adoption from an isolated candidate without a plugin.
 - [x] Add and validate the canonical framework-neutral norm-spec Skill without
       parser, collect, or validation fallback.
-- [ ] Confirm the integrated Batch 3 candidate on hosted quality, Linux, macOS,
-      and Windows CI, then close Gate D.
+- [x] Confirm the integrated Batch 3 candidate on hosted quality, Linux, macOS,
+      and Windows CI, and close Gate D with real non-plugin adoption evidence.
 - [ ] Complete cross-platform distribution and release-readiness review
       (Gate E).

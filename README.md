@@ -7,10 +7,11 @@ The project starts with one deterministic semantic engine. Its specification,
 schemas, templates, fixtures, and machine contracts live in this repository;
 framework adapters consume those contracts without becoming format authorities.
 
-> Status: `0.1.0-alpha.1`. Gate C and Gate D1-D3 are integrated. Gate D Batch 3
-> is locally complete: packaged standalone adoption and the canonical
-> framework-neutral Skill are implemented and tested. Integrated hosted CI is
-> still required before Gate D closes.
+> Status: `0.1.0-alpha.1`. Gate C and Gate D are complete. Packaged standalone
+> adoption and the canonical framework-neutral Skill are implemented; final
+> candidate `7e052ae` is green on hosted quality, Linux, macOS, and Windows CI.
+> A real OpenCode-assisted run also used the Skill against pi-norm-spec without
+> the pi plugin. Gate E distribution and release readiness are next.
 
 ## Crates
 
