@@ -176,21 +176,21 @@ The response must not use absolute paths, network state, registry availability,
 or object-key order as compatibility. A new decision must freeze the envelope,
 discovery command, ordering, and compatibility rules before implementation.
 
-### D2 protocol proposal — awaiting maintainer approval
+### D2 approved protocol — D015
 
-The proposed discovery command is additive and machine-only:
+The discovery command is additive and machine-only:
 
 ```text
 norm compatibility [--pretty]
 ```
 
-Compact JSON is the default. `--pretty` changes whitespace only. The proposal
+Compact JSON is the default. `--pretty` changes whitespace only. The protocol
 does not add a redundant `--json` selector or a second human presentation that
 consumers could accidentally scrape. Gate B froze the five initial commands,
 not a permanent five-command ceiling; this command receives separate
 compatibility-v1 fixtures and cross-platform tests.
 
-The proposed compact response is structurally equivalent to:
+The compact response is structurally equivalent to:
 
 ```json
 {
@@ -232,7 +232,7 @@ commit and build metadata. A Git revision or artifact digest remains an
 external transport pin until the build can inject and reproduce source
 identity rather than infer it from a checkout.
 
-The proposed compatibility rules are:
+The compatibility rules are:
 
 - the envelope, format, Rust API, machine APIs, bundle API, report API, and
   suite are
@@ -259,7 +259,7 @@ the already frozen 82 cases.
 
 Provide a cross-platform runner that accepts an arbitrary `norm` candidate and
 executes the exact frozen contract assets owned by this repository. The
-proposed invocation shape is:
+approved invocation shape is:
 
 ```text
 norm-spec-conformance \
@@ -269,7 +269,7 @@ norm-spec-conformance \
 ```
 
 Compact JSON is the default and `--pretty` changes whitespace only. The runner
-is proposed as a second binary in the `norm-spec-cli` package, not a `norm`
+is a second binary in the `norm-spec-cli` package, not a `norm`
 subcommand or part of the public Rust facade. That keeps candidate behavior
 separate from the independent process, fixture, and comparison machinery that
 verifies it.
@@ -281,7 +281,7 @@ candidate through `CARGO_BIN_EXE_norm` and the explicit Schema case through the
 repository-root `schema/` tree. D3 therefore needs a deterministic exported
 bundle rather than a renamed copy of the integration test.
 
-The proposed bundle contains:
+The bundle contains:
 
 ```text
 bundle.lock.json
@@ -316,9 +316,9 @@ then rejects a missing, altered, extra, or path-unsafe bundle entry. Exporting
 from source and verifying an exported directory become permanent gates; no
 sibling lookup or network repair exists.
 
-### D3 report proposal
+### D3 approved report — D015
 
-The proposed success report is structurally equivalent to:
+The success report is structurally equivalent to:
 
 ```json
 {
@@ -379,7 +379,7 @@ declared case was executed and no global runner or bundle issue prevented the
 suite. A compatibility issue may make the overall status `fail` while the
 suite remains complete and all case checks pass.
 
-The proposed status and exit rules are:
+The status and exit rules are:
 
 - `pass`, complete, exit `0`: compatibility preflight passes and all 82 cases
   execute and match;
@@ -400,7 +400,7 @@ guessing from the runner version. The candidate path is resolved before case
 working directories change and is never emitted as a host-absolute report
 field.
 
-The `norm-spec/conformance/v1` report therefore includes suite identity,
+The `norm-spec/conformance/v1` report includes suite identity,
 candidate identity, totals, failures, and completion state.
 
 Required properties:

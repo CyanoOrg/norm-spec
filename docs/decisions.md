@@ -409,3 +409,58 @@ facade without copies or parent-tree access. The explicit dependency direction
 keeps semantics single-sourced in core, gives CLI and library consumers the
 same orchestration, and preserves independent tests for Git consumption,
 package contents, and eventual registry publication.
+
+## D015 — Freeze compatibility discovery and arbitrary-candidate conformance
+
+**Decision.** The additive `norm compatibility [--pretty]` command is
+machine-only and emits `norm-spec/compatibility/v1`. Its required fields expose
+the exact product version, accepted format identifiers, the
+`norm-spec/rust-api/v1` surface and package version, supported machine API
+identifiers, and the `norm-spec/a1-cli/v1` suite identity: bundle API, report
+API, case count, and SHA-256 contract digest. Compact JSON is the default and
+`--pretty` changes whitespace only. Identifier arrays are emitted lexically;
+consumers compare membership rather than order, ignore unknown fields, and
+fail closed on absent or unknown required identifiers. Product SemVer never
+substitutes for a protocol or suite identifier.
+
+The 82-case A1 CLI suite remains distinct from compatibility discovery. The
+new command has its own compatibility-v1 fixtures, while conformance performs
+discovery as a preflight before executing the frozen suite. Source revision or
+build metadata is omitted until it can be injected reproducibly; an exact Git
+revision or artifact digest remains an external transport pin.
+
+The `norm-spec-cli` package also ships a separate
+`norm-spec-conformance` binary. It accepts an explicit candidate and exact
+contract directory, emits compact `norm-spec/conformance/v1` JSON by default,
+and never searches siblings, the network, a registry, or environment fallback.
+The exported contract bundle contains the manifest, requirements,
+expectations, fixtures, layouts, and canonical Schema resources required by
+execution. A versioned lock enumerates portable relative paths and lowercase
+SHA-256 file digests; a suite digest binds that ordered inventory, suite ID,
+and case count. The lock excludes itself, rejects unsafe paths and unlisted or
+altered files, and is generated from canonical repository sources rather than
+maintained as a second Schema authority.
+
+Conformance reports distinguish `pass`/complete/exit `0`,
+`fail`/complete/exit `1`, and `error`/incomplete/exit `2`. An executable but
+incompatible candidate still runs every case. Case mismatches do not stop the
+suite. Candidate, bundle, setup, or runner failures expose stable
+`norm/conformance/*` issue codes, explicit not-executed counts, and no skip or
+empty-success state. Candidate identity comes only from a valid compatibility
+response; help text, the runner version, ambient checkout metadata, and raw
+host paths are not substitutes.
+
+**Context.** Gate C executes the frozen contract only through
+`CARGO_BIN_EXE_norm`, and the explicit Schema case still reads the repository
+root. D1 made the Rust facade externally consumable but did not give an
+installed binary a self-describing compatibility surface or let an independent
+runner verify an arbitrary candidate. A direct extraction of the integration
+test would therefore preserve hidden source-tree coupling and would not prove
+the bundle presented to a downstream consumer.
+
+**Rationale.** Exact identifiers prevent SemVer guesses from becoming
+compatibility policy. A locked, exportable bundle binds claims to the precise
+assets executed, while a separate runner can verify installed, packaged, or
+downstream-pinned candidates without trusting their own test harness. Explicit
+complete and incomplete states preserve all available mismatch evidence and
+fail closed when execution cannot be proven.

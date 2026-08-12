@@ -7,9 +7,8 @@
 - Integration state: local and remote `main` are synchronized at `c84aafb`;
   D1 implementation, hosted verification, and documentation are integrated.
 - Current resume point: D1 high-level Rust consumption and packaging are
-  complete. The exact D2/D3 compatibility and conformance proposal is recorded
-  in `docs/planning/gate-d-design.md` for the next human design checkpoint;
-  D015 has not been recorded and no protocol behavior has been implemented.
+  complete. The maintainer approved the exact D2/D3 compatibility and
+  conformance protocol recorded by D015; Batch 2 implementation is next.
 - The maintainer confirmed standalone-first product positioning, one canonical
   framework-neutral Skill in this repository, explicit failure without engine
   fallback, downstream host adapters, and standalone adoption as Gate D scope.
@@ -41,11 +40,11 @@
   consumer. Hosted D1 evidence is maintainer-confirmed green.
 - The private GitHub repository and hosted Actions are green through D1
   candidate `07a95c6`. Public visibility remains a maintainer checkpoint.
-- The pending D2/D3 proposal selects machine-default compatibility discovery,
+- D015 selects machine-default compatibility discovery,
   exact identifier membership, a locked 82-case A1 bundle, a separate
   `norm-spec-conformance` binary, explicit complete/incomplete reports, and no
-  candidate, bundle, source, or version fallback. These are planning inputs,
-  not accepted behavior, until the maintainer checkpoint closes.
+  candidate, bundle, source, or version fallback. Observable implementation
+  remains open until Batch 2 is green.
 
 ## Verification
 
@@ -126,8 +125,8 @@ Gate D1 local verification on 2026-08-12:
       sibling-path or copied-asset coupling (D014 and the isolated D1.1 spike).
 - [x] Implement the selected facade, CLI delegation, and permanent external
       package-consumer checks.
-- [ ] Approve the D2/D3 command, envelope, bundle identity, report, and exit
-      protocol; then record D015 before implementation.
+- [x] Approve the D2/D3 command, envelope, bundle identity, report, and exit
+      protocol; record D015 before implementation.
 - [ ] Add versioned compatibility discovery and arbitrary-candidate
       conformance without skips after D015.
 - [ ] Prove standalone adoption from an isolated candidate without a plugin.
