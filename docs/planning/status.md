@@ -2,18 +2,16 @@
 
 ## Resume here
 
-- Stage: `0.1.0-alpha.1`; Gate B and Gate C are complete. Gate D integration
-  readiness planning is active.
-- Integration state: local `main` includes the approved D015 documentation at
-  `8c10b6b`; `origin/main` remains at the integrated D1 record `c84aafb` until
-  the maintainer's next push. Hosted candidate `1326dbe` contains the complete
-  Batch 2 implementation and is ready for local fast-forward integration with
-  this documentation-only verification record.
-- Current resume point: D1, D2 compatibility discovery, and D3
-  arbitrary-candidate conformance are complete. Full local gates are green
-  through implementation candidate `5efb42c`, and hosted quality, Linux,
-  macOS, and Windows CI for complete candidate `1326dbe` is
-  maintainer-confirmed. D4 standalone adoption and D5 Skill are next.
+- Stage: `0.1.0-alpha.1`; Gate B and Gate C are complete. Gate D D1-D5 are
+  locally complete, but Gate D remains open pending integrated hosted CI.
+- Integration state: local and `origin/main` are synchronized at the D2/D3
+  hosted verification record `415a7da`. Batch 3 implementation and integration
+  documentation are complete on the short-lived branch through candidate
+  `2b8f7ff`; this status update is documentation-only.
+- Current resume point: full Batch 3 local gates are green. Push the final
+  branch candidate and require hosted quality, Linux, macOS, and Windows CI.
+  Only after all four hosted jobs pass may the maintainer fast-forward `main`,
+  delete the branch, and record Gate D as closed.
 - The maintainer confirmed standalone-first product positioning, one canonical
   framework-neutral Skill in this repository, explicit failure without engine
   fallback, downstream host adapters, and standalone adoption as Gate D scope.
@@ -29,9 +27,8 @@
   execute the compiled binary in isolated roots with no skips: 82 of 82 frozen
   cases.
 - All five initial production commands, compatibility discovery, the D1
-  consumer-resolvable Rust API, and the independent conformance runner are
-  functional. Standalone adoption and Skill work remain open; D2/D3 completion
-  does not claim those later results.
+  consumer-resolvable Rust API, the independent conformance runner, packaged
+  standalone adoption, and the canonical Skill are functional locally.
 - D014 selected a repository-root `norm-spec` facade after an isolated D1.1
   spike. The facade layout packaged the existing root assets, passed Rust 1.97
   workspace candidate verification with the unpublished core package, and ran
@@ -45,7 +42,8 @@
   Cargo registry, and runs collect plus validation from an unrelated
   exact-revision Git consumer. Hosted D1 evidence is maintainer-confirmed green.
 - The private GitHub repository and hosted Actions are green through D2/D3
-  candidate `1326dbe`. Public visibility remains a maintainer checkpoint.
+  candidate `1326dbe`. Batch 3 hosted evidence and public visibility remain
+  maintainer checkpoints.
 - D015's machine-default compatibility discovery, exact identifier membership,
   locked 82-case A1 bundle, separate `norm-spec-conformance` binary, explicit
   complete/incomplete reports, and no-fallback rules are implemented and green
@@ -118,6 +116,37 @@ Gate D2/D3 local verification on 2026-08-12:
 - hosted quality, Linux, macOS, and Windows CI for candidate `1326dbe` →
   maintainer-confirmed green.
 
+Gate D4/D5 local verification on 2026-08-12:
+
+- `cargo fmt --check`, strict workspace Clippy, and rustdoc with warnings denied
+  → green.
+- `cargo test --workspace --all-features` → 68 Rust test functions passed; the
+  original 82-case CLI contract remains green without skips.
+- `bash scripts/check-contract-bundle.sh` → the unchanged 108-file lock
+  exported successfully and the current candidate executed 82 of 82 cases with
+  pass/complete status and the frozen digest.
+- `bash scripts/check-packages.sh` → fresh isolated package candidates verified
+  with 13 core, 31 facade, and 23 CLI files; the unrelated exact-revision Rust
+  consumer completed collect plus validation at candidate `2b8f7ff`.
+- `bash scripts/check-standalone-adoption.sh` → a candidate installed from
+  unpacked `.crate` sources queried version/compatibility, scanned an empty
+  project, initialized root and nested conventions, collected
+  most-specific-first, validated strictly, then returned the stable
+  `norm/reference/not-found` machine failure after its temporary package source
+  and install build tree were removed.
+- skill-creator `quick_validate.py` → green. The Skill contract requires exactly
+  `SKILL.md` plus two self-contained references, executes all six documented
+  CLI examples, and proves isolated installation without host metadata.
+- Skill forward tests → nested collection, authoring, invalid-reference repair,
+  and missing-CLI fail-closed behavior all green without parser, collect,
+  validation, empty-ruleset, or successful-skip fallback.
+- strict repository self-validation → seven files, zero errors, zero warnings;
+  structural scan → 41 directories, seven `.norm` files, no symlinks, and
+  `0.171` coverage after removing the initializer's empty host-metadata
+  directory.
+- public-history scan → green. Hosted quality, Linux, macOS, and Windows CI for
+  the final Batch 3 candidate remains required before Gate D closure.
+
 ## Open-source readiness
 
 - [x] Independent public `0.1` history and product identity.
@@ -156,8 +185,10 @@ Gate D2/D3 local verification on 2026-08-12:
       protocol; record D015 before implementation.
 - [x] Add versioned compatibility discovery and arbitrary-candidate
       conformance without skips after D015; local gates are green.
-- [ ] Prove standalone adoption from an isolated candidate without a plugin.
-- [ ] Add and validate the canonical framework-neutral norm-spec Skill without
+- [x] Prove standalone adoption from an isolated candidate without a plugin.
+- [x] Add and validate the canonical framework-neutral norm-spec Skill without
       parser, collect, or validation fallback.
+- [ ] Confirm the integrated Batch 3 candidate on hosted quality, Linux, macOS,
+      and Windows CI, then close Gate D.
 - [ ] Complete cross-platform distribution and release-readiness review
       (Gate E).

@@ -466,6 +466,28 @@ project with no agent plugin and no sibling source checkout. The lane must:
 This proves a real standalone product path. Repository self-validation remains
 valuable but is not a substitute.
 
+### D4 implementation result — 2026-08-12
+
+`scripts/check-standalone-adoption.sh` creates and verifies all three workspace
+packages in a disposable target, unpacks the resulting `.crate` candidates,
+patches only those packaged core/facade sources into an isolated CLI install,
+and never consumes a sibling checkout as a runtime dependency. The installed
+candidate then:
+
+- reports exact version and `norm-spec/compatibility/v1` identity;
+- scans a project with zero initial conventions;
+- initializes embedded root and nested convention templates;
+- collects `docs/.norm` before `.norm`;
+- strictly validates the adopted project;
+- replaces the nested convention with one isolated invalid-reference signal;
+- deletes the unpacked package sources and install build tree; and
+- returns exit `1`, empty stderr, `norm-spec/validate/v1`, and
+  `norm/reference/not-found` from the remaining installed binary.
+
+The cross-platform CI matrix invokes this lane directly. Local macOS evidence
+is green through Batch 3 candidate `2b8f7ff`; hosted Linux, macOS, and Windows
+evidence remains required for Gate D closure.
+
 ## Result D5 — Canonical framework-neutral Skill
 
 Create `skills/norm-spec/` with only essential Skill artifacts:
@@ -509,6 +531,27 @@ Validation includes:
 
 The Skill is versioned by the norm-spec product release that contains it. Gate
 D does not create a second Skill repository or independent release process.
+
+### D5 implementation result — 2026-08-12
+
+The skill-creator initializer created the canonical directory with its
+`references` resource; all initializer content was replaced, and the generated
+`agents/openai.yaml` plus empty host directory were removed. The result contains
+only `SKILL.md`, `references/authoring.md`, and
+`references/field-reference.md`.
+
+The Skill requires exact compatibility discovery, explicit-root collection,
+application of every returned convention, strict validation, engine-backed
+authoring, and stable-code diagnosis. Missing or incompatible CLI behavior
+stops the workflow with repair guidance. It neither implements fallback
+semantics nor promises automatic discovery or enforcement.
+
+skill-creator quick validation is green. Permanent Rust tests prove exact
+structure and frontmatter, portable one-level references, isolated directory
+installation, absence of host/local/initializer residue, execution of all six
+documented commands, nested collection, authoring, invalid-reference repair,
+and missing-CLI fail-closed behavior. Local evidence is green through candidate
+`2b8f7ff`; hosted matrix evidence remains pending.
 
 ## Merge-ready implementation batches
 
@@ -555,6 +598,11 @@ hosted run under the repository's agreed documentation policy.
 Each batch is independently reviewable and locally green. Hosted CI may run per
 batch branch; Gate D closes only after the integrated candidate is green on all
 three operating systems.
+
+Batch 3 is locally complete through implementation/documentation candidate
+`2b8f7ff`. Its semantic commits separate standalone adoption, canonical Skill,
+artifact/command checks, forward workflows, integration documentation, and this
+status record. Integrated hosted CI is the remaining closure gate.
 
 ## Quality gates
 

@@ -22,11 +22,12 @@ five production commands are in place. All 82 frozen cases execute the
 compiled binary without skips, and the integrated candidate is green on hosted
 Linux, macOS, and Windows CI.
 
-Gate D is active. D1 Rust consumption plus D2 compatibility discovery and D3
-consumer-neutral conformance are complete; hosted quality, Linux, macOS, and
-Windows CI for Batch 2 candidate `1326dbe` is maintainer-confirmed. D4
-standalone adoption and the canonical framework-neutral Skill under D013 remain
-open. Host-specific injection and enforcement stay downstream.
+Gate D is active. D1-D5 are locally complete: Rust consumption, compatibility
+discovery, consumer-neutral conformance, packaged standalone adoption, and the
+canonical framework-neutral Skill. Full local gates are green through Batch 3
+implementation/documentation candidate `2b8f7ff`; integrated hosted quality,
+Linux, macOS, and Windows CI remains the Gate D closure condition. Host-specific
+injection and enforcement stay downstream.
 
 Read first:
 
@@ -49,6 +50,7 @@ cargo run -p norm-spec-cli -- validate --all --strict
 cargo run -p norm-spec-cli -- scan --root . --text
 bash scripts/check-contract-bundle.sh
 bash scripts/check-packages.sh
+bash scripts/check-standalone-adoption.sh
 bash scripts/check-public-history.sh
 ```
 
