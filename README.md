@@ -7,18 +7,19 @@ The project starts with one deterministic semantic engine. Its specification,
 schemas, templates, fixtures, and machine contracts live in this repository;
 framework adapters consume those contracts without becoming format authorities.
 
-> Status: `0.1.0-alpha.1`. Gate C is integrated. Gate D1 is complete: the
-> packaged high-level Rust facade, delegated CLI, workspace package
-> verification, and an exact-revision external consumer are green; hosted
-> Linux, macOS, and Windows CI for candidate `07a95c6` is maintainer-confirmed.
+> Status: `0.1.0-alpha.1`. Gate C and Gate D1 are integrated. Gate D2/D3 is
+> locally complete: exact compatibility discovery, a locked A1 contract
+> bundle, and arbitrary-candidate conformance are green. Hosted Linux, macOS,
+> and Windows verification for the Batch 2 candidate is the next checkpoint.
 
 ## Crates
 
 - `norm-spec`: packaged, filesystem-aware collect and validation facade.
 - `norm-spec-core`: deterministic parsing, collection rules, Schema and
   semantic validation, and versioned response models.
-- `norm-spec-cli`: arguments, presentation, exit codes, and the `norm` command;
-  filesystem semantics and release-owned assets are delegated to `norm-spec`.
+- `norm-spec-cli`: arguments, presentation, exit codes, the `norm` command, and
+  the independent `norm-spec-conformance` runner; filesystem semantics and
+  release-owned assets are delegated to `norm-spec`.
 
 ## Rust API
 
@@ -57,6 +58,7 @@ cargo run -p norm-spec-cli -- collect --root . --target path/to/directory --pret
 cargo run -p norm-spec-cli -- validate --all --strict
 cargo run -p norm-spec-cli -- init --profile module --output path/to/.norm
 cargo run -p norm-spec-cli -- scan --root . --text
+cargo run -p norm-spec-cli -- compatibility --pretty
 ```
 
 Or install the current development binary from this checkout:
@@ -68,11 +70,23 @@ norm collect --root . --target path/to/directory --pretty
 norm validate --all --strict
 norm init --profile module --output path/to/.norm
 norm scan --root . --text
+norm compatibility --pretty
 ```
 
-This is an alpha development install. All five frozen subcommands and the D1
-Rust facade are functional; compatibility discovery, arbitrary-candidate
-conformance, standalone adoption, Skill, and distribution remain later work.
+`cargo install` also installs `norm-spec-conformance`. It verifies an explicit
+candidate against an exact exported or release-provided contract bundle:
+
+```bash
+norm-spec-conformance \
+  --candidate "$(command -v norm)" \
+  --contract-dir path/to/exact-contract-bundle \
+  --pretty
+```
+
+This is an alpha development install. The five initial commands, compatibility
+discovery, D1 Rust facade, and arbitrary-candidate conformance are functional.
+Standalone adoption, the canonical Skill, distribution, and hosted Batch 2
+verification remain later Gate D/Gate E work.
 
 See `ROADMAP.md`, `docs/ARCHITECTURE.md`, and
 `docs/planning/v0.1-execution.md` before contributing.

@@ -91,7 +91,45 @@ The permanent package gate runs:
 bash scripts/check-packages.sh
 ```
 
-It checks facade package contents, verifies core, facade, and CLI together via
-Cargo's temporary workspace registry, and builds an unrelated consumer from
-the exact current Git revision. Compatibility discovery and arbitrary-binary
-conformance are separate Gate D2/D3 results and are not implied by this API.
+It checks facade and runner package contents, verifies core, facade, and CLI
+together via an isolated temporary workspace registry, and builds an unrelated
+consumer from the exact current Git revision.
+
+## Machine compatibility and conformance
+
+Rust API availability does not imply CLI compatibility. An installed candidate
+reports exact machine identity without help-text scraping:
+
+```bash
+norm compatibility --pretty
+```
+
+The `norm-spec/compatibility/v1` response names the accepted format, public
+Rust surface, machine APIs, bundle/report protocols, frozen suite count, and
+exact contract digest. Consumers compare required identifiers directly;
+product SemVer is identity data, not a protocol substitute.
+
+The CLI package also installs an independent runner:
+
+```bash
+norm-spec-conformance \
+  --candidate /exact/path/to/norm \
+  --contract-dir /exact/path/to/exported-bundle \
+  --pretty
+```
+
+The bundle must match `norm-spec/contract-bundle/v1` byte identities. Missing,
+altered, extra, symbolic-link, or unsafe-path content fails before execution.
+An executable but incompatible candidate still runs all 82 cases; mismatches
+produce a complete failure report, while unavailable execution evidence
+produces an explicit incomplete error. There is no sibling, network, registry,
+help-text, copied-Schema, empty-success, or skip fallback.
+
+Repository maintainers regenerate, export, and verify the canonical bundle
+with:
+
+```bash
+bash scripts/update-contract-lock.sh
+bash scripts/export-contract-bundle.sh path/to/empty-destination
+bash scripts/check-contract-bundle.sh
+```

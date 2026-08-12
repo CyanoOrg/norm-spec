@@ -37,10 +37,11 @@ interfaces so behavior can be tested without ambient process state.
 
 ### `norm-cli`
 
-Owns CLI arguments, human-readable reporting, JSON serialization, and stable
-exit codes. It delegates filesystem collect and validation plus release-owned
-Schema/template access to `norm-spec`; both packages may depend on
-`norm-spec-core`, and reverse dependencies are forbidden.
+Owns CLI arguments, human-readable reporting, JSON serialization, stable exit
+codes, and the independent `norm-spec-conformance` process runner. It delegates
+filesystem collect and validation plus release-owned Schema/template access to
+`norm-spec`; both packages may depend on `norm-spec-core`, and reverse
+dependencies are forbidden.
 
 The facade embeds the release schema bundle and may load an explicitly selected
 bundle from disk. It passes parsed JSON resources into `norm-core`; the core
@@ -54,22 +55,31 @@ files. Scan passes portable directory and symlink observations into
 `norm-spec-core`, which owns naming classification, ordering, recurrence, and
 coverage aggregation.
 
+The `norm compatibility` command serializes the core-owned compatibility model
+with the exact frozen suite digest. `norm-spec-conformance` verifies an explicit
+candidate and exported bundle independently: it hashes every locked asset,
+checks suite identity, queries compatibility, materializes isolated cases, and
+compares exits and streams. The runner does not enter the public Rust facade
+and the contract bundle does not become a second Schema source.
+
 ## Dependency direction
 
 ```text
 norm-cli ──> norm-spec ──> norm-spec-core
     └──────────────────────> norm-spec-core
 consumers ──> norm-spec or versioned norm-cli contracts
+conformance runner ──> explicit norm candidate + exact exported bundle
 norm-spec-core ──X filesystems, process policy, and consumer frameworks
 ```
 
 ## Contract layers
 
-The project versions three layers independently:
+The project versions four identities independently:
 
 - product/crate version: Rust packages and CLI release;
 - format compatibility: accepted `.norm` syntax and fields;
 - machine API version: JSON output envelopes and error codes.
+- conformance identity: bundle protocol, suite ID, case count, and exact digest.
 
 Arrays whose order carries meaning stay ordered. Object-key order is not a
 semantic contract. Contract tests compare canonical data and stable fields,

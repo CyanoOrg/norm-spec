@@ -22,10 +22,10 @@ five production commands are in place. All 82 frozen cases execute the
 compiled binary without skips, and the integrated candidate is green on hosted
 Linux, macOS, and Windows CI.
 
-Gate D is active. It makes the Rust surface and machine contracts consumable
-outside this repository, adds consumer-neutral conformance and standalone
-adoption evidence, and ships one canonical framework-neutral Skill under D013.
-Host-specific injection and enforcement remain downstream.
+Gate D is active. D1 Rust consumption plus D2 compatibility discovery and D3
+consumer-neutral conformance are locally complete; hosted Batch 2 evidence is
+pending. D4 standalone adoption and the canonical framework-neutral Skill under
+D013 remain open. Host-specific injection and enforcement stay downstream.
 
 Read first:
 
@@ -43,8 +43,10 @@ cargo clippy --workspace --all-targets --all-features -- -D warnings
 cargo test --workspace --all-features
 cargo doc --workspace --no-deps
 cargo package --workspace
+cargo run -p norm-spec-cli -- compatibility --pretty
 cargo run -p norm-spec-cli -- validate --all --strict
 cargo run -p norm-spec-cli -- scan --root . --text
+bash scripts/check-contract-bundle.sh
 bash scripts/check-packages.sh
 bash scripts/check-public-history.sh
 ```

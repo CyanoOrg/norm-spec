@@ -33,3 +33,9 @@ Versioning and keeps changes under `[Unreleased]` until release preparation.
   typed collect and validation requests and failures, CLI delegation without a
   second orchestration copy, workspace package verification, and an
   exact-revision external Cargo consumer gate.
+- Machine-default `norm compatibility` discovery with exact product, format,
+  Rust API, machine API, bundle, report, suite-count, and contract-digest
+  identity.
+- Reproducible SHA-256 locking and export of the 82-case A1 CLI bundle plus the
+  independent `norm-spec-conformance` runner, complete/incomplete reports,
+  fail-closed candidate and bundle handling, package verification, and CI.

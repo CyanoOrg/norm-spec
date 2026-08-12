@@ -5,10 +5,10 @@
 本项目从单一、确定性的语义引擎开始。规范、Schema、模板、fixtures 和
 机器协议都在本仓库内自足维护；框架适配器消费这些契约，但不成为格式权威。
 
-> 当前状态：`0.1.0-alpha.1`。Gate C 已集成。Gate D1 已完成：高层 Rust
-> facade、CLI 委托、workspace package 验证以及精确 Git revision 外部
-> consumer 均为绿色；维护者已确认候选 `07a95c6` 的 Linux、macOS、Windows
-> CI 全部通过。
+> 当前状态：`0.1.0-alpha.1`。Gate C 与 Gate D1 已集成。Gate D2/D3 已在
+> 本地完成：精确 compatibility discovery、锁定的 A1 contract bundle 与
+> 任意候选 conformance 均为绿色；下一检查点是 Batch 2 候选在 Linux、macOS、
+> Windows 上的托管验证。
 
 ## Rust API
 
@@ -46,6 +46,7 @@ cargo run -p norm-spec-cli -- collect --root . --target path/to/directory --pret
 cargo run -p norm-spec-cli -- validate --all --strict
 cargo run -p norm-spec-cli -- init --profile module --output path/to/.norm
 cargo run -p norm-spec-cli -- scan --root . --text
+cargo run -p norm-spec-cli -- compatibility --pretty
 ```
 
 也可以从当前 checkout 安装开发版本：
@@ -57,10 +58,22 @@ norm collect --root . --target path/to/directory --pretty
 norm validate --all --strict
 norm init --profile module --output path/to/.norm
 norm scan --root . --text
+norm compatibility --pretty
 ```
 
-这是 alpha 开发安装。五个冻结子命令与 D1 Rust facade 目前都可用；兼容性
-发现、任意候选 conformance、独立采用、Skill 与分发仍属于后续 gates。
+`cargo install` 也会安装 `norm-spec-conformance`。它使用精确导出或随发布
+提供的 contract bundle 验证显式候选：
+
+```bash
+norm-spec-conformance \
+  --candidate "$(command -v norm)" \
+  --contract-dir path/to/exact-contract-bundle \
+  --pretty
+```
+
+这是 alpha 开发安装。五个初始命令、compatibility discovery、D1 Rust
+facade 与任意候选 conformance 目前都可用；独立采用、canonical Skill、分发
+以及 Batch 2 托管验证仍属于后续 Gate D/Gate E 工作。
 
 参与开发前请先阅读 `AGENTS.md`、`ROADMAP.md`、`docs/ARCHITECTURE.md` 和
 `docs/planning/v0.1-execution.md`。
