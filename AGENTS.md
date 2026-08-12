@@ -40,6 +40,7 @@ Read first:
 - `docs/planning/v0.1-execution.md` for the active plan.
 - `docs/planning/gate-d-design.md` for the active integration-readiness design.
 - `docs/planning/gate-e-design.md` for the active distribution design.
+- `docs/planning/v0.1.0-rc.1-release.md` for the active release checklist.
 - `docs/ARCHITECTURE.md` for code boundaries.
 - `docs/INSTALLATION.md` for binary, source, Skill, and upgrade procedures.
 - `docs/decisions.md` for immutable decisions.

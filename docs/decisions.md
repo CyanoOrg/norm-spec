@@ -533,3 +533,74 @@ separate from publication permits repeated hosted verification without
 granting a workflow release authority. Rust 1.97 is the lowest version the
 project currently promises and proves; a lower aspirational number would be a
 compatibility claim without evidence.
+
+## D017 — Rehearse the public release boundary with v0.1.0-rc.1
+
+**Decision.** The first public norm-spec release is `v0.1.0-rc.1`, not the
+stable `v0.1.0`. The RC contains the Gate E product without new format or
+behavior scope and rehearses the irreversible public-distribution chain:
+repository visibility, exact release artifacts, the three crates.io packages,
+registry installation, release download, and canonical Skill installation.
+An RC defect is repaired in `v0.1.0-rc.N+1`; the published RC version is never
+overwritten. Stable promotion follows only after the public RC evidence is
+complete and requires a separate maintainer authorization.
+
+One release-preparation commit is the identity anchor. The hosted quality,
+MSRV, fixed-platform, and four native artifact jobs must all pass for that exact
+commit. `main`, annotated tag `v0.1.0-rc.1`, GitHub Pre-release source, every
+archive's `sourceRevision`, and the `.cargo_vcs_info.json` revision in all three
+crate packages must resolve to the same commit. A merge, squash, rebase, or
+documentation edit that changes the commit invalidates earlier artifacts and
+requires a new complete hosted run.
+
+The GitHub repository becomes public only after the RC candidate and its public
+history, workflow logs, and candidate inventories have passed review. Public
+visibility precedes the tag and package uploads so registry metadata and
+release documentation resolve to the canonical public source. Main and tag
+rules, private vulnerability reporting, community files, Actions history, and
+temporary artifacts are reviewed at that checkpoint. Visibility change,
+ruleset configuration, tag creation/push, GitHub Release creation, and every
+registry upload remain explicit maintainer actions.
+
+The crates.io packages publish serially in dependency order:
+`norm-spec-core`, then `norm-spec`, then `norm-spec-cli`. After each upload, the
+exact version must be resolvable from the public index and the next package's
+`cargo publish --dry-run` must succeed. A later package is never published
+while its required upstream version is absent. If any upload fails, preserve
+the successful immutable publications, stop the release, report the partial
+state, and repair forward with the next RC version if repository changes are
+required. Do not yank a correct upstream package merely because a downstream
+upload failed.
+
+The annotated tag is created only after the exact `main` candidate is green.
+The GitHub Pre-release attaches the four D016 archives and four checksum files
+built and verified by that commit. Registry publication follows the GitHub
+Pre-release so each crate can point users to an existing public source and
+download record. The release is not considered complete until a clean external
+environment verifies the GitHub archive/checksum/conformance path, registry CLI
+installation, registry Rust-facade consumption, docs.rs results, and Skill use
+from the same release.
+
+**Context.** Gate E candidate `3ccde86` and integrated `main` `9e71747` proved
+the repository-owned build and verification machinery on all four native
+targets, but no public GitHub Release or crates.io dependency chain has yet
+been exercised. At the decision checkpoint, crates.io resolved no published
+version for `norm-spec-core`, `norm-spec`, or `norm-spec-cli`. A real
+`norm-spec-core` publish dry-run passed. Facade and CLI dry-runs correctly
+failed because their unpublished upstream packages were absent from the public
+index, demonstrating that the first registry release is inherently serial.
+
+Publishing `v0.1.0` directly would make registry propagation, package ownership,
+public visibility, Release asset attachment, and post-publication installation
+part of the stable release experiment. Crates.io versions are immutable, and
+the three names are allocated only by actual successful publication rather
+than by local availability checks. GitHub visibility changes also expose prior
+Actions history and logs, so they are not a clerical side effect of tagging.
+
+**Rationale.** The product and frozen A1 behavior are ready for public use, but
+the transport and registry control plane needs one observable rehearsal. An RC
+keeps that evidence honest without weakening the artifact or compatibility
+bar. Exact commit binding prevents a green branch, tag, archive, and crate from
+quietly naming different code. Serial publication and stop-on-partial-failure
+rules respect registry immutability, while explicit maintainer checkpoints
+keep public and irreversible actions outside ordinary CI authority.
