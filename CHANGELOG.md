@@ -45,3 +45,15 @@ Versioning and keeps changes under `[Unreleased]` until release preparation.
 - A canonical framework-neutral norm-spec Skill with self-contained authoring
   and field references, fail-closed engine use, executable command examples,
   isolated installation checks, and forward workflow tests.
+- Versioned native release-candidate archives for Linux x86-64, macOS Apple
+  Silicon and Intel, and Windows x86-64, containing both executables, the exact
+  locked contract bundle, canonical Skill, release manifest, and SHA-256
+  checksum.
+- Extracted-archive verification for safe paths, exact inventory, source and
+  compatibility identity, complete 82-case conformance, and source-free
+  standalone adoption.
+- An explicit Rust 1.97 MSRV policy and hosted verification lane, fixed native
+  runner targets, and commit-pinned direct artifact upload without publication
+  authority.
+- Binary/source/Skill installation plus checksum, upgrade, rollback, and
+  uninstall guidance.

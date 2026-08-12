@@ -3,14 +3,17 @@
 ## Resume here
 
 - Stage: `0.1.0-alpha.1`; Gate B, Gate C, and Gate D are complete. Gate E
-  distribution and release readiness are next.
+  distribution and release readiness are active, with the local implementation
+  candidate complete and hosted/release checkpoints still open.
 - Integration state: final Gate D candidate `7e052ae` is maintainer-confirmed
   green on hosted quality, Linux, macOS, and Windows CI. This hosted/adoption
   record is documentation-only and may be fast-forwarded without a second
   hosted run under the repository's agreed documentation policy.
-- Current resume point: fast-forward this record to `main`, archive the Batch 3
-  branch, then plan Gate E. Public visibility, publication, MSRV, and release
-  artifacts remain maintainer checkpoints.
+- Current resume point: push `codex/feat-gate-e-distribution`, confirm quality,
+  MSRV, fixed-platform, and all four native release-candidate jobs for the same
+  commit, then record hosted evidence and merge. Tagging, GitHub Release,
+  registry publication, version promotion, and the stable release remain
+  maintainer checkpoints.
 - The maintainer confirmed standalone-first product positioning, one canonical
   framework-neutral Skill in this repository, explicit failure without engine
   fallback, downstream host adapters, and standalone adoption as Gate D scope.
@@ -46,6 +49,19 @@
   locked 82-case A1 bundle, separate `norm-spec-conformance` binary, explicit
   complete/incomplete reports, and no-fallback rules are implemented and green
   locally plus on hosted quality, Linux, macOS, and Windows CI.
+- D016 fixes four native release targets, a versioned archive manifest,
+  checksum and source binding, extracted self-verification, Rust 1.97 as the
+  conservative initial MSRV, temporary candidate CI without publication
+  authority, and explicit maintainer release checkpoints.
+- Repository-owned scripts build a clean-revision archive and verify its
+  checksum, safe paths, exact inventory, manifest/source/contract identity,
+  both executables, complete conformance, exact canonical Skill, and unrelated
+  standalone adoption from the extracted candidate.
+- CI now uses fixed OS labels, has a distinct Rust 1.97.1 MSRV job, and builds
+  native `x86_64-unknown-linux-gnu`, `aarch64-apple-darwin`,
+  `x86_64-apple-darwin`, and `x86_64-pc-windows-msvc` candidates. It uploads
+  the preconstructed archives and checksums directly with read-only repository
+  permissions; no tag, release, registry, or signing authority was added.
 
 ## Verification
 
@@ -162,6 +178,35 @@ First real non-plugin adoption evidence on 2026-08-12:
   `AGENTS.md` still described pre-self-hosting manual collection. That follow-up
   belongs to pi-norm-spec and does not change canonical format semantics here.
 
+Gate E local implementation verification on 2026-08-12:
+
+- Rust `1.97.1` (declared MSRV `1.97`) executed the complete local candidate;
+  `cargo fmt --check`, strict workspace Clippy, and rustdoc with warnings denied
+  were green.
+- `cargo test --workspace --all-features --locked` → 68 Rust test functions
+  passed; all 82 frozen compiled-binary cases and six conformance negative/pass
+  paths remained green.
+- the 108-file locked contract bundle regenerated without drift and the current
+  arbitrary candidate returned pass, complete, 82 executed, zero failed, and
+  zero not executed.
+- `scripts/check-packages.sh` and the refactored source-free standalone lane
+  remained green for the three package candidates and unrelated consumption.
+- the clean Apple Silicon candidate built as
+  `norm-spec-0.1.0-alpha.1-aarch64-apple-darwin.tar.gz`; extraction verified its
+  checksum, single safe root, exact release inventory, precise source revision,
+  compatibility and bundle identities, 82-case conformance, and standalone
+  scan/init/collect/strict-validation/stable-failure workflow.
+- a negative archive check rejected an intentionally wrong expected source
+  revision. Strict self-validation returned seven files, zero errors, and zero
+  warnings; the public-history scan remained green.
+- scope/docs/behavior/package/compatibility review found no intentional format,
+  Rust API, machine API, or frozen behavior change. Linux ARM64, musl,
+  older-glibc, Windows ARM64, package-manager distribution, signing,
+  notarization, registry publication, GitHub Release, and `v0.1.0` remain
+  explicitly unclaimed or maintainer-gated.
+- hosted quality, MSRV, fixed-platform regression, and all four native archive
+  jobs are pending for the final integrated branch commit.
+
 ## Open-source readiness
 
 - [x] Independent public `0.1` history and product identity.
@@ -205,5 +250,13 @@ First real non-plugin adoption evidence on 2026-08-12:
       parser, collect, or validation fallback.
 - [x] Confirm the integrated Batch 3 candidate on hosted quality, Linux, macOS,
       and Windows CI, and close Gate D with real non-plugin adoption evidence.
+- [x] Define the self-verifying release archive and Rust 1.97 MSRV contract
+      (D016), without granting CI publication authority.
+- [x] Build and fully verify the native Apple Silicon archive locally.
+- [x] Add fixed-runner MSRV and four-target candidate-artifact CI.
+- [x] Complete binary/source/Skill installation, upgrade, rollback, and
+      uninstall documentation.
+- [ ] Confirm the integrated Gate E implementation candidate on hosted quality,
+      MSRV, Linux x64, macOS ARM64/Intel, and Windows x64 jobs.
 - [ ] Complete cross-platform distribution and release-readiness review
       (Gate E).
