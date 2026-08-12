@@ -39,3 +39,9 @@ Versioning and keeps changes under `[Unreleased]` until release preparation.
 - Reproducible SHA-256 locking and export of the 82-case A1 CLI bundle plus the
   independent `norm-spec-conformance` runner, complete/incomplete reports,
   fail-closed candidate and bundle handling, package verification, and CI.
+- Cross-platform standalone adoption from packaged candidates, including
+  source-free final smoke coverage for scan, init, collect, strict validation,
+  compatibility discovery, and stable machine failures.
+- A canonical framework-neutral norm-spec Skill with self-contained authoring
+  and field references, fail-closed engine use, executable command examples,
+  isolated installation checks, and forward workflow tests.

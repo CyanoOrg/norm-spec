@@ -7,10 +7,10 @@ The project starts with one deterministic semantic engine. Its specification,
 schemas, templates, fixtures, and machine contracts live in this repository;
 framework adapters consume those contracts without becoming format authorities.
 
-> Status: `0.1.0-alpha.1`. Gate C and Gate D1 are integrated. Gate D2/D3 is
-> complete: exact compatibility discovery, a locked A1 contract bundle, and
-> arbitrary-candidate conformance are green. Hosted quality, Linux, macOS, and
-> Windows CI for candidate `1326dbe` is maintainer-confirmed.
+> Status: `0.1.0-alpha.1`. Gate C and Gate D1-D3 are integrated. Gate D Batch 3
+> is locally complete: packaged standalone adoption and the canonical
+> framework-neutral Skill are implemented and tested. Integrated hosted CI is
+> still required before Gate D closes.
 
 ## Crates
 
@@ -84,9 +84,12 @@ norm-spec-conformance \
 ```
 
 This is an alpha development install. The five initial commands, compatibility
-discovery, D1 Rust facade, and arbitrary-candidate conformance are functional.
-Standalone adoption, the canonical Skill, and distribution remain later Gate
-D/Gate E work.
+discovery, Rust facade, arbitrary-candidate conformance, packaged standalone
+adoption lane, and canonical Skill are functional locally. Distribution remains
+Gate E work; Gate D closure still requires integrated hosted CI.
+
+See `docs/INTEGRATION.md` for plugin-free project adoption, canonical Skill
+installation, failure behavior, and downstream host-adapter boundaries.
 
 See `ROADMAP.md`, `docs/ARCHITECTURE.md`, and
 `docs/planning/v0.1-execution.md` before contributing.

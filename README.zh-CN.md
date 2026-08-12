@@ -5,10 +5,9 @@
 本项目从单一、确定性的语义引擎开始。规范、Schema、模板、fixtures 和
 机器协议都在本仓库内自足维护；框架适配器消费这些契约，但不成为格式权威。
 
-> 当前状态：`0.1.0-alpha.1`。Gate C 与 Gate D1 已集成。Gate D2/D3 已在
-> 完成：精确 compatibility discovery、锁定的 A1 contract bundle 与任意
-> 候选 conformance 均为绿色；维护者已确认候选 `1326dbe` 的 quality、Linux、
-> macOS、Windows CI 全部通过。
+> 当前状态：`0.1.0-alpha.1`。Gate C 与 Gate D1-D3 已集成。Gate D Batch 3
+> 已在本地完成：packaged standalone adoption 与 framework-neutral canonical
+> Skill 均已实现并通过测试；Gate D 正式关闭前仍需 integrated hosted CI。
 
 ## Rust API
 
@@ -71,9 +70,12 @@ norm-spec-conformance \
   --pretty
 ```
 
-这是 alpha 开发安装。五个初始命令、compatibility discovery、D1 Rust
-facade 与任意候选 conformance 目前都可用；独立采用、canonical Skill 与分发
-仍属于后续 Gate D/Gate E 工作。
+这是 alpha 开发安装。五个初始命令、compatibility discovery、Rust facade、
+任意候选 conformance、packaged standalone adoption lane 与 canonical Skill
+目前都已在本地可用。分发仍属于 Gate E；Gate D 关闭仍需 integrated hosted CI。
+
+无插件项目采用、canonical Skill 安装、失败行为与下游 host adapter 边界见
+`docs/INTEGRATION.md`。
 
 参与开发前请先阅读 `AGENTS.md`、`ROADMAP.md`、`docs/ARCHITECTURE.md` 和
 `docs/planning/v0.1-execution.md`。
