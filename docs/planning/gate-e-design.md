@@ -136,9 +136,10 @@ semantic inventory inside those bytes. Signing is not claimed in v0.1.0.
 
 ## E2 — Extracted-artifact verification
 
-The verifier accepts an explicit archive and expected target. It creates a
-temporary directory, checks the checksum, extracts without using the checkout
-as a runtime source, and fails on an unexpected or missing inventory item.
+The verifier accepts an explicit archive, expected target, and expected source
+revision. It creates a temporary directory, checks the checksum, extracts
+without using the checkout as a runtime source, and fails on an unexpected or
+missing inventory item.
 
 It then proves:
 
