@@ -35,6 +35,7 @@ Read first:
 - `docs/planning/status.md` for live state.
 - `docs/planning/v0.1-execution.md` for the active plan.
 - `docs/planning/gate-d-design.md` for the active integration-readiness design.
+- `docs/planning/gate-e-design.md` for the active distribution design.
 - `docs/ARCHITECTURE.md` for code boundaries.
 - `docs/decisions.md` for immutable decisions.
 

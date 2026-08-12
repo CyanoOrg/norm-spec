@@ -464,3 +464,72 @@ assets executed, while a separate runner can verify installed, packaged, or
 downstream-pinned candidates without trusting their own test harness. Explicit
 complete and incomplete states preserve all available mismatch evidence and
 fail closed when execution cannot be proven.
+
+## D016 — Publish native, self-verifying release archives and start at Rust 1.97
+
+**Decision.** The first release archive set contains four native targets:
+`x86_64-unknown-linux-gnu`, `aarch64-apple-darwin`,
+`x86_64-apple-darwin`, and `x86_64-pc-windows-msvc`. Each target is built and
+tested on a fixed GitHub-hosted runner of the same operating system and
+architecture. A moving `*-latest` label, a cross-compiled binary that was not
+executed, or an operating-system-only name is not sufficient release evidence.
+
+Every archive has one versioned top-level directory and contains `norm`,
+`norm-spec-conformance`, the exact locked A1 contract bundle, the canonical
+framework-neutral Skill, `README.md`, `README.zh-CN.md`, `LICENSE`, and a
+machine-readable `release-manifest.json`. The manifest uses
+`norm-spec/release-artifact/v1` and binds the product version, Rust target,
+source revision, executable paths, contract suite/count/digest, and Skill path.
+The archive filename includes the product version and exact Rust target. A
+lowercase SHA-256 checksum is emitted beside each archive.
+
+Release verification starts from the extracted archive rather than the source
+tree. It must check the exact inventory and manifest, execute both binaries,
+match the compatibility response to the bundled contract identity, run all 82
+conformance cases to a complete passing report, and complete the standalone
+adoption smoke with no checkout or ambient asset fallback. An uploaded workflow
+artifact is review evidence, not a release; GitHub Release publication, tags,
+and registry publication remain explicit maintainer checkpoints.
+
+The initial minimum supported Rust version is `1.97`, declared through Cargo's
+`rust-version`. CI verifies the complete workspace and package/adoption gates
+with Rust `1.97.1`, the pinned patch toolchain used to develop this release.
+This is a conservative supported floor, not a claim that older compilers fail.
+Lowering it requires a separately recorded policy change and full verification
+of code, dependencies, packages, documentation, and binaries on the proposed
+toolchain. Raising it is a compatibility change that must be documented before
+release.
+
+The repository initially owns small build and verification scripts rather than
+adding a release-framework dependency. Candidate archives are built on pushes
+and pull requests for review. A tag-triggered publication workflow is deferred
+until the artifact contract has passed hosted CI and the maintainer approves
+the release procedure.
+
+**Context.** Gate D proves package candidates, an installed CLI, arbitrary
+candidate conformance, and a canonical Skill, but it does not produce a single
+download whose identity and contents can be verified after extraction. The
+existing cross-platform job uses moving runner labels and tests source
+checkouts; it neither distinguishes macOS architectures nor uploads release
+candidates. Cargo already declares Rust 1.97 and the repository pins 1.97.1,
+but Gate E has not yet named that declaration as the supported minimum or
+isolated it as an explicit CI contract.
+
+GitHub workflow artifact transport does not preserve executable permissions
+when it creates its own archive, so the repository must upload an already
+constructed archive. Product SemVer alone cannot identify architecture,
+source, contract content, or assisted workflow content. Introducing automated
+publication before those boundaries are exercised would make the first public
+release the test of the release process.
+
+**Rationale.** Native execution on exact targets makes portability claims
+reviewable, while separate Intel and Apple Silicon archives avoid hiding a
+macOS architecture assumption. Shipping the conformance data and Skill beside
+the binaries makes one download useful for standalone and assisted adoption
+without creating another semantic implementation. A versioned manifest,
+contract digest, source revision, and outer checksum bind different layers of
+identity instead of overloading the CLI version. Keeping candidate generation
+separate from publication permits repeated hosted verification without
+granting a workflow release authority. Rust 1.97 is the lowest version the
+project currently promises and proves; a lower aspirational number would be a
+compatibility claim without evidence.
