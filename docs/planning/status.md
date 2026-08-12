@@ -4,11 +4,14 @@
 
 - Stage: `0.1.0-alpha.1`; Gate B and Gate C are complete. Gate D integration
   readiness planning is active.
-- Integration state: local and remote `main` are synchronized at `c84aafb`;
-  D1 implementation, hosted verification, and documentation are integrated.
-- Current resume point: D1 high-level Rust consumption and packaging are
-  complete. The maintainer approved the exact D2/D3 compatibility and
-  conformance protocol recorded by D015; Batch 2 implementation is next.
+- Integration state: local `main` includes the approved D015 documentation at
+  `8c10b6b`; `origin/main` remains at the integrated D1 record `c84aafb` until
+  the maintainer's next push. Batch 2 implementation lives on
+  `codex/feat-gate-d-conformance`.
+- Current resume point: D1, D2 compatibility discovery, and D3
+  arbitrary-candidate conformance are locally complete. Full local gates are
+  green through implementation candidate `5efb42c`; hosted Linux, macOS, and
+  Windows CI for this Batch 2 branch is the next checkpoint.
 - The maintainer confirmed standalone-first product positioning, one canonical
   framework-neutral Skill in this repository, explicit failure without engine
   fallback, downstream host adapters, and standalone adoption as Gate D scope.
@@ -23,9 +26,10 @@
 - All 4 global, 13 parse, 11 collect, 35 validate, 9 init, and 10 scan cases
   execute the compiled binary in isolated roots with no skips: 82 of 82 frozen
   cases.
-- All five production commands and the D1 consumer-resolvable Rust API are
-  functional. Compatibility, conformance, standalone adoption, and Skill work
-  remain open; D1 completion does not claim those later results.
+- All five initial production commands, compatibility discovery, the D1
+  consumer-resolvable Rust API, and the independent conformance runner are
+  functional. Standalone adoption and Skill work remain open; D2/D3 completion
+  does not claim those later results.
 - D014 selected a repository-root `norm-spec` facade after an isolated D1.1
   spike. The facade layout packaged the existing root assets, passed Rust 1.97
   workspace candidate verification with the unpublished core package, and ran
@@ -34,17 +38,16 @@
   packaged Schema/template access, completed validation results, and typed
   pre-evaluation failures without process exit codes. The CLI delegates to it
   and retains all 82 frozen observable cases.
-- `scripts/check-packages.sh` verifies required package contents, verifies the
-  core → facade → CLI workspace candidate through Cargo's temporary registry,
-  and runs collect plus validation from an unrelated exact-revision Git
-  consumer. Hosted D1 evidence is maintainer-confirmed green.
+- `scripts/check-packages.sh` verifies required facade and runner contents,
+  verifies the core → facade → CLI workspace candidate through a fresh isolated
+  Cargo registry, and runs collect plus validation from an unrelated
+  exact-revision Git consumer. Hosted D1 evidence is maintainer-confirmed green.
 - The private GitHub repository and hosted Actions are green through D1
   candidate `07a95c6`. Public visibility remains a maintainer checkpoint.
-- D015 selects machine-default compatibility discovery,
-  exact identifier membership, a locked 82-case A1 bundle, a separate
-  `norm-spec-conformance` binary, explicit complete/incomplete reports, and no
-  candidate, bundle, source, or version fallback. Observable implementation
-  remains open until Batch 2 is green.
+- D015's machine-default compatibility discovery, exact identifier membership,
+  locked 82-case A1 bundle, separate `norm-spec-conformance` binary, explicit
+  complete/incomplete reports, and no-fallback rules are implemented and
+  locally green. Hosted evidence remains pending.
 
 ## Verification
 
@@ -91,6 +94,27 @@ Gate D1 local verification on 2026-08-12:
   maintainer-confirmed green. This verification record is documentation-only
   and does not change the tested implementation candidate.
 
+Gate D2/D3 local verification on 2026-08-12:
+
+- `cargo fmt --check` and strict workspace Clippy → green.
+- `cargo test --workspace --all-features` → 63 Rust test functions passed; the
+  original 82-case CLI contract remains green without skips.
+- exact `norm-spec/compatibility/v1` compact and pretty fixtures → green and
+  cross-checked against the bundle lock.
+- `bash scripts/check-contract-bundle.sh` → the 108-file inventory regenerated
+  with no diff, exported with its lock, and the arbitrary current candidate
+  executed 82 of 82 cases with pass/complete status.
+- six conformance black-box paths → green: exact pass; missing candidate;
+  tampered bundle; unsafe lock path; compatible behavioral mismatch; and
+  missing compatibility with all behavior cases still executed.
+- `bash scripts/check-packages.sh` → fresh isolated package candidates verified
+  with 13 core, 31 facade, and 21 CLI files; the second binary and its modules
+  are present; the exact-revision external consumer remains green.
+- `RUSTDOCFLAGS='-D warnings' cargo doc --workspace --no-deps`, strict
+  self-validation of seven `.norm` files, and public-history scan → green.
+- structural scan → 37 directories and seven `.norm` files.
+- hosted Linux, macOS, and Windows CI → pending maintainer confirmation.
+
 ## Open-source readiness
 
 - [x] Independent public `0.1` history and product identity.
@@ -127,8 +151,8 @@ Gate D1 local verification on 2026-08-12:
       package-consumer checks.
 - [x] Approve the D2/D3 command, envelope, bundle identity, report, and exit
       protocol; record D015 before implementation.
-- [ ] Add versioned compatibility discovery and arbitrary-candidate
-      conformance without skips after D015.
+- [x] Add versioned compatibility discovery and arbitrary-candidate
+      conformance without skips after D015; local gates are green.
 - [ ] Prove standalone adoption from an isolated candidate without a plugin.
 - [ ] Add and validate the canonical framework-neutral norm-spec Skill without
       parser, collect, or validation fallback.

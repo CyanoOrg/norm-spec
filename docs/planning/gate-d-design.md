@@ -157,7 +157,8 @@ The production result now matches D014:
 
 D1 is complete. Hosted Linux, macOS, and Windows CI for candidate `07a95c6` is
 maintainer-confirmed green. This later verification record is documentation
-only; D2/D3 protocol design remains the next human checkpoint.
+only. At D1 closure, D2/D3 protocol design was the next human checkpoint; the
+maintainer subsequently approved it as D015 before Batch 2 implementation.
 
 ## Result D2 — Versioned compatibility discovery
 
@@ -419,6 +420,34 @@ The first runner proves CLI/machine compatibility. It does not pretend to test
 host-specific injection or enforcement; those remain downstream end-to-end
 gates.
 
+### D2/D3 implementation result — 2026-08-12
+
+The approved D015 protocol is locally complete through implementation candidate
+`5efb42c`:
+
+- `norm compatibility [--pretty]` emits the exact compact/pretty
+  `norm-spec/compatibility/v1` contract without a human-mode alternative;
+- `tests/contract/bundle.lock.json` binds 108 execution-owned files to
+  `norm-spec/a1-cli/v1`, 82 cases, and
+  `sha256:3d94441e9cde3ef9489618bdb8fbf37f6979331bea099acadf0136b65df7e2eb`;
+- generation reads the canonical root Schema and contract sources; export
+  produces 109 files including the lock in an explicit empty destination;
+- `norm-spec-conformance` verifies the locked inventory, performs exact
+  compatibility preflight, and executes candidates in isolated case roots;
+- the current candidate reports pass/complete with 82 executed and 82 passed;
+- black-box tests prove missing candidates and tampered or unsafe bundles are
+  incomplete errors, while missing compatibility or behavioral mismatch still
+  executes all 82 cases and returns a complete failure;
+- the CLI package contains both binaries, and package verification uses a fresh
+  isolated target so an older same-version temporary registry cannot satisfy a
+  candidate accidentally;
+- adding the second binary preserves the established
+  `cargo run -p norm-spec-cli -- ...` path through `default-run = "norm"`.
+
+Local merge gates are green. Hosted Linux, macOS, and Windows evidence remains
+the final Batch 2 checkpoint; this result does not claim D4 standalone adoption
+or D5 Skill completion.
+
 ## Result D4 — Standalone adoption evidence
 
 Run a packaged or otherwise repository-independent candidate in a disposable
@@ -507,6 +536,11 @@ second hosted run under the repository's agreed documentation policy.
 5. `feat(conformance): run arbitrary candidates`
 6. `test(conformance): fail closed across the frozen suite`
 
+Batch 2 is locally complete. D015 was recorded before behavior, implementation
+was split into compatibility model/discovery, bundle identity, runner layers,
+fail-closed tests, package/CI gates, and documentation. Hosted cross-platform
+CI for the integrated branch remains required before local merge and cleanup.
+
 ### Batch 3 — Standalone adoption and canonical Skill
 
 1. `test(adoption): exercise an isolated standalone project`
@@ -547,8 +581,8 @@ Gate D additionally requires:
 1. **D1.1 package layout** — satisfied by the maintainer's authorization to
    continue into implementation and the evidence recorded in D014 after the
    packaging spike.
-2. **D2/D3 protocols** — approve the compatibility command/envelope and
-   conformance report before freezing new observable behavior.
+2. **D2/D3 protocols** — satisfied by the maintainer's approval and D015 before
+   compatibility and conformance implementation.
 3. **First real adoption project** — choose a real non-plugin repository after
    the disposable lane is green; it is additional evidence, not a hidden build
    dependency.
