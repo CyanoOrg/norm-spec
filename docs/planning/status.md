@@ -3,17 +3,21 @@
 ## Resume here
 
 - Stage: `0.1.0-rc.1` release preparation; Gate B, Gate C, Gate D, and Gate E
-  implementation are complete. D017 selects an RC rehearsal before stable;
-  exact-candidate local and hosted verification remain open.
+  implementation are complete. D017 selects an RC rehearsal before stable.
+  Phase 3 local verification is complete on `2e5b8e9`; hosted verification
+  (Phase 4) and the maintainer public-visibility and publication checkpoints
+  remain open.
 - Integration state: final Gate D candidate `7e052ae` is maintainer-confirmed
   green on hosted quality, Linux, macOS, and Windows CI. This hosted/adoption
   record is documentation-only and may be fast-forwarded without a second
   hosted run under the repository's agreed documentation policy.
-- Current resume point: finish the exact RC package, version, changelog,
-  release-notes, and local verification batches on
-  `codex/chore-release-v0.1.0-rc.1`. Then push the candidate for hosted review.
-  Public visibility, tag, GitHub Pre-release, registry publication, and stable
-  promotion remain explicit later maintainer checkpoints.
+- Current resume point: Phase 3 local verification passed on
+  `2e5b8e9025f88b785cfe816c519c6d40df57a4b0` on
+  `codex/chore-release-v0.1.0-rc.1` (`6cf1bfa` plus one `fix(test)` correcting
+  the `check-packages.sh` `.cargo_vcs_info.json` assertions). Push the candidate
+  for hosted review (Phase 4); public visibility, tag, GitHub Pre-release,
+  registry publication, and stable promotion remain explicit later maintainer
+  checkpoints.
 - The maintainer confirmed standalone-first product positioning, one canonical
   framework-neutral Skill in this repository, explicit failure without engine
   fallback, downstream host adapters, and standalone adoption as Gate D scope.
@@ -221,6 +225,40 @@ Gate E hosted verification on 2026-08-12:
 - this evidence closes Gate E release-readiness implementation. It does not
   authorize version promotion, tagging, GitHub Release, registry publication,
   or the stable `v0.1.0` release.
+
+Phase 3 local verification on 2026-08-12:
+
+- exact release-preparation commit `2e5b8e9025f88b785cfe816c519c6d40df57a4b0`
+  on `codex/chore-release-v0.1.0-rc.1` (`6cf1bfa` plus one `fix(test)`); the
+  tracked worktree was clean.
+- `cargo fmt --check`, strict workspace Clippy, and rustdoc with warnings denied
+  were green.
+- `cargo test --workspace --all-features --locked` passed 68 Rust test functions
+  with 0 failed and 0 ignored; the 82-case compiled-binary contract ran without
+  skips.
+- the 108-file locked contract bundle regenerated without drift and the current
+  candidate returned pass, complete, 82 executed, 82 passed, 0 failed, and 0 not
+  executed.
+- `NORM_REQUIRE_CLEAN_PACKAGES=1 bash scripts/check-packages.sh` verified all
+  three `.crate` candidates (LICENSE/README/metadata plus `.cargo_vcs_info.json`
+  with the exact HEAD SHA and correct `path_in_vcs`) and the exact-revision Git
+  consumer; the dry-run sequence passed for `norm-spec-core` and stopped at the
+  expected absent public upstream for the facade and CLI.
+- `bash scripts/check-standalone-adoption.sh` completed source-free adoption.
+- strict self-validation returned seven files, zero errors, and zero warnings;
+  the public-history scan remained green.
+- the clean Apple Silicon candidate built as
+  `norm-spec-0.1.0-rc.1-aarch64-apple-darwin.tar.gz`; extraction verified its
+  checksum, single safe root, exact release inventory, source revision
+  `2e5b8e9…a4b0`, compatibility and bundle identities, 82-case conformance, and
+  standalone adoption.
+- `check-packages.sh` fix: the `.cargo_vcs_info.json` `sha1` assertion had a
+  trailing comma that only matched dirty trees and the strict gate checked a
+  never-emitted `dirty: false`; commit `2e5b8e9` corrected both. No package
+  content, source, or release identity changed.
+- this evidence closes local Phase 3. Hosted Phase 4 handoff, public visibility,
+  tag, GitHub Pre-release, registry publication, and stable promotion remain
+  maintainer checkpoints.
 
 ## Open-source readiness
 
