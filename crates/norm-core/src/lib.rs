@@ -67,6 +67,10 @@ pub const A1_CLI_SUITE_ID: &str = "norm-spec/a1-cli/v1";
 /// Number of executable cases in the frozen initial A1 CLI suite.
 pub const A1_CLI_CASE_COUNT: usize = 82;
 
+/// SHA-256 identity of the exact frozen initial A1 CLI contract bundle.
+pub const A1_CLI_CONTRACT_DIGEST: &str =
+    "sha256:3d94441e9cde3ef9489618bdb8fbf37f6979331bea099acadf0136b65df7e2eb";
+
 /// Return the compiled crate version.
 #[must_use]
 pub const fn crate_version() -> &'static str {
@@ -76,10 +80,10 @@ pub const fn crate_version() -> &'static str {
 #[cfg(test)]
 mod tests {
     use super::{
-        A1_CLI_CASE_COUNT, A1_CLI_SUITE_ID, COLLECT_API_VERSION, COMPATIBILITY_API_VERSION,
-        CONFORMANCE_API_VERSION, CONTRACT_BUNDLE_API_VERSION, ERROR_API_VERSION, FORMAT_ID,
-        INIT_API_VERSION, PARSE_API_VERSION, RUST_API_VERSION, SCAN_API_VERSION,
-        VALIDATE_API_VERSION,
+        A1_CLI_CASE_COUNT, A1_CLI_CONTRACT_DIGEST, A1_CLI_SUITE_ID, COLLECT_API_VERSION,
+        COMPATIBILITY_API_VERSION, CONFORMANCE_API_VERSION, CONTRACT_BUNDLE_API_VERSION,
+        ERROR_API_VERSION, FORMAT_ID, INIT_API_VERSION, PARSE_API_VERSION, RUST_API_VERSION,
+        SCAN_API_VERSION, VALIDATE_API_VERSION,
     };
 
     #[test]
@@ -96,6 +100,10 @@ mod tests {
         assert_eq!(CONFORMANCE_API_VERSION, "norm-spec/conformance/v1");
         assert_eq!(A1_CLI_SUITE_ID, "norm-spec/a1-cli/v1");
         assert_eq!(A1_CLI_CASE_COUNT, 82);
+        assert_eq!(
+            A1_CLI_CONTRACT_DIGEST,
+            "sha256:3d94441e9cde3ef9489618bdb8fbf37f6979331bea099acadf0136b65df7e2eb"
+        );
         assert_eq!(FORMAT_ID, "norm-spec/a1");
     }
 }

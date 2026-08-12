@@ -10,7 +10,10 @@ mod validate;
 use std::{fs, path::PathBuf, process::ExitCode};
 
 use clap::{Args, Parser, Subcommand};
-use norm_spec_core::{ErrorDetail, ParseOptions, ParseResponse, parse_norm};
+use norm_spec_core::{
+    A1_CLI_CONTRACT_DIGEST, CompatibilityResponse, ErrorDetail, ParseOptions, ParseResponse,
+    parse_norm,
+};
 
 use crate::{
     collect::CollectArgs,
@@ -45,6 +48,15 @@ enum Command {
     Init(InitArgs),
     /// Scan a directory without inferring conventions.
     Scan(ScanArgs),
+    /// Report exact machine and conformance compatibility.
+    Compatibility(CompatibilityArgs),
+}
+
+#[derive(Debug, Args)]
+struct CompatibilityArgs {
+    /// Pretty-print the JSON response.
+    #[arg(long)]
+    pretty: bool,
 }
 
 #[derive(Debug, Args)]
@@ -66,6 +78,11 @@ fn main() -> ExitCode {
         Command::Validate(args) => validate::run(&args),
         Command::Init(args) => init::run(&args),
         Command::Scan(args) => scan::run(&args),
+        Command::Compatibility(args) => emit_json(
+            &CompatibilityResponse::current(A1_CLI_CONTRACT_DIGEST),
+            args.pretty,
+            0,
+        ),
     }
 }
 
