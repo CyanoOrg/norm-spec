@@ -16,6 +16,15 @@ Rules:
 The initial fixtures establish the A1 baseline. Gate B freezes every documented
 CLI behavior before parser implementation begins.
 
+`bundle.lock.json` freezes the exported `norm-spec/a1-cli/v1` execution bundle.
+It binds all manifest, requirement, expectation, fixture, layout, and required
+Schema files by portable path and SHA-256, then binds that ordered inventory to
+the suite ID and 82-case count. Run `scripts/update-contract-lock.sh` after an
+approved contract or canonical Schema change. Use
+`scripts/export-contract-bundle.sh <empty-destination>` to materialize the exact
+repository-independent directory consumed by conformance; do not hand-edit an
+export or maintain a second Schema copy.
+
 `requirements.tsv` is the obligation inventory. Every requirement ID must be
 named by at least one `manifest.tsv` case. The manifest has eleven columns:
 
