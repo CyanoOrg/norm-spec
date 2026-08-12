@@ -27,11 +27,12 @@ consumer-neutral conformance, packaged standalone adoption, and the canonical
 framework-neutral Skill are implemented. Final candidate `7e052ae` passed
 hosted quality, Linux, macOS, and Windows CI, and a real OpenCode-assisted run
 used the Skill against pi-norm-spec without the pi plugin. Gate E distribution
-and release readiness are active: D016, native candidate archives, extracted
-verification, an explicit Rust 1.97 MSRV lane, four-target candidate CI, and
-installation/upgrade guidance are implemented locally. Hosted candidate
-evidence and maintainer release authorization remain open. Host-specific
-injection and enforcement stay downstream.
+and release-readiness implementation is complete: D016, native candidate
+archives, extracted verification, an explicit Rust 1.97 MSRV lane, four-target
+candidate CI, and installation/upgrade guidance are green locally and on
+hosted CI at candidate `3ccde86`. Version promotion, tagging, GitHub Release,
+registry publication, and stable release remain maintainer checkpoints.
+Host-specific injection and enforcement stay downstream.
 
 Read first:
 

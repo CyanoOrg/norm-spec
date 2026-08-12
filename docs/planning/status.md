@@ -3,17 +3,16 @@
 ## Resume here
 
 - Stage: `0.1.0-alpha.1`; Gate B, Gate C, and Gate D are complete. Gate E
-  distribution and release readiness are active, with the local implementation
-  candidate complete and hosted/release checkpoints still open.
+  distribution and release-readiness implementation is complete at hosted
+  candidate `3ccde86`. Stable release authorization remains open.
 - Integration state: final Gate D candidate `7e052ae` is maintainer-confirmed
   green on hosted quality, Linux, macOS, and Windows CI. This hosted/adoption
   record is documentation-only and may be fast-forwarded without a second
   hosted run under the repository's agreed documentation policy.
-- Current resume point: push `codex/feat-gate-e-distribution`, confirm quality,
-  MSRV, fixed-platform, and all four native release-candidate jobs for the same
-  commit, then record hosted evidence and merge. Tagging, GitHub Release,
-  registry publication, version promotion, and the stable release remain
-  maintainer checkpoints.
+- Current resume point: fast-forward this hosted evidence record to `main` and
+  archive the Gate E branch. Then perform the separate maintainer release
+  checkpoint before any version promotion, `[Unreleased]` promotion, tag,
+  GitHub Release, registry publication, or stable-release declaration.
 - The maintainer confirmed standalone-first product positioning, one canonical
   framework-neutral Skill in this repository, explicit failure without engine
   fallback, downstream host adapters, and standalone adoption as Gate D scope.
@@ -44,7 +43,8 @@
   Cargo registry, and runs collect plus validation from an unrelated
   exact-revision Git consumer. Hosted D1 evidence is maintainer-confirmed green.
 - The private GitHub repository and hosted Actions are green through final Gate
-  D candidate `7e052ae`. Public visibility remains a maintainer checkpoint.
+  E implementation candidate `3ccde86`. Public visibility remains a maintainer
+  checkpoint.
 - D015's machine-default compatibility discovery, exact identifier membership,
   locked 82-case A1 bundle, separate `norm-spec-conformance` binary, explicit
   complete/incomplete reports, and no-fallback rules are implemented and green
@@ -204,8 +204,22 @@ Gate E local implementation verification on 2026-08-12:
   older-glibc, Windows ARM64, package-manager distribution, signing,
   notarization, registry publication, GitHub Release, and `v0.1.0` remain
   explicitly unclaimed or maintainer-gated.
-- hosted quality, MSRV, fixed-platform regression, and all four native archive
-  jobs are pending for the final integrated branch commit.
+- hosted quality, MSRV, fixed Linux/macOS/Windows regression, and all four
+  native archive jobs are maintainer-confirmed green for exact candidate
+  `3ccde86`.
+
+Gate E hosted verification on 2026-08-12:
+
+- the exact pushed branch and tested implementation candidate was `3ccde86`;
+- hosted quality, the Rust 1.97.1 MSRV lane, and fixed Linux, macOS, and Windows
+  regression jobs passed;
+- native `x86_64-unknown-linux-gnu`, `aarch64-apple-darwin`,
+  `x86_64-apple-darwin`, and `x86_64-pc-windows-msvc` candidate jobs all built,
+  extracted, executed, and verified their D016 archives successfully;
+- all nine hosted jobs were maintainer-confirmed green for the same candidate;
+- this evidence closes Gate E release-readiness implementation. It does not
+  authorize version promotion, tagging, GitHub Release, registry publication,
+  or the stable `v0.1.0` release.
 
 ## Open-source readiness
 
@@ -256,7 +270,8 @@ Gate E local implementation verification on 2026-08-12:
 - [x] Add fixed-runner MSRV and four-target candidate-artifact CI.
 - [x] Complete binary/source/Skill installation, upgrade, rollback, and
       uninstall documentation.
-- [ ] Confirm the integrated Gate E implementation candidate on hosted quality,
+- [x] Confirm the integrated Gate E implementation candidate on hosted quality,
       MSRV, Linux x64, macOS ARM64/Intel, and Windows x64 jobs.
-- [ ] Complete cross-platform distribution and release-readiness review
-      (Gate E).
+- [x] Complete cross-platform distribution and release-readiness implementation
+      review (Gate E).
+- [ ] Run the maintainer-authorized `v0.1.0` release procedure.

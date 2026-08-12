@@ -11,7 +11,9 @@ framework adapters consume those contracts without becoming format authorities.
 > adoption and the canonical framework-neutral Skill are implemented; final
 > candidate `7e052ae` is green on hosted quality, Linux, macOS, and Windows CI.
 > A real OpenCode-assisted run also used the Skill against pi-norm-spec without
-> the pi plugin. Gate E distribution and release readiness are active.
+> the pi plugin. Gate E release-readiness implementation candidate `3ccde86`
+> is green on hosted quality, MSRV, fixed-platform, and four native artifact
+> jobs. The `v0.1.0` release remains a maintainer checkpoint.
 
 ## Crates
 

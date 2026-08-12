@@ -9,7 +9,8 @@
 > adoption 与 framework-neutral canonical Skill 已实现；最终候选 `7e052ae`
 > 的 hosted quality、Linux、macOS、Windows CI 全部通过。一次真实的 OpenCode
 > 辅助运行也在不启用 pi plugin 的情况下，对 pi-norm-spec 使用了该 Skill。
-> Gate E 分发与发布准备正在进行中。
+> Gate E 发布准备实现候选 `3ccde86` 的 hosted quality、MSRV、固定平台及四个
+> 原生 artifact jobs 均已通过；`v0.1.0` 正式发布仍是维护者检查点。
 
 ## Rust API
 
