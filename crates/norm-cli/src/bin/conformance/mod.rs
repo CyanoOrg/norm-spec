@@ -1,7 +1,8 @@
-//! Candidate discovery and bundle verification for the staged runner.
+//! Candidate discovery, bundle verification, and suite orchestration.
 
 mod bundle;
 mod model;
+mod suite;
 
 use std::{collections::BTreeSet, fs, path::Path, process::Command};
 
@@ -66,28 +67,41 @@ pub(crate) fn run(candidate: &Path, contract_dir: &Path) -> RunOutcome {
             };
         }
     };
-    if !verified.root.is_dir() {
-        return RunOutcome {
-            report: ConformanceReport::incomplete(preflight.candidate, {
-                issues.push(ConformanceIssue::new(
-                    "norm/conformance/bundle-unavailable",
-                    "The verified contract bundle became unavailable.",
-                ));
-                issues
-            }),
-            exit_code: 2,
-        };
+    let version = preflight.candidate.version.as_deref();
+    let suite = suite::execute(&candidate, &verified.root, version);
+    let complete = suite.executed == A1_CLI_CASE_COUNT && suite.issue.is_none();
+    if let Some(issue) = suite.issue {
+        issues.push(issue);
     }
-
+    let failed = suite.failures.len();
+    let passed = suite.executed.saturating_sub(failed);
+    let not_executed = A1_CLI_CASE_COUNT.saturating_sub(suite.executed);
+    let compatible = preflight.candidate.compatibility == "compatible";
+    let (status, exit_code) = if !complete {
+        ("error", 2)
+    } else if !compatible || failed > 0 {
+        ("fail", 1)
+    } else {
+        ("pass", 0)
+    };
     RunOutcome {
-        report: ConformanceReport::incomplete(preflight.candidate, {
-            issues.push(ConformanceIssue::new(
-                "norm/conformance/runner-unsupported",
-                "Candidate execution is not available in this staged runner.",
-            ));
-            issues
-        }),
-        exit_code: 2,
+        report: ConformanceReport {
+            api_version: CONFORMANCE_API_VERSION.to_owned(),
+            suite: model::SuiteIdentity::current(),
+            candidate: preflight.candidate,
+            status: status.to_owned(),
+            complete,
+            summary: model::ReportSummary {
+                declared: A1_CLI_CASE_COUNT,
+                executed: suite.executed,
+                passed,
+                failed,
+                not_executed,
+            },
+            issues,
+            failures: suite.failures,
+        },
+        exit_code,
     }
 }
 
