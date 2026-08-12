@@ -4,9 +4,109 @@ use serde::{Deserialize, Serialize};
 use serde_json::Value;
 
 use crate::{
-    COLLECT_API_VERSION, ERROR_API_VERSION, INIT_API_VERSION, PARSE_API_VERSION, ParsedNorm,
-    VALIDATE_API_VERSION,
+    A1_CLI_CASE_COUNT, A1_CLI_SUITE_ID, COLLECT_API_VERSION, COMPATIBILITY_API_VERSION,
+    CONFORMANCE_API_VERSION, CONTRACT_BUNDLE_API_VERSION, ERROR_API_VERSION, FORMAT_ID,
+    INIT_API_VERSION, PARSE_API_VERSION, ParsedNorm, RUST_API_VERSION, SCAN_API_VERSION,
+    VALIDATE_API_VERSION, crate_version,
 };
+
+/// Exact product identity reported by compatibility discovery.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct CompatibilityProduct {
+    /// Stable product name.
+    pub name: String,
+    /// Exact compiled product version.
+    pub version: String,
+}
+
+/// Public Rust consumer-surface identity.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct CompatibilityRustApi {
+    /// Versioned Rust API identifier.
+    pub id: String,
+    /// Cargo package that provides the surface.
+    pub package: String,
+    /// Exact compiled package version.
+    pub version: String,
+}
+
+/// Frozen conformance surface reported by a candidate.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct CompatibilityConformance {
+    /// Versioned contract-bundle format.
+    #[serde(rename = "bundleApi")]
+    pub bundle_api: String,
+    /// Versioned conformance-report protocol.
+    #[serde(rename = "reportApi")]
+    pub report_api: String,
+    /// Frozen suite identifier.
+    pub suite: String,
+    /// Number of executable cases in the suite.
+    #[serde(rename = "caseCount")]
+    pub case_count: usize,
+    /// SHA-256 identity of the exact contract bundle.
+    #[serde(rename = "contractDigest")]
+    pub contract_digest: String,
+}
+
+/// Machine-readable compatibility discovery response.
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
+pub struct CompatibilityResponse {
+    /// Version of the compatibility response protocol.
+    #[serde(rename = "apiVersion")]
+    pub api_version: String,
+    /// Exact product identity.
+    pub product: CompatibilityProduct,
+    /// Accepted format identifiers in lexical order.
+    pub formats: Vec<String>,
+    /// Public high-level Rust API identity.
+    #[serde(rename = "rustApi")]
+    pub rust_api: CompatibilityRustApi,
+    /// Supported machine API identifiers in lexical order.
+    #[serde(rename = "machineApis")]
+    pub machine_apis: Vec<String>,
+    /// Frozen conformance surface.
+    pub conformance: CompatibilityConformance,
+}
+
+impl CompatibilityResponse {
+    /// Construct discovery for the compiled product and an exact contract digest.
+    #[must_use]
+    pub fn current(contract_digest: impl Into<String>) -> Self {
+        Self {
+            api_version: COMPATIBILITY_API_VERSION.to_owned(),
+            product: CompatibilityProduct {
+                name: "norm-spec".to_owned(),
+                version: crate_version().to_owned(),
+            },
+            formats: vec![FORMAT_ID.to_owned()],
+            rust_api: CompatibilityRustApi {
+                id: RUST_API_VERSION.to_owned(),
+                package: "norm-spec".to_owned(),
+                version: crate_version().to_owned(),
+            },
+            machine_apis: [
+                COLLECT_API_VERSION,
+                COMPATIBILITY_API_VERSION,
+                ERROR_API_VERSION,
+                INIT_API_VERSION,
+                PARSE_API_VERSION,
+                SCAN_API_VERSION,
+                VALIDATE_API_VERSION,
+            ]
+            .into_iter()
+            .map(str::to_owned)
+            .collect(),
+            conformance: CompatibilityConformance {
+                bundle_api: CONTRACT_BUNDLE_API_VERSION.to_owned(),
+                report_api: CONFORMANCE_API_VERSION.to_owned(),
+                suite: A1_CLI_SUITE_ID.to_owned(),
+                case_count: A1_CLI_CASE_COUNT,
+                contract_digest: contract_digest.into(),
+            },
+        }
+    }
+}
 
 /// Successful `parse` machine response.
 #[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
@@ -336,8 +436,9 @@ mod tests {
     use serde_json::json;
 
     use super::{
-        CollectResponse, CollectedNorm, Diagnostic, ErrorDetail, ErrorResponse, InitAction,
-        InitResponse, ParseResponse, ValidateResponse, ValidationResult, ValidationStatus,
+        CollectResponse, CollectedNorm, CompatibilityResponse, Diagnostic, ErrorDetail,
+        ErrorResponse, InitAction, InitResponse, ParseResponse, ValidateResponse, ValidationResult,
+        ValidationStatus,
     };
     use crate::ParsedNorm;
 
@@ -346,6 +447,43 @@ mod tests {
             Ok(value) => value,
             Err(error) => panic!("failed to serialize test response: {error}"),
         }
+    }
+
+    #[test]
+    fn compatibility_response_exposes_exact_sorted_identifiers() {
+        let response = CompatibilityResponse::current("sha256:example");
+        assert_eq!(
+            json_value(response),
+            json!({
+                "apiVersion": "norm-spec/compatibility/v1",
+                "product": {
+                    "name": "norm-spec",
+                    "version": env!("CARGO_PKG_VERSION")
+                },
+                "formats": ["norm-spec/a1"],
+                "rustApi": {
+                    "id": "norm-spec/rust-api/v1",
+                    "package": "norm-spec",
+                    "version": env!("CARGO_PKG_VERSION")
+                },
+                "machineApis": [
+                    "norm-spec/collect/v1",
+                    "norm-spec/compatibility/v1",
+                    "norm-spec/error/v1",
+                    "norm-spec/init/v1",
+                    "norm-spec/parse/v1",
+                    "norm-spec/scan/v1",
+                    "norm-spec/validate/v1"
+                ],
+                "conformance": {
+                    "bundleApi": "norm-spec/contract-bundle/v1",
+                    "reportApi": "norm-spec/conformance/v1",
+                    "suite": "norm-spec/a1-cli/v1",
+                    "caseCount": 82,
+                    "contractDigest": "sha256:example"
+                }
+            })
+        );
     }
 
     #[test]

@@ -15,8 +15,9 @@ mod validator;
 pub use collector::{CollectPathError, collect_candidate_paths, project_path};
 pub use parser::{ParseError, ParseOptions, ParsedNorm, parse_norm};
 pub use protocol::{
-    CollectResponse, CollectedNorm, Diagnostic, ErrorDetail, ErrorResponse, InitAction,
-    InitResponse, ParseResponse, ValidateResponse, ValidationResult, ValidationStatus,
+    CollectResponse, CollectedNorm, CompatibilityConformance, CompatibilityProduct,
+    CompatibilityResponse, CompatibilityRustApi, Diagnostic, ErrorDetail, ErrorResponse,
+    InitAction, InitResponse, ParseResponse, ValidateResponse, ValidationResult, ValidationStatus,
     ValidationSummary,
 };
 pub use scan::{
@@ -48,6 +49,24 @@ pub const SCAN_API_VERSION: &str = "norm-spec/scan/v1";
 /// Machine API identifier for handled CLI failures in machine mode.
 pub const ERROR_API_VERSION: &str = "norm-spec/error/v1";
 
+/// Machine API identifier for compatibility discovery responses.
+pub const COMPATIBILITY_API_VERSION: &str = "norm-spec/compatibility/v1";
+
+/// Identifier for the public high-level Rust consumer surface.
+pub const RUST_API_VERSION: &str = "norm-spec/rust-api/v1";
+
+/// Identifier for the locked contract-bundle format.
+pub const CONTRACT_BUNDLE_API_VERSION: &str = "norm-spec/contract-bundle/v1";
+
+/// Machine API identifier for arbitrary-candidate conformance reports.
+pub const CONFORMANCE_API_VERSION: &str = "norm-spec/conformance/v1";
+
+/// Identifier for the frozen initial A1 CLI conformance suite.
+pub const A1_CLI_SUITE_ID: &str = "norm-spec/a1-cli/v1";
+
+/// Number of executable cases in the frozen initial A1 CLI suite.
+pub const A1_CLI_CASE_COUNT: usize = 82;
+
 /// Return the compiled crate version.
 #[must_use]
 pub const fn crate_version() -> &'static str {
@@ -57,8 +76,10 @@ pub const fn crate_version() -> &'static str {
 #[cfg(test)]
 mod tests {
     use super::{
-        COLLECT_API_VERSION, ERROR_API_VERSION, FORMAT_ID, INIT_API_VERSION, PARSE_API_VERSION,
-        SCAN_API_VERSION, VALIDATE_API_VERSION,
+        A1_CLI_CASE_COUNT, A1_CLI_SUITE_ID, COLLECT_API_VERSION, COMPATIBILITY_API_VERSION,
+        CONFORMANCE_API_VERSION, CONTRACT_BUNDLE_API_VERSION, ERROR_API_VERSION, FORMAT_ID,
+        INIT_API_VERSION, PARSE_API_VERSION, RUST_API_VERSION, SCAN_API_VERSION,
+        VALIDATE_API_VERSION,
     };
 
     #[test]
@@ -69,6 +90,12 @@ mod tests {
         assert_eq!(INIT_API_VERSION, "norm-spec/init/v1");
         assert_eq!(SCAN_API_VERSION, "norm-spec/scan/v1");
         assert_eq!(ERROR_API_VERSION, "norm-spec/error/v1");
+        assert_eq!(COMPATIBILITY_API_VERSION, "norm-spec/compatibility/v1");
+        assert_eq!(RUST_API_VERSION, "norm-spec/rust-api/v1");
+        assert_eq!(CONTRACT_BUNDLE_API_VERSION, "norm-spec/contract-bundle/v1");
+        assert_eq!(CONFORMANCE_API_VERSION, "norm-spec/conformance/v1");
+        assert_eq!(A1_CLI_SUITE_ID, "norm-spec/a1-cli/v1");
+        assert_eq!(A1_CLI_CASE_COUNT, 82);
         assert_eq!(FORMAT_ID, "norm-spec/a1");
     }
 }
