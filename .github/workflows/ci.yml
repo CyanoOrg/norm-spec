@@ -36,3 +36,4 @@ jobs:
       - uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7.0.0
       - uses: dtolnay/rust-toolchain@032958afbdc797a9164d3bc0b56325c1308924a5 # 1.97.1
       - run: cargo test --workspace --all-features
+      - run: bash scripts/check-standalone-adoption.sh

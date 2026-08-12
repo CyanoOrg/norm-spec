@@ -1,3 +1,5 @@
 tests/contract/** text eol=lf
 tests/compatibility/** text eol=lf
+tests/adoption/** text eol=lf
 schema/** text eol=lf
+scripts/*.sh text eol=lf
