@@ -1,0 +1,31 @@
+{
+  "apiVersion": "norm-spec/compatibility/v1",
+  "product": {
+    "name": "norm-spec",
+    "version": "{version}"
+  },
+  "formats": [
+    "norm-spec/a1"
+  ],
+  "rustApi": {
+    "id": "norm-spec/rust-api/v1",
+    "package": "norm-spec",
+    "version": "{version}"
+  },
+  "machineApis": [
+    "norm-spec/collect/v1",
+    "norm-spec/compatibility/v1",
+    "norm-spec/error/v1",
+    "norm-spec/init/v1",
+    "norm-spec/parse/v1",
+    "norm-spec/scan/v1",
+    "norm-spec/validate/v1"
+  ],
+  "conformance": {
+    "bundleApi": "norm-spec/contract-bundle/v1",
+    "reportApi": "norm-spec/conformance/v1",
+    "suite": "norm-spec/a1-cli/v1",
+    "caseCount": 82,
+    "contractDigest": "sha256:3d94441e9cde3ef9489618bdb8fbf37f6979331bea099acadf0136b65df7e2eb"
+  }
+}
