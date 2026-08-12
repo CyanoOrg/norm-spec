@@ -2,17 +2,18 @@
 
 ## Resume here
 
-- Stage: `0.1.0-alpha.1`; Gate B, Gate C, and Gate D are complete. Gate E
-  distribution and release-readiness implementation is complete at hosted
-  candidate `3ccde86`. Stable release authorization remains open.
+- Stage: `0.1.0-rc.1` release preparation; Gate B, Gate C, Gate D, and Gate E
+  implementation are complete. D017 selects an RC rehearsal before stable;
+  exact-candidate local and hosted verification remain open.
 - Integration state: final Gate D candidate `7e052ae` is maintainer-confirmed
   green on hosted quality, Linux, macOS, and Windows CI. This hosted/adoption
   record is documentation-only and may be fast-forwarded without a second
   hosted run under the repository's agreed documentation policy.
-- Current resume point: fast-forward this hosted evidence record to `main` and
-  archive the Gate E branch. Then perform the separate maintainer release
-  checkpoint before any version promotion, `[Unreleased]` promotion, tag,
-  GitHub Release, registry publication, or stable-release declaration.
+- Current resume point: finish the exact RC package, version, changelog,
+  release-notes, and local verification batches on
+  `codex/chore-release-v0.1.0-rc.1`. Then push the candidate for hosted review.
+  Public visibility, tag, GitHub Pre-release, registry publication, and stable
+  promotion remain explicit later maintainer checkpoints.
 - The maintainer confirmed standalone-first product positioning, one canonical
   framework-neutral Skill in this repository, explicit failure without engine
   fallback, downstream host adapters, and standalone adoption as Gate D scope.
@@ -274,4 +275,7 @@ Gate E hosted verification on 2026-08-12:
       MSRV, Linux x64, macOS ARM64/Intel, and Windows x64 jobs.
 - [x] Complete cross-platform distribution and release-readiness implementation
       review (Gate E).
-- [ ] Run the maintainer-authorized `v0.1.0` release procedure.
+- [ ] Complete and host-verify the exact `v0.1.0-rc.1` preparation candidate.
+- [ ] Run the maintainer-authorized public visibility and RC publication
+      checkpoints in `docs/planning/v0.1.0-rc.1-release.md`.
+- [ ] Promote stable `v0.1.0` only after the public RC criteria are complete.

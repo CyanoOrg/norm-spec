@@ -7,13 +7,12 @@ The project starts with one deterministic semantic engine. Its specification,
 schemas, templates, fixtures, and machine contracts live in this repository;
 framework adapters consume those contracts without becoming format authorities.
 
-> Status: `0.1.0-alpha.1`. Gate C and Gate D are complete. Packaged standalone
-> adoption and the canonical framework-neutral Skill are implemented; final
-> candidate `7e052ae` is green on hosted quality, Linux, macOS, and Windows CI.
-> A real OpenCode-assisted run also used the Skill against pi-norm-spec without
-> the pi plugin. Gate E release-readiness implementation candidate `3ccde86`
-> is green on hosted quality, MSRV, fixed-platform, and four native artifact
-> jobs. The `v0.1.0` release remains a maintainer checkpoint.
+> Status: `0.1.0-rc.1` release-preparation candidate. Gate C, Gate D, and the
+> Gate E distribution implementation are complete, including standalone and
+> canonical Skill adoption, Rust 1.97 MSRV verification, and four native
+> archive targets. The RC still requires exact-candidate hosted verification;
+> public visibility, tagging, GitHub Pre-release, crates.io publication, and
+> stable `v0.1.0` remain maintainer checkpoints.
 
 ## Crates
 
@@ -86,11 +85,11 @@ norm-spec-conformance \
   --pretty
 ```
 
-This is an alpha development install. The five initial commands, compatibility
-discovery, Rust facade, arbitrary-candidate conformance, packaged standalone
-adoption lane, and canonical Skill are functional locally. Gate E adds
-target-specific, self-verifying candidate archives; CI artifacts remain review
-evidence until a maintainer approves a public release.
+This is an unpublished RC candidate install. The five initial commands,
+compatibility discovery, Rust facade, arbitrary-candidate conformance,
+packaged standalone adoption lane, canonical Skill, and target-specific
+self-verifying archives are functional. CI artifacts remain review evidence
+until a maintainer approves public release actions.
 
 See `docs/INTEGRATION.md` for plugin-free project adoption, canonical Skill
 installation, failure behavior, and downstream host-adapter boundaries.

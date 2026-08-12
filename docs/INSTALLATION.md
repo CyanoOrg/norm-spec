@@ -4,7 +4,7 @@ norm-spec supports standalone binaries, source/Git development installs, a
 Rust facade, and the canonical framework-neutral Skill. All lanes use the same
 Rust semantic engine. An agent plugin is not required.
 
-The repository is currently `0.1.0-alpha.1`. CI candidate artifacts are
+The repository is currently preparing `0.1.0-rc.1`. CI candidate artifacts are
 temporary review evidence, not public releases. Use the release-archive steps
 below only for an artifact attached to a maintainer-approved GitHub Release, or
 for a CI candidate whose exact workflow commit you are intentionally testing.

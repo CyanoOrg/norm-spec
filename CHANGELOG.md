@@ -5,6 +5,8 @@ Versioning and keeps changes under `[Unreleased]` until release preparation.
 
 ## [Unreleased]
 
+## [0.1.0-rc.1] - 2026-08-12
+
 ### Added
 
 - Rust workspace governance and standalone architecture.

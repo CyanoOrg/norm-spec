@@ -5,12 +5,10 @@
 本项目从单一、确定性的语义引擎开始。规范、Schema、模板、fixtures 和
 机器协议都在本仓库内自足维护；框架适配器消费这些契约，但不成为格式权威。
 
-> 当前状态：`0.1.0-alpha.1`。Gate C 与 Gate D 均已完成。packaged standalone
-> adoption 与 framework-neutral canonical Skill 已实现；最终候选 `7e052ae`
-> 的 hosted quality、Linux、macOS、Windows CI 全部通过。一次真实的 OpenCode
-> 辅助运行也在不启用 pi plugin 的情况下，对 pi-norm-spec 使用了该 Skill。
-> Gate E 发布准备实现候选 `3ccde86` 的 hosted quality、MSRV、固定平台及四个
-> 原生 artifact jobs 均已通过；`v0.1.0` 正式发布仍是维护者检查点。
+> 当前状态：`0.1.0-rc.1` 发布准备候选。Gate C、Gate D 与 Gate E 分发实现均
+> 已完成，包括 standalone 与 canonical Skill adoption、Rust 1.97 MSRV 验证
+> 和四个原生归档目标。RC 仍需对精确候选做 hosted 验证；公开可见性、tag、
+> GitHub Pre-release、crates.io 发布以及稳定版 `v0.1.0` 都仍是维护者检查点。
 
 ## Rust API
 
@@ -73,10 +71,10 @@ norm-spec-conformance \
   --pretty
 ```
 
-这是 alpha 开发安装。五个初始命令、compatibility discovery、Rust facade、
-任意候选 conformance、packaged standalone adoption lane 与 canonical Skill
-目前都已在本地可用。Gate E 增加按目标区分、可自证的候选归档；在维护者批准
-公开发布前，CI artifacts 仍只是评审证据。
+这是尚未公开发布的 RC 候选安装。五个初始命令、compatibility discovery、
+Rust facade、任意候选 conformance、packaged standalone adoption lane、
+canonical Skill 以及按目标区分的可自证归档目前都已可用。在维护者批准公开
+发布动作前，CI artifacts 仍只是评审证据。
 
 无插件项目采用、canonical Skill 安装、失败行为与下游 host adapter 边界见
 `docs/INTEGRATION.md`。

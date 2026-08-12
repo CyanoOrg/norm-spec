@@ -16,7 +16,7 @@ target-specific release archives rather than embedded as hidden host metadata.
 After registry publication, install one exact reviewed version with:
 
 ```bash
-cargo install norm-spec-cli --version '=<exact-release-version>' --locked
+cargo install norm-spec-cli --version '=0.1.0-rc.1' --locked
 norm --version
 norm compatibility --pretty
 ```

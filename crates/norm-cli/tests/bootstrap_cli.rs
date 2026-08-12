@@ -42,10 +42,7 @@ fn temporary_root(label: &str) -> PathBuf {
 fn version_is_available() {
     let output = run_norm(&["--version"]);
     assert!(output.status.success());
-    assert_eq!(
-        String::from_utf8_lossy(&output.stdout),
-        "norm 0.1.0-alpha.1\n"
-    );
+    assert_eq!(String::from_utf8_lossy(&output.stdout), "norm 0.1.0-rc.1\n");
 }
 
 #[test]

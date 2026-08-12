@@ -16,11 +16,10 @@ release history.
 
 ## Current state
 
-Version `0.1.0-alpha.1` has completed Gate B and Gate C: governance,
-architecture, the language-neutral five-command behavior contract, and all
-five production commands are in place. All 82 frozen cases execute the
-compiled binary without skips, and the integrated candidate is green on hosted
-Linux, macOS, and Windows CI.
+Version `0.1.0-rc.1` is the active release-preparation candidate. Gate B and
+Gate C governance, architecture, the language-neutral five-command behavior
+contract, and all five production commands are complete. All 82 frozen cases
+execute the compiled binary without skips.
 
 Gate D is complete: Rust consumption, compatibility discovery,
 consumer-neutral conformance, packaged standalone adoption, and the canonical
@@ -30,8 +29,9 @@ used the Skill against pi-norm-spec without the pi plugin. Gate E distribution
 and release-readiness implementation is complete: D016, native candidate
 archives, extracted verification, an explicit Rust 1.97 MSRV lane, four-target
 candidate CI, and installation/upgrade guidance are green locally and on
-hosted CI at candidate `3ccde86`. Version promotion, tagging, GitHub Release,
-registry publication, and stable release remain maintainer checkpoints.
+hosted CI. D017 now governs the RC rehearsal. Hosted verification of the exact
+RC commit, public visibility, tagging, GitHub Release, registry publication,
+and stable promotion remain separate maintainer checkpoints.
 Host-specific injection and enforcement stay downstream.
 
 Read first:
