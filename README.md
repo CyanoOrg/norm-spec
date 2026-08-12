@@ -8,9 +8,9 @@ schemas, templates, fixtures, and machine contracts live in this repository;
 framework adapters consume those contracts without becoming format authorities.
 
 > Status: `0.1.0-alpha.1`. Gate C and Gate D1 are integrated. Gate D2/D3 is
-> locally complete: exact compatibility discovery, a locked A1 contract
-> bundle, and arbitrary-candidate conformance are green. Hosted Linux, macOS,
-> and Windows verification for the Batch 2 candidate is the next checkpoint.
+> complete: exact compatibility discovery, a locked A1 contract bundle, and
+> arbitrary-candidate conformance are green. Hosted quality, Linux, macOS, and
+> Windows CI for candidate `1326dbe` is maintainer-confirmed.
 
 ## Crates
 
@@ -85,8 +85,8 @@ norm-spec-conformance \
 
 This is an alpha development install. The five initial commands, compatibility
 discovery, D1 Rust facade, and arbitrary-candidate conformance are functional.
-Standalone adoption, the canonical Skill, distribution, and hosted Batch 2
-verification remain later Gate D/Gate E work.
+Standalone adoption, the canonical Skill, and distribution remain later Gate
+D/Gate E work.
 
 See `ROADMAP.md`, `docs/ARCHITECTURE.md`, and
 `docs/planning/v0.1-execution.md` before contributing.

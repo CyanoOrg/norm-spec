@@ -23,9 +23,10 @@ compiled binary without skips, and the integrated candidate is green on hosted
 Linux, macOS, and Windows CI.
 
 Gate D is active. D1 Rust consumption plus D2 compatibility discovery and D3
-consumer-neutral conformance are locally complete; hosted Batch 2 evidence is
-pending. D4 standalone adoption and the canonical framework-neutral Skill under
-D013 remain open. Host-specific injection and enforcement stay downstream.
+consumer-neutral conformance are complete; hosted quality, Linux, macOS, and
+Windows CI for Batch 2 candidate `1326dbe` is maintainer-confirmed. D4
+standalone adoption and the canonical framework-neutral Skill under D013 remain
+open. Host-specific injection and enforcement stay downstream.
 
 Read first:
 

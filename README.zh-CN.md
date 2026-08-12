@@ -6,9 +6,9 @@
 机器协议都在本仓库内自足维护；框架适配器消费这些契约，但不成为格式权威。
 
 > 当前状态：`0.1.0-alpha.1`。Gate C 与 Gate D1 已集成。Gate D2/D3 已在
-> 本地完成：精确 compatibility discovery、锁定的 A1 contract bundle 与
-> 任意候选 conformance 均为绿色；下一检查点是 Batch 2 候选在 Linux、macOS、
-> Windows 上的托管验证。
+> 完成：精确 compatibility discovery、锁定的 A1 contract bundle 与任意
+> 候选 conformance 均为绿色；维护者已确认候选 `1326dbe` 的 quality、Linux、
+> macOS、Windows CI 全部通过。
 
 ## Rust API
 
@@ -72,8 +72,8 @@ norm-spec-conformance \
 ```
 
 这是 alpha 开发安装。五个初始命令、compatibility discovery、D1 Rust
-facade 与任意候选 conformance 目前都可用；独立采用、canonical Skill、分发
-以及 Batch 2 托管验证仍属于后续 Gate D/Gate E 工作。
+facade 与任意候选 conformance 目前都可用；独立采用、canonical Skill 与分发
+仍属于后续 Gate D/Gate E 工作。
 
 参与开发前请先阅读 `AGENTS.md`、`ROADMAP.md`、`docs/ARCHITECTURE.md` 和
 `docs/planning/v0.1-execution.md`。

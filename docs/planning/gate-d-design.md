@@ -444,9 +444,10 @@ The approved D015 protocol is locally complete through implementation candidate
 - adding the second binary preserves the established
   `cargo run -p norm-spec-cli -- ...` path through `default-run = "norm"`.
 
-Local merge gates are green. Hosted Linux, macOS, and Windows evidence remains
-the final Batch 2 checkpoint; this result does not claim D4 standalone adoption
-or D5 Skill completion.
+Local merge gates are green. Hosted quality, Linux, macOS, and Windows CI for
+candidate `1326dbe` is maintainer-confirmed green. This later documentation-only
+record does not change the tested candidate and does not claim D4 standalone
+adoption or D5 Skill completion.
 
 ## Result D4 — Standalone adoption evidence
 
@@ -536,10 +537,12 @@ second hosted run under the repository's agreed documentation policy.
 5. `feat(conformance): run arbitrary candidates`
 6. `test(conformance): fail closed across the frozen suite`
 
-Batch 2 is locally complete. D015 was recorded before behavior, implementation
-was split into compatibility model/discovery, bundle identity, runner layers,
-fail-closed tests, package/CI gates, and documentation. Hosted cross-platform
-CI for the integrated branch remains required before local merge and cleanup.
+Batch 2 is complete. D015 was recorded before behavior, implementation was
+split into compatibility model/discovery, bundle identity, runner layers,
+fail-closed tests, package/CI gates, and documentation. Candidate `1326dbe`
+passed hosted quality plus Linux, macOS, and Windows CI; this
+documentation-only verification record may be fast-forwarded without a second
+hosted run under the repository's agreed documentation policy.
 
 ### Batch 3 — Standalone adoption and canonical Skill
 

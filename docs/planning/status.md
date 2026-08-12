@@ -6,12 +6,14 @@
   readiness planning is active.
 - Integration state: local `main` includes the approved D015 documentation at
   `8c10b6b`; `origin/main` remains at the integrated D1 record `c84aafb` until
-  the maintainer's next push. Batch 2 implementation lives on
-  `codex/feat-gate-d-conformance`.
+  the maintainer's next push. Hosted candidate `1326dbe` contains the complete
+  Batch 2 implementation and is ready for local fast-forward integration with
+  this documentation-only verification record.
 - Current resume point: D1, D2 compatibility discovery, and D3
-  arbitrary-candidate conformance are locally complete. Full local gates are
-  green through implementation candidate `5efb42c`; hosted Linux, macOS, and
-  Windows CI for this Batch 2 branch is the next checkpoint.
+  arbitrary-candidate conformance are complete. Full local gates are green
+  through implementation candidate `5efb42c`, and hosted quality, Linux,
+  macOS, and Windows CI for complete candidate `1326dbe` is
+  maintainer-confirmed. D4 standalone adoption and D5 Skill are next.
 - The maintainer confirmed standalone-first product positioning, one canonical
   framework-neutral Skill in this repository, explicit failure without engine
   fallback, downstream host adapters, and standalone adoption as Gate D scope.
@@ -42,12 +44,12 @@
   verifies the core → facade → CLI workspace candidate through a fresh isolated
   Cargo registry, and runs collect plus validation from an unrelated
   exact-revision Git consumer. Hosted D1 evidence is maintainer-confirmed green.
-- The private GitHub repository and hosted Actions are green through D1
-  candidate `07a95c6`. Public visibility remains a maintainer checkpoint.
+- The private GitHub repository and hosted Actions are green through D2/D3
+  candidate `1326dbe`. Public visibility remains a maintainer checkpoint.
 - D015's machine-default compatibility discovery, exact identifier membership,
   locked 82-case A1 bundle, separate `norm-spec-conformance` binary, explicit
-  complete/incomplete reports, and no-fallback rules are implemented and
-  locally green. Hosted evidence remains pending.
+  complete/incomplete reports, and no-fallback rules are implemented and green
+  locally plus on hosted quality, Linux, macOS, and Windows CI.
 
 ## Verification
 
@@ -113,7 +115,8 @@ Gate D2/D3 local verification on 2026-08-12:
 - `RUSTDOCFLAGS='-D warnings' cargo doc --workspace --no-deps`, strict
   self-validation of seven `.norm` files, and public-history scan → green.
 - structural scan → 37 directories and seven `.norm` files.
-- hosted Linux, macOS, and Windows CI → pending maintainer confirmation.
+- hosted quality, Linux, macOS, and Windows CI for candidate `1326dbe` →
+  maintainer-confirmed green.
 
 ## Open-source readiness
 
