@@ -18,6 +18,17 @@ trap cleanup EXIT
 
 cd "$repo_root"
 
+# A clean tracked worktree is the reliable signal that every published .crate
+# embeds the exact committed revision. When NORM_REQUIRE_CLEAN_PACKAGES is set,
+# reject tracked modifications up front instead of relying on cargo's per-package
+# dirty field, which is omitted on clean trees and only emitted as `dirty: true`.
+if [[ "${NORM_REQUIRE_CLEAN_PACKAGES:-0}" == "1" ]]; then
+  if ! git diff --quiet || ! git diff --cached --quiet; then
+    echo "NORM_REQUIRE_CLEAN_PACKAGES requires a clean tracked worktree" >&2
+    exit 1
+  fi
+fi
+
 require_package_entry() {
   local package_name="$1"
   local package_list="$2"
@@ -182,7 +193,7 @@ head_revision="$(git rev-parse HEAD)"
 for package_dir in "$core_package" "$facade_package" "$cli_package"; do
   package_name="$(basename "$package_dir" "-$version")"
   vcs_info="$package_dir/.cargo_vcs_info.json"
-  require_manifest_line "$package_name" "$vcs_info" "    \"sha1\": \"$head_revision\","
+  require_manifest_line "$package_name" "$vcs_info" "    \"sha1\": \"$head_revision\""
 done
 require_manifest_line \
   "norm-spec-core" \
@@ -196,16 +207,6 @@ require_manifest_line \
   "norm-spec-cli" \
   "$cli_package/.cargo_vcs_info.json" \
   '  "path_in_vcs": "crates/norm-cli"'
-
-if [[ "${NORM_REQUIRE_CLEAN_PACKAGES:-0}" == "1" ]]; then
-  for package_dir in "$core_package" "$facade_package" "$cli_package"; do
-    package_name="$(basename "$package_dir" "-$version")"
-    require_manifest_line \
-      "$package_name" \
-      "$package_dir/.cargo_vcs_info.json" \
-      '    "dirty": false'
-  done
-fi
 
 git_url="file://$repo_root"
 escaped_git_url="$(printf '%s' "$git_url" | sed 's/[&|]/\\&/g')"
