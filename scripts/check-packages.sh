@@ -51,7 +51,23 @@ if grep -Fq "tests/contract/" "$package_list"; then
   exit 1
 fi
 
-cargo package --workspace --allow-dirty
+cli_package_list="$candidate_root/norm-spec-cli-package.txt"
+cargo package --list --allow-dirty -p norm-spec-cli >"$cli_package_list"
+for cli_asset in \
+  "src/main.rs" \
+  "src/bin/norm-spec-conformance.rs" \
+  "src/bin/conformance/bundle.rs" \
+  "src/bin/conformance/model.rs" \
+  "src/bin/conformance/mod.rs" \
+  "src/bin/conformance/suite.rs"; do
+  if ! grep -Fqx "$cli_asset" "$cli_package_list"; then
+    echo "norm-spec-cli package omitted required runner source: $cli_asset" >&2
+    exit 1
+  fi
+done
+
+package_target="$candidate_root/package-target"
+CARGO_TARGET_DIR="$package_target" cargo package --workspace --allow-dirty
 
 head_revision="$(git rev-parse HEAD)"
 git_url="file://$repo_root"
