@@ -59,3 +59,8 @@ Versioning and keeps changes under `[Unreleased]` until release preparation.
   authority.
 - Binary/source/Skill installation plus checksum, upgrade, rollback, and
   uninstall guidance.
+- Self-describing crates.io metadata, README and MIT license content for all
+  three packages, plus normalized-manifest, source-revision, and package-content
+  gates.
+- The `v0.1.0-rc.1` exact-candidate release procedure, public-distribution
+  boundaries, serial package order, and maintainer checkpoints.

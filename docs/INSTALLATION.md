@@ -8,6 +8,8 @@ The repository is currently preparing `0.1.0-rc.1`. CI candidate artifacts are
 temporary review evidence, not public releases. Use the release-archive steps
 below only for an artifact attached to a maintainer-approved GitHub Release, or
 for a CI candidate whose exact workflow commit you are intentionally testing.
+The reviewed RC scope and compatibility identities are recorded in
+`docs/releases/v0.1.0-rc.1.md`.
 
 ## Choose a release archive
 

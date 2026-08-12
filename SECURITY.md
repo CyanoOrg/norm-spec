@@ -2,8 +2,10 @@
 
 ## Supported versions
 
-Before the first stable release, security fixes land on `main` and, when one
-exists, the latest published pre-release. Older pre-releases are not supported.
+Before the first stable release, security fixes land on `main`. After an RC is
+published, the latest published pre-release is also supported; older
+pre-releases are not. A locally prepared or hosted-CI candidate is not a
+supported public release.
 
 ## Reporting a vulnerability
 
