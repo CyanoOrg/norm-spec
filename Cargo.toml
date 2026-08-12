@@ -8,6 +8,10 @@ license.workspace = true
 authors.workspace = true
 repository.workspace = true
 readme = "README.md"
+documentation = "https://docs.rs/norm-spec"
+keywords = ["ai-agents", "conventions", "configuration", "validation"]
+categories = ["config", "development-tools", "parser-implementations"]
+publish = ["crates-io"]
 include = [
     "/Cargo.toml",
     "/LICENSE",

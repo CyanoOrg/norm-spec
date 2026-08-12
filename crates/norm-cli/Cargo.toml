@@ -8,6 +8,11 @@ rust-version.workspace = true
 license.workspace = true
 authors.workspace = true
 repository.workspace = true
+readme = "README.md"
+documentation = "https://docs.rs/norm-spec-cli"
+keywords = ["ai-agents", "conventions", "configuration", "validation", "cli"]
+categories = ["command-line-utilities", "config", "development-tools"]
+publish = ["crates-io"]
 
 [[bin]]
 name = "norm"
