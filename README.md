@@ -7,12 +7,10 @@ The project starts with one deterministic semantic engine. Its specification,
 schemas, templates, fixtures, and machine contracts live in this repository;
 framework adapters consume those contracts without becoming format authorities.
 
-> Status: `0.1.0-rc.1` release-preparation candidate. Gate C, Gate D, and the
-> Gate E distribution implementation are complete, including standalone and
-> canonical Skill adoption, Rust 1.97 MSRV verification, and four native
-> archive targets. The RC still requires exact-candidate hosted verification;
-> public visibility, tagging, GitHub Pre-release, crates.io publication, and
-> stable `v0.1.0` remain maintainer checkpoints.
+> Status: `0.1.0-rc.1` is published and validated from exact commit `5c781964`.
+> The signed tag, four native archives with checksums, all three Rust packages,
+> docs.rs pages, standalone adoption, and the canonical Skill path are public.
+> Stable `v0.1.0` remains a separate maintainer decision after RC soak.
 
 ## Crates
 
@@ -25,11 +23,11 @@ framework adapters consume those contracts without becoming format authorities.
 
 ## Rust API
 
-Until registry publication, pin an exact Git revision:
+Use the exact reviewed release candidate:
 
 ```toml
 [dependencies]
-norm-spec = { git = "https://github.com/CyanoOrg/norm-spec", rev = "<exact-commit>" }
+norm-spec = "=0.1.0-rc.1"
 ```
 
 ```rust
@@ -48,6 +46,20 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 See `docs/RUST-API.md` for request, failure, compatibility, and packaging
 boundaries.
+
+## Install the release candidate
+
+Install both CLI executables from crates.io:
+
+```bash
+cargo install norm-spec-cli --version '=0.1.0-rc.1' --locked
+norm --version
+norm compatibility --pretty
+```
+
+Target-specific archives and their sibling checksums are available from the
+GitHub Pre-release. Follow `docs/INSTALLATION.md` before copying either binary
+into `PATH`.
 
 ## Development usage
 
@@ -85,11 +97,10 @@ norm-spec-conformance \
   --pretty
 ```
 
-This is an unpublished RC candidate install. The five initial commands,
-compatibility discovery, Rust facade, arbitrary-candidate conformance,
-packaged standalone adoption lane, canonical Skill, and target-specific
-self-verifying archives are functional. CI artifacts remain review evidence
-until a maintainer approves public release actions.
+This public RC includes the five initial commands, compatibility discovery,
+Rust facade, arbitrary-candidate conformance, packaged standalone adoption,
+canonical Skill, and target-specific self-verifying archives. It is not the
+stable `v0.1.0` release.
 
 See `docs/INTEGRATION.md` for plugin-free project adoption, canonical Skill
 installation, failure behavior, and downstream host-adapter boundaries.

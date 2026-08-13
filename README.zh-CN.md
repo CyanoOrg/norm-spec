@@ -5,18 +5,18 @@
 本项目从单一、确定性的语义引擎开始。规范、Schema、模板、fixtures 和
 机器协议都在本仓库内自足维护；框架适配器消费这些契约，但不成为格式权威。
 
-> 当前状态：`0.1.0-rc.1` 发布准备候选。Gate C、Gate D 与 Gate E 分发实现均
-> 已完成，包括 standalone 与 canonical Skill adoption、Rust 1.97 MSRV 验证
-> 和四个原生归档目标。RC 仍需对精确候选做 hosted 验证；公开可见性、tag、
-> GitHub Pre-release、crates.io 发布以及稳定版 `v0.1.0` 都仍是维护者检查点。
+> 当前状态：`0.1.0-rc.1` 已从精确提交 `5c781964` 发布并完成验证。签名 tag、
+> 四个原生归档及 checksum、三个 Rust package、docs.rs 页面、standalone
+> adoption 和 canonical Skill 路径均已公开。稳定版 `v0.1.0` 仍需在 RC soak
+> 后由维护者单独决策。
 
 ## Rust API
 
-在 registry 发布前，应固定到精确 Git revision：
+使用经过评审的精确 RC 版本：
 
 ```toml
 [dependencies]
-norm-spec = { git = "https://github.com/CyanoOrg/norm-spec", rev = "<exact-commit>" }
+norm-spec = "=0.1.0-rc.1"
 ```
 
 ```rust
@@ -34,6 +34,19 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 ```
 
 请求、失败分类、兼容性与打包边界见 `docs/RUST-API.md`。
+
+## 安装发布候选
+
+从 crates.io 安装两个 CLI executable：
+
+```bash
+cargo install norm-spec-cli --version '=0.1.0-rc.1' --locked
+norm --version
+norm compatibility --pretty
+```
+
+GitHub Pre-release 提供各目标平台归档及对应 checksum。将 binary 复制进
+`PATH` 前，请按 `docs/INSTALLATION.md` 完成验证。
 
 ## 开发版本使用
 
@@ -71,10 +84,9 @@ norm-spec-conformance \
   --pretty
 ```
 
-这是尚未公开发布的 RC 候选安装。五个初始命令、compatibility discovery、
-Rust facade、任意候选 conformance、packaged standalone adoption lane、
-canonical Skill 以及按目标区分的可自证归档目前都已可用。在维护者批准公开
-发布动作前，CI artifacts 仍只是评审证据。
+这个公开 RC 包含五个初始命令、compatibility discovery、Rust facade、任意
+候选 conformance、packaged standalone adoption、canonical Skill 以及按目标
+区分的可自证归档；它还不是稳定版 `v0.1.0`。
 
 无插件项目采用、canonical Skill 安装、失败行为与下游 host adapter 边界见
 `docs/INTEGRATION.md`。

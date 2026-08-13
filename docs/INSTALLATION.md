@@ -4,12 +4,25 @@ norm-spec supports standalone binaries, source/Git development installs, a
 Rust facade, and the canonical framework-neutral Skill. All lanes use the same
 Rust semantic engine. An agent plugin is not required.
 
-The repository is currently preparing `0.1.0-rc.1`. CI candidate artifacts are
-temporary review evidence, not public releases. Use the release-archive steps
-below only for an artifact attached to a maintainer-approved GitHub Release, or
-for a CI candidate whose exact workflow commit you are intentionally testing.
-The reviewed RC scope and compatibility identities are recorded in
-`docs/releases/v0.1.0-rc.1.md`.
+Release candidate `0.1.0-rc.1` is public and validated from exact commit
+`5c781964`. Its three Rust packages are on crates.io, and four native archives
+with sibling checksums are attached to the GitHub Pre-release. CI candidate
+artifacts remain temporary review evidence and must not be confused with those
+release assets. The reviewed RC scope and compatibility identities are recorded
+in `docs/releases/v0.1.0-rc.1.md`.
+
+## Install from crates.io
+
+Install both CLI executables with the exact reviewed version:
+
+```bash
+cargo install norm-spec-cli --version '=0.1.0-rc.1' --locked
+norm --version
+norm compatibility --pretty
+```
+
+This source compiles locally and therefore requires Rust 1.97 or newer. Use a
+native release archive when an end user should not need a Rust toolchain.
 
 ## Choose a release archive
 
@@ -151,24 +164,18 @@ Both commands install `norm` and `norm-spec-conformance`. Source installation
 requires Rust 1.97 or newer; Rust 1.97.1 is the exact initial MSRV verification
 toolchain. Do not install a moving branch for production use.
 
-Registry installation is intentionally undocumented as an available command
-until the three Rust packages have actually been published. The required
-publication order is `norm-spec-core`, then `norm-spec`, then
-`norm-spec-cli`.
-
 ## Use the Rust facade
 
-Before registry publication, pin the public high-level facade by exact Git
-revision:
+Use the exact reviewed public facade release:
 
 ```toml
 [dependencies]
-norm-spec = { git = "https://github.com/CyanoOrg/norm-spec", rev = "<exact-commit>" }
+norm-spec = "=0.1.0-rc.1"
 ```
 
-After registry publication, use an exact reviewed compatible version according
-to the release notes. `docs/RUST-API.md` defines the request, response, failure,
-asset, and compatibility boundary.
+For source-development work, an exact Git revision remains available as an
+alternative. Do not depend on a moving branch. `docs/RUST-API.md` defines the
+request, response, failure, asset, and compatibility boundary.
 
 ## Upgrade safely
 
