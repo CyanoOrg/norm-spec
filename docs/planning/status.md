@@ -2,22 +2,17 @@
 
 ## Resume here
 
-- Stage: `0.1.0-rc.1` release preparation; Gate B, Gate C, Gate D, and Gate E
-  implementation are complete. D017 selects an RC rehearsal before stable.
-  Phase 3 local verification is complete on `2e5b8e9`; hosted verification
-  (Phase 4) and the maintainer public-visibility and publication checkpoints
-  remain open.
-- Integration state: final Gate D candidate `7e052ae` is maintainer-confirmed
-  green on hosted quality, Linux, macOS, and Windows CI. This hosted/adoption
-  record is documentation-only and may be fast-forwarded without a second
-  hosted run under the repository's agreed documentation policy.
-- Current resume point: Phase 3 local verification passed on
-  `2e5b8e9025f88b785cfe816c519c6d40df57a4b0` on
-  `codex/chore-release-v0.1.0-rc.1` (`6cf1bfa` plus one `fix(test)` correcting
-  the `check-packages.sh` `.cargo_vcs_info.json` assertions). Push the candidate
-  for hosted review (Phase 4); public visibility, tag, GitHub Pre-release,
-  registry publication, and stable promotion remain explicit later maintainer
-  checkpoints.
+- Stage: `v0.1.0-rc.1` is published and validated. Gate B, Gate C, Gate D, and
+  Gate E are complete; release Phases 1–7 are complete (public repo, signed tag,
+  GitHub Pre-release, serial crates.io publication, and full public validation).
+  Stable `v0.1.0` promotion remains a separate maintainer decision after RC soak.
+- Current resume point: `v0.1.0-rc.1` shipped from `5c781964` (tag signed and
+  verified; `main` is at that commit) — public GitHub repo, GitHub Pre-release
+  with four native archives and four checksum assets, and `norm-spec-core` /
+  `norm-spec` / `norm-spec-cli` on crates.io, all validated end-to-end (Phase 7
+  green). Next: optional live agent-driven Skill adoption, then stable
+  `v0.1.0` promotion after RC soak.
+  (pi-norm-spec is a separate downstream track, decoupled per D013.)
 - The maintainer confirmed standalone-first product positioning, one canonical
   framework-neutral Skill in this repository, explicit failure without engine
   fallback, downstream host adapters, and standalone adoption as Gate D scope.
@@ -47,9 +42,8 @@
   verifies the core → facade → CLI workspace candidate through a fresh isolated
   Cargo registry, and runs collect plus validation from an unrelated
   exact-revision Git consumer. Hosted D1 evidence is maintainer-confirmed green.
-- The private GitHub repository and hosted Actions are green through final Gate
-  E implementation candidate `3ccde86`. Public visibility remains a maintainer
-  checkpoint.
+- The formerly private repository's Gate E implementation candidate `3ccde86`
+  was green on hosted Actions before the later public RC candidate was prepared.
 - D015's machine-default compatibility discovery, exact identifier membership,
   locked 82-case A1 bundle, separate `norm-spec-conformance` binary, explicit
   complete/incomplete reports, and no-fallback rules are implemented and green
@@ -260,6 +254,78 @@ Phase 3 local verification on 2026-08-12:
   tag, GitHub Pre-release, registry publication, and stable promotion remain
   maintainer checkpoints.
 
+Phase 4 hosted candidate handoff on 2026-08-12:
+
+- exact candidate `5c781964b6d9b11c52f29e5b6e2bbe13c25a5ee0` on
+  `codex/chore-release-v0.1.0-rc.1` was pushed; maintainer-confirmed the
+  quality, MSRV, three fixed-platform regression, and four native artifact jobs
+  green for that exact commit.
+- all eight uploaded files matched `norm-spec-0.1.0-rc.1-<target>.tar.gz` plus a
+  sibling `.sha256`; each archive manifest carried `version=0.1.0-rc.1`,
+  `sourceRevision=5c781964…5ee0`, `suite=norm-spec/a1-cli/v1`, `caseCount=82`,
+  and `contractDigest=sha256:3d94441e…e2eb`, with a single safe root and no
+  symlinks or unsafe paths. The downloaded `aarch64-apple-darwin` archive passed
+  the full native check (82/82 conformance and adoption) after stripping macOS
+  browser quarantine from the ad-hoc-signed binary.
+- the 9-job Actions log tree was scanned for private keys, token prefixes,
+  `/Users/<local>` paths, registry credentials, other-repo git URLs, and emails:
+  zero matches. All actions are pinned to full SHAs; the run fetched `5c781964`
+  from `CyanoOrg/norm-spec`; remaining SHAs were runner-image commits, artifact
+  upload digests, and content checksums.
+- `main` was fast-forwarded to `5c781964…5ee0` with no squash, rebase, or
+  closure commit; release identity unchanged. Maintainer-confirmed the
+  exact-`main` CI run green; `main` SHA does not differ from the candidate.
+- this evidence closes Phase 4.
+
+Phase 5 public-repository checkpoint on 2026-08-12:
+
+- all retained Actions runs (24, 2026-08-10 through the tag run) had logs and
+  artifacts scanned: zero private keys, tokens, maintainer-local paths, registry
+  credentials, non-`CyanoOrg/norm-spec` git URLs, or emails; all actions pinned
+  to full SHAs.
+- `CyanoOrg/norm-spec` was changed from private to public; write access stayed
+  admin-only and the audit was clean.
+- `main` ruleset (`main-protection`) and `v*` tag ruleset
+  (`release-tag-immutable`) configured: `main` blocks force-push/deletion,
+  requires linear history, signed commits, the nine CI status checks, and a PR
+  (one approval) for non-admins, with repository-admin bypass; `v*` tags block
+  update and deletion. (GitHub Free private repos cannot enforce rulesets, so
+  visibility preceded ruleset configuration.)
+- private vulnerability reporting enabled; public smoke green (anonymous clone
+  to `5c781964`; `cargo build` + `cargo test --workspace --all-features` → 68
+  passed / 0 failed; `check-public-history.sh` green; compatibility and strict
+  self-validation clean).
+
+Phase 6 RC publication on 2026-08-12:
+
+- annotated, signed tag `v0.1.0-rc.1` created at `5c781964` and pushed (GitHub
+  verifies the signature `valid`).
+- GitHub Pre-release `v0.1.0-rc.1` (`prerelease=true`) with the eight
+  archive/checksum files built by the tagged commit's CI run; asset names and
+  sizes match the tag run and each manifest carries `sourceRevision 5c781964`.
+- crates.io serial publication with a fresh `--dry-run` between uploads:
+  `norm-spec-core` → `norm-spec` → `norm-spec-cli`, all owned by `bravetwo`, no
+  `--no-verify`, no partial failure.
+
+Phase 7 public validation on 2026-08-12:
+
+- clean-environment `cargo install norm-spec-cli --version '=0.1.0-rc.1' --locked`
+  installed both binaries; `norm compatibility` reported the expected suite (82
+  cases) and digest.
+- a registry-only Rust consumer `norm-spec = "=0.1.0-rc.1"` (isolated
+  `CARGO_HOME`, outside the workspace) completed collect and strict validation.
+- the public `aarch64-apple-darwin` Release archive passed checksum, manifest
+  identity (`5c781964`), and the full native check (82/82 conformance and
+  adoption); the other three targets were native-verified by CI on the tag run.
+- docs.rs rendered all three crates (`doc_status: true`).
+- the canonical Skill from the public release archive drove the released engine
+  end-to-end (compatibility, collect with inheritance, strict validate clean).
+- optional remaining: a live agent-driven Skill adoption session (functional
+  equivalent passed).
+
+`v0.1.0-rc.1` is published and validated end-to-end. Stable `v0.1.0` promotion
+remains a separate maintainer decision after RC soak.
+
 ## Open-source readiness
 
 - [x] Independent public `0.1` history and product identity.
@@ -269,8 +335,9 @@ Phase 3 local verification on 2026-08-12:
 - [x] Private GitHub repository creation, initial `main` push, and hosted
       Actions.
 - [x] Node 24 Action pins verified green on GitHub without annotations.
-- [ ] Configure `main` protection when repository visibility or the
-      organization plan permits it.
+- [x] Configure `main` protection — the `main-protection` (branch) and
+      `release-tag-immutable` (`v*`) rulesets are active with repository-admin
+      bypass, signed commits, and the nine CI checks required.
 
 ## Open work
 
@@ -313,7 +380,7 @@ Phase 3 local verification on 2026-08-12:
       MSRV, Linux x64, macOS ARM64/Intel, and Windows x64 jobs.
 - [x] Complete cross-platform distribution and release-readiness implementation
       review (Gate E).
-- [ ] Complete and host-verify the exact `v0.1.0-rc.1` preparation candidate.
-- [ ] Run the maintainer-authorized public visibility and RC publication
+- [x] Complete and host-verify the exact `v0.1.0-rc.1` preparation candidate.
+- [x] Run the maintainer-authorized public visibility and RC publication
       checkpoints in `docs/planning/v0.1.0-rc.1-release.md`.
 - [ ] Promote stable `v0.1.0` only after the public RC criteria are complete.

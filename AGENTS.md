@@ -105,6 +105,22 @@ Do not create `develop` or long-lived release branches. Bootstrap commits may
 land directly on `main`; subsequent non-trivial work uses a short-lived branch
 and returns with a fast-forward merge after all gates are green.
 
+### Public contribution flow
+
+`CyanoOrg/norm-spec` is public. The `main` branch is governed by a GitHub
+ruleset (`main-protection`): direct force pushes and deletion are blocked,
+linear history is required, commits must be signed, the nine CI status checks
+must pass, and a pull request with one approving review is required for
+non-admin actors (including bots). Repository admins may bypass the ruleset so
+the release-preparation candidate can be fast-forwarded to `main` as an exact
+commit — the tag, archives, and `.cargo_vcs_info.json` bind to that exact SHA.
+A `v*` tag ruleset (`release-tag-immutable`) blocks tag updates and deletion.
+
+External contributors work from a fork and open a pull request; maintainers may
+use a short-lived in-repo branch and a pull request. Everyday merges keep linear
+history (rebase). Do not mix release-preparation identity changes into ordinary
+PRs — the release-preparation branch is the single identity anchor.
+
 ## Commits
 
 Use Conventional Commits: `feat:`, `fix:`, `docs:`, `refactor:`, `test:`,
