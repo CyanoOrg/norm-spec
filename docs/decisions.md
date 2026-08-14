@@ -604,3 +604,70 @@ bar. Exact commit binding prevents a green branch, tag, archive, and crate from
 quietly naming different code. Serial publication and stop-on-partial-failure
 rules respect registry immutability, while explicit maintainer checkpoints
 keep public and irreversible actions outside ordinary CI authority.
+
+## D018 — Layer main protections and grant exact promotion to a human Team
+
+**Decision.** `CyanoOrg/norm-spec` uses shared organization Teams for access:
+`norm-maintainers` has Maintain, `norm-release-managers` has Maintain, and
+`norm-automation` has Write. These Teams may also be attached to independent
+repositories, but membership does not combine repository CI, release identity,
+tags, registry publication, stable-promotion authority, or roadmap ownership.
+Automation identities belong only in `norm-automation`; they must not be
+members of `norm-release-managers`.
+
+The monolithic `main-protection` ruleset is replaced by three repository
+rulesets with distinct bypass boundaries:
+
+- `main-integrity` blocks deletion and non-fast-forward updates, requires
+  linear history, and requires signed commits. It has no bypass.
+- `main-quality` requires strict success for exactly `quality`, `msrv`,
+  `cross-platform (ubuntu-22.04)`, `cross-platform (macos-15)`,
+  `cross-platform (windows-2022)`,
+  `release-candidate (ubuntu-22.04, x86_64-unknown-linux-gnu)`,
+  `release-candidate (macos-15, aarch64-apple-darwin)`,
+  `release-candidate (macos-15-intel, x86_64-apple-darwin)`, and
+  `release-candidate (windows-2022, x86_64-pc-windows-msvc)`. It has no
+  bypass.
+- `main-review` requires a pull request, one approval, dismissal of approvals
+  when new commits are pushed, and resolution of all review threads. Only the
+  organization Team `norm-release-managers` (GitHub Team ID `18981934`) has an
+  always-allowed bypass for this layer.
+
+An exact-candidate promotion still starts with a pull request whose HEAD is the
+candidate commit. The required approval must bind to that HEAD, every review
+thread must be resolved, all nine strict checks must be green for that exact
+commit, and the branch must not be behind `main`. A human release manager may
+then fast-forward that exact commit to `main`; squash, merge commits, rebases,
+or closure edits that change its SHA invalidate earlier candidate evidence.
+Ordinary changes continue through reviewed linear-history pull requests.
+
+Migration is fail-safe. The existing monolithic ruleset remains active while
+the three new rulesets are created. Each new rule is read back and its effective
+result is verified before the old ruleset is disabled. The old ruleset is
+retained disabled for audit and rollback; it is not deleted. The existing
+`release-tag-immutable` rule remains active without a bypass.
+
+Direct repository Admin access for `cyano-bot` is temporary migration access.
+After the layered rules are active and verified in both `norm-spec` and the
+independent `pi-norm-spec` repository, its direct access is reduced to Write.
+Organization owners may remain members of the human Teams, but automation does
+not acquire human approval or release-promotion authority through ownership.
+
+**Context.** The initial public-release ruleset deliberately combined
+integrity, required checks, review, and repository-admin bypass so the exact RC
+commit could be fast-forwarded without changing its SHA. That broad bypass also
+allowed an administrator or automation identity to bypass signed-commit,
+non-fast-forward, deletion, and quality requirements, even though exact
+promotion needs an exception only to the pull-request rule. The maintainer has
+created the three shared organization Teams and confirmed that the release
+manager Team contains human identities while `cyano-bot` remains automation.
+The same model has already been exercised on `pi-norm-spec` with an approved
+exact-candidate pull request and that repository's own required quality set.
+
+**Rationale.** Separating invariant integrity and quality from review workflow
+gives human release managers the narrow capability needed to preserve an exact
+candidate SHA without granting a persistent broad administrator bypass. Team
+membership makes responsibilities reviewable and reusable while repository-
+local rules keep the two products independent. Creating and verifying the new
+layers before disabling the old one avoids an unprotected migration window,
+and retaining the disabled rule preserves a recoverable audit trail.

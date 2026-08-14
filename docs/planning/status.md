@@ -7,11 +7,13 @@
   GitHub Pre-release, serial crates.io publication, and full public validation).
   Stable `v0.1.0` promotion remains a separate maintainer decision after RC soak.
 - Current resume point: `v0.1.0-rc.1` shipped from `5c781964` (tag signed and
-  verified; `main` is at that commit) — public GitHub repo, GitHub Pre-release
-  with four native archives and four checksum assets, and `norm-spec-core` /
-  `norm-spec` / `norm-spec-cli` on crates.io, all validated end-to-end (Phase 7
-  green). Next: optional live agent-driven Skill adoption, then stable
-  `v0.1.0` promotion after RC soak.
+  verified). The tag, GitHub Pre-release assets, and all three crates bind that
+  release commit. Current `main` is `60d98b6`, with documentation-only commits
+  `8a3801d` and `60d98b6` after the tag. The public GitHub repo, four native
+  archives and checksum assets, and `norm-spec-core` / `norm-spec` /
+  `norm-spec-cli` paths are validated end-to-end (Phase 7 green). Next: migrate
+  the D018 repository rules, then optional live agent-driven Skill adoption and
+  stable `v0.1.0` promotion after RC soak.
   (pi-norm-spec is a separate downstream track, decoupled per D013.)
 - The maintainer confirmed standalone-first product positioning, one canonical
   framework-neutral Skill in this repository, explicit failure without engine
@@ -326,6 +328,23 @@ Phase 7 public validation on 2026-08-12:
 `v0.1.0-rc.1` is published and validated end-to-end. Stable `v0.1.0` promotion
 remains a separate maintainer decision after RC soak.
 
+Post-RC repository-governance checkpoint on 2026-08-14:
+
+- D018 accepts the same organization Team model already exercised by the
+  independent pi-norm-spec repository: `norm-maintainers` (Maintain),
+  `norm-release-managers` (Maintain), and `norm-automation` (Write).
+- the target `main-integrity` and `main-quality` layers have no bypass;
+  `main-review` grants its only always bypass to human Team ID `18981934`.
+  `release-tag-immutable` remains unchanged with no bypass.
+- exact promotion still requires an approved candidate-head PR, all threads
+  resolved, the branch not behind `main`, and all nine exact-head checks green
+  before a release manager fast-forwards that unchanged commit.
+- live GitHub migration is pending a fresh API readback. The current
+  monolithic `main-protection` ruleset therefore remains authoritative and
+  must not be disabled until all three replacements are active and effective.
+- after both repositories' layered migrations are read back and verified,
+  reduce `cyano-bot` direct repository access from Admin to Write on each.
+
 ## Open-source readiness
 
 - [x] Independent public `0.1` history and product identity.
@@ -335,9 +354,15 @@ remains a separate maintainer decision after RC soak.
 - [x] Private GitHub repository creation, initial `main` push, and hosted
       Actions.
 - [x] Node 24 Action pins verified green on GitHub without annotations.
-- [x] Configure `main` protection — the `main-protection` (branch) and
-      `release-tag-immutable` (`v*`) rulesets are active with repository-admin
-      bypass, signed commits, and the nine CI checks required.
+- [x] Configure initial public protection — `main-protection` and
+      `release-tag-immutable` are active; the main rule requires signed commits,
+      linear history, review, and nine CI checks with its original broad
+      repository-admin bypass.
+- [x] Record the narrower layered Team model in D018.
+- [ ] Create and read back `main-integrity`, `main-quality`, and `main-review`;
+      verify their effective result before disabling `main-protection`.
+- [ ] After both independent repository migrations are verified, reduce
+      `cyano-bot` direct access from Admin to Write.
 
 ## Open work
 
@@ -383,4 +408,8 @@ remains a separate maintainer decision after RC soak.
 - [x] Complete and host-verify the exact `v0.1.0-rc.1` preparation candidate.
 - [x] Run the maintainer-authorized public visibility and RC publication
       checkpoints in `docs/planning/v0.1.0-rc.1-release.md`.
+- [x] Decide the layered Team protection and exact-promotion model (D018).
+- [ ] Migrate and verify the three D018 `main` rulesets, then disable but retain
+      the old monolithic ruleset.
+- [ ] Verify both repository migrations before reducing `cyano-bot` to Write.
 - [ ] Promote stable `v0.1.0` only after the public RC criteria are complete.

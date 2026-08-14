@@ -16,7 +16,7 @@ release history.
 
 ## Current state
 
-Version `0.1.0-rc.1` is the active release-preparation candidate. Gate B and
+Version `0.1.0-rc.1` is the published public release candidate. Gate B and
 Gate C governance, architecture, the language-neutral five-command behavior
 contract, and all five production commands are complete. All 82 frozen cases
 execute the compiled binary without skips.
@@ -29,9 +29,11 @@ used the Skill against pi-norm-spec without the pi plugin. Gate E distribution
 and release-readiness implementation is complete: D016, native candidate
 archives, extracted verification, an explicit Rust 1.97 MSRV lane, four-target
 candidate CI, and installation/upgrade guidance are green locally and on
-hosted CI. D017 now governs the RC rehearsal. Hosted verification of the exact
-RC commit, public visibility, tagging, GitHub Release, registry publication,
-and stable promotion remain separate maintainer checkpoints.
+hosted CI. The D017 RC rehearsal is complete through public validation: signed
+tag, GitHub Pre-release, all three crates.io packages, and public binary, Rust,
+conformance, and Skill paths bind release commit `5c781964`. Current `main` is
+`60d98b6`, two documentation-only commits after that immutable release commit.
+Stable promotion remains a separate maintainer checkpoint.
 Host-specific injection and enforcement stay downstream.
 
 Read first:
@@ -107,19 +109,30 @@ and returns with a fast-forward merge after all gates are green.
 
 ### Public contribution flow
 
-`CyanoOrg/norm-spec` is public. The `main` branch is governed by a GitHub
-ruleset (`main-protection`): direct force pushes and deletion are blocked,
-linear history is required, commits must be signed, the nine CI status checks
-must pass, and a pull request with one approving review is required for
-non-admin actors (including bots). Repository admins may bypass the ruleset so
-the release-preparation candidate can be fast-forwarded to `main` as an exact
-commit — the tag, archives, and `.cargo_vcs_info.json` bind to that exact SHA.
-A `v*` tag ruleset (`release-tag-immutable`) blocks tag updates and deletion.
+`CyanoOrg/norm-spec` is public. D018 separates `main` governance into three
+rulesets: `main-integrity` blocks deletion and non-fast-forward updates and
+requires linear history and signed commits; `main-quality` requires the exact
+nine strict CI contexts; and `main-review` requires a pull request, one
+approval, dismissal of stale approvals, and resolution of all review threads.
+Integrity and quality have no bypass. Only the `norm-release-managers` Team may
+always bypass the review layer for an exact reviewed fast-forward. Automation
+identities belong in `norm-automation`, not in the release-manager Team. The
+`v*` tag ruleset (`release-tag-immutable`) blocks tag updates and deletion with
+no bypass.
+
+The live migration state is recorded in `docs/planning/status.md`. Until all
+three D018 rulesets have been created, read back as active/effective, and the
+old monolithic `main-protection` ruleset has then been disabled, that existing
+monolithic ruleset remains authoritative.
 
 External contributors work from a fork and open a pull request; maintainers may
 use a short-lived in-repo branch and a pull request. Everyday merges keep linear
-history (rebase). Do not mix release-preparation identity changes into ordinary
-PRs — the release-preparation branch is the single identity anchor.
+history (rebase). An exact-candidate promotion requires an approved PR at the
+candidate HEAD, no unresolved review threads, all nine strict checks green for
+that HEAD, and a branch that is not behind `main`; a release manager may then
+fast-forward the exact commit without rewriting it. Do not mix
+release-preparation identity changes into ordinary PRs — the
+release-preparation branch is the single identity anchor.
 
 ## Commits
 
