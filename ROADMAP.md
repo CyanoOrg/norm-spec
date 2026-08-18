@@ -28,6 +28,11 @@ portable CLI with explicit format and machine contracts.
 - Release-quality review is green.
 - The Rust library and CLI satisfy the documented A1 contract.
 - Installation and compatibility documentation is complete.
+- RC soak satisfied: two independent downstream adapters consume
+  `0.1.0-rc.1` in published releases (dsh-norm-spec 0.1.0 stable is the
+  first; pi-norm-spec's first public beta is the second) plus a soak
+  window after the second ships; promotion then rests with the
+  maintainer.
 
 ## Later
 

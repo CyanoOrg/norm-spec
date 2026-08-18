@@ -329,6 +329,14 @@ Phase 7 public validation on 2026-08-12:
 `v0.1.0-rc.1` is published and validated end-to-end. Stable `v0.1.0` promotion
 remains a separate maintainer decision after RC soak.
 
+RC soak criteria (recorded 2026-08-18): at least two independent
+downstream adapters consume `0.1.0-rc.1` in published releases, followed
+by a soak window after the second consumer ships. The first consumer is
+`dsh-norm-spec` `0.1.0` stable (published 2026-08-18 against the pinned
+rc.1 payload); the second is `pi-norm-spec`'s first public beta (its
+E3/E4 remaining). Once both are public, promotion becomes a maintainer
+decision on timing alone.
+
 Post-RC repository-governance checkpoint on 2026-08-14:
 
 - D018 accepts the same organization Team model already exercised by the
