@@ -11,9 +11,10 @@
   release commit. Current `main` is `60d98b6`, with documentation-only commits
   `8a3801d` and `60d98b6` after the tag. The public GitHub repo, four native
   archives and checksum assets, and `norm-spec-core` / `norm-spec` /
-  `norm-spec-cli` paths are validated end-to-end (Phase 7 green). Next: migrate
-  the D018 repository rules, then optional live agent-driven Skill adoption and
-  stable `v0.1.0` promotion after RC soak.
+  `norm-spec-cli` paths are validated end-to-end (Phase 7 green). The D018
+  layered rulesets and the D019 family unification are live and verified
+  (2026-08-18); `cyano-bot` is back to Write. Next: optional live
+  agent-driven Skill adoption and stable `v0.1.0` promotion after RC soak.
   (pi-norm-spec is a separate downstream track, decoupled per D013.)
 - The maintainer confirmed standalone-first product positioning, one canonical
   framework-neutral Skill in this repository, explicit failure without engine
@@ -345,6 +346,22 @@ Post-RC repository-governance checkpoint on 2026-08-14:
 - after both repositories' layered migrations are read back and verified,
   reduce `cyano-bot` direct repository access from Admin to Write on each.
 
+Family governance unification executed on 2026-08-18 (D019):
+
+- All three family repositories now share the standard four-ruleset form
+  (`main-integrity`, `main-quality`, `main-review`,
+  `release-tag-immutable`), all active, all `bypass_mode: none`.
+- `norm-spec` migrated off the monolithic ruleset (create-verify-delete in
+  D018's fail-safe order, minus retention — superseded by D019);
+  `pi-norm-spec` shed its disabled leftover; `dsh-norm-spec` raised
+  `main-quality` from three to nine required checks (strict).
+- `cyano-bot` direct Admin removed on all three repositories; effective
+  Write via `norm-automation` verified by API readback and real
+  `git push` plus branch deletion on each repository.
+- Repository settings aligned: wikis off everywhere; head branches are NOT
+  auto-deleted (explicit cleanup by decision — future release or maintenance
+  branches must not be silently removed).
+
 ## Open-source readiness
 
 - [x] Independent public `0.1` history and product identity.
@@ -409,7 +426,8 @@ Post-RC repository-governance checkpoint on 2026-08-14:
 - [x] Run the maintainer-authorized public visibility and RC publication
       checkpoints in `docs/planning/v0.1.0-rc.1-release.md`.
 - [x] Decide the layered Team protection and exact-promotion model (D018).
-- [ ] Migrate and verify the three D018 `main` rulesets, then disable but retain
-      the old monolithic ruleset.
-- [ ] Verify both repository migrations before reducing `cyano-bot` to Write.
+- [x] Migrate and verify the three D018 `main` rulesets (2026-08-18; the
+      old monolithic ruleset was deleted, not retained — superseded by D019).
+- [x] Verify the migrations and reduce `cyano-bot` to Write (2026-08-18;
+      extended to all three family repositories per D019).
 - [ ] Promote stable `v0.1.0` only after the public RC criteria are complete.

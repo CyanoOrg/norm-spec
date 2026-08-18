@@ -671,3 +671,51 @@ membership makes responsibilities reviewable and reusable while repository-
 local rules keep the two products independent. Creating and verifying the new
 layers before disabling the old one avoids an unprotected migration window,
 and retaining the disabled rule preserves a recoverable audit trail.
+
+## D019 — Family-wide ruleset unification supersedes two D018 execution details
+
+**Decision.** All three family repositories (`norm-spec`, `pi-norm-spec`,
+`dsh-norm-spec`) now share one standard ruleset form: `main-integrity`,
+`main-quality`, `main-review`, and `release-tag-immutable`, all active
+with `bypass_mode: none` on every layer. Two D018 execution details are
+superseded:
+
+1. D018 granted `main-review` an always bypass to `norm-release-managers`
+   (GitHub Team ID `18981934`). The executed form has no bypass anywhere:
+   an approved, green, candidate-head pull request already satisfies the
+   pull-request rule for a release manager's fast-forward push (verified
+   end-to-end by the dsh-norm-spec `v0.1.0` exact promotion on 2026-08-18),
+   so the bypass capability is redundant for the designed loop, and uniform
+   no-bypass is simpler to audit across repositories. If a future emergency
+   ever requires a no-PR push, re-adding that single-layer bypass is a
+   one-rule change recorded here first.
+2. D018 retained the old monolithic ruleset disabled for audit and rollback.
+   The executed migration deleted it in both `norm-spec` and
+   `pi-norm-spec` (pi's disabled leftover was itself removed as cruft on
+   2026-08-18). The audit trail lives in this record; rollback is recreating
+   a ruleset, a procedure this migration has already exercised.
+
+`cyano-bot` direct repository Admin access is removed from all three
+repositories (2026-08-18); its effective access is Write through
+`norm-automation`, verified by API readback (effective permission `write`
+on each repository) and by real `git push` plus branch deletion on each
+repository. Organization ownership stays with the human `cyano-org`
+account; automation holds no human approval or release-promotion authority.
+
+**Context.** D018 was designed before the third repository existed and before
+any exact promotion had run under layered rules. A family-wide governance
+audit on 2026-08-18 found the
+three repositories had drifted: `norm-spec` still monolithic,
+`pi-norm-spec` carrying a disabled leftover beside its layered sets, and
+`dsh-norm-spec` layered but requiring only three of its nine checks. The
+audit unified all three to the standard form above, aligned repository
+settings (wikis off; head branches never auto-deleted, so future release or
+maintenance branches cannot be silently removed), and retired the temporary
+`cyano-bot` Admin grants.
+
+**Rationale.** Uniform layered rulesets make the three repositories
+operationally identical: the same merge loop, the same release-promotion
+path, and one audit answer instead of three. The first stable release
+executed under these rules (dsh-norm-spec `v0.1.0`) demonstrated that
+SHA-exact promotion does not need the pull-request bypass, so the narrowest
+enforceable form wins.
