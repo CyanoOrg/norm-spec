@@ -1,16 +1,39 @@
 # norm-spec
 
-The `.norm` project-convention format, implemented as a Rust library and a
-portable `norm` CLI.
+The `.norm` project-convention format, and the one deterministic Rust
+engine that owns its semantics.
 
-The project starts with one deterministic semantic engine. Its specification,
-schemas, templates, fixtures, and machine contracts live in this repository;
-framework adapters consume those contracts without becoming format authorities.
+## Why
 
-> Status: `0.1.0-rc.1` is published and validated from exact commit `5c781964`.
-> The signed tag, four native archives with checksums, all three Rust packages,
-> docs.rs pages, standalone adoption, and the canonical Skill path are public.
-> Stable `v0.1.0` remains a separate maintainer decision after RC soak.
+Every project carries rules nobody wrote down completely — naming habits,
+module boundaries, commit granularity, "we don't do it that way here."
+They live in reviewers' heads, old decisions, and tribal memory.
+Newcomers, human or agent, pay for them at every step: the cost of not
+knowing is rework, review friction, and quiet divergence.
+
+The common answer — an always-resident instruction file — treats
+convention knowledge as memory: loaded once, expected to stay effective.
+But an LLM context behaves like a cache, not memory. Instruction
+effectiveness decays with distance and competing tokens; long sessions
+lose what the first screen said, and re-reading a flat file spends the
+same tokens to re-establish the same ambiguity.
+
+norm-spec starts from a different proposition:
+
+> Project conventions should live on disk as scoped, verifiable
+> artifacts — a peer of the code, not a paragraph of prose.
+
+A `.norm` file is layered (directories inherit), scoped (each
+convention names its target), and validated (schemas, reference
+integrity, single sources of truth). Parsing, collection, and validation
+semantics live in this repository's one deterministic engine, together
+with its specification, schemas, fixtures, and machine contracts. Host
+adapters ([pi-norm-spec](https://github.com/CyanoOrg/pi-norm-spec),
+[dsh-norm-spec](https://github.com/CyanoOrg/dsh-norm-spec)) consume
+those contracts to deliver exactly the collected conventions into agent
+sessions at action time and to check edits afterward — without becoming
+format authorities. The result is a closed loop rather than prose:
+validated at authoring, scoped at collection, observed at delivery.
 
 ## Crates
 
@@ -97,19 +120,25 @@ norm-spec-conformance \
   --pretty
 ```
 
-This public RC includes the five initial commands, compatibility discovery,
-Rust facade, arbitrary-candidate conformance, packaged standalone adoption,
-canonical Skill, and target-specific self-verifying archives. It is not the
-stable `v0.1.0` release.
+## Status
 
-See `docs/INTEGRATION.md` for plugin-free project adoption, canonical Skill
-installation, failure behavior, and downstream host-adapter boundaries.
+`0.1.0-rc.1` is published and validated: signed tag `v0.1.0-rc.1`, all
+three crates on crates.io, docs.rs pages, four native archives with
+checksums, and the canonical Skill path. Stable `v0.1.0` promotion follows
+the RC soak criteria recorded in `ROADMAP.md` — two independent downstream
+adapters consuming `0.1.0-rc.1` in published releases, plus a soak window
+after the second ships.
 
-See `docs/INSTALLATION.md` for release archives, checksums, source installation,
-MSRV, upgrades, rollback, and uninstall.
+## Documentation
 
-See `ROADMAP.md`, `docs/ARCHITECTURE.md`, and
-`docs/planning/v0.1-execution.md` before contributing.
+- `docs/INTEGRATION.md` — plugin-free project adoption, canonical Skill
+  installation, failure behavior, and downstream host-adapter boundaries
+- `docs/INSTALLATION.md` — release archives, checksums, source installation,
+  MSRV, upgrades, rollback, and uninstall
+- `docs/ARCHITECTURE.md` — crate boundaries and what owns each behavior
+- `docs/RUST-API.md` — Rust facade requests, failures, and compatibility
+- `ROADMAP.md`, `docs/planning/v0.1-execution.md` — milestones and execution
+  state to read before contributing
 
 ## License
 
