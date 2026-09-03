@@ -16,6 +16,10 @@
   (2026-08-18); `cyano-bot` is back to Write. Next: optional live
   agent-driven Skill adoption and stable `v0.1.0` promotion after RC soak.
   (pi-norm-spec is a separate downstream track, decoupled per D013.)
+- Batch (multi-target) collect is decided (D020, 2026-09-03) and held as
+  post-stable backlog: `collect/v2` semantics are fixed in
+  `docs/planning/batch-collect-proposal.md`; implementation starts after
+  stable promotion and rides the minor version line.
 - The maintainer confirmed standalone-first product positioning, one canonical
   framework-neutral Skill in this repository, explicit failure without engine
   fallback, downstream host adapters, and standalone adoption as Gate D scope.
@@ -384,10 +388,12 @@ Family governance unification executed on 2026-08-18 (D019):
       linear history, review, and nine CI checks with its original broad
       repository-admin bypass.
 - [x] Record the narrower layered Team model in D018.
-- [ ] Create and read back `main-integrity`, `main-quality`, and `main-review`;
+- [x] Create and read back `main-integrity`, `main-quality`, and `main-review`;
       verify their effective result before disabling `main-protection`.
-- [ ] After both independent repository migrations are verified, reduce
-      `cyano-bot` direct access from Admin to Write.
+      (Completed 2026-08-18; see the D019 unification above.)
+- [x] After both independent repository migrations are verified, reduce
+      `cyano-bot` direct access from Admin to Write. (Completed 2026-08-18
+      via D019, extended family-wide.)
 
 ## Open work
 
@@ -439,3 +445,9 @@ Family governance unification executed on 2026-08-18 (D019):
 - [x] Verify the migrations and reduce `cyano-bot` to Write (2026-08-18;
       extended to all three family repositories per D019).
 - [ ] Promote stable `v0.1.0` only after the public RC criteria are complete.
+- [ ] Implement batch multi-target collect as `collect/v2` per D020 and
+      `docs/planning/batch-collect-proposal.md`: protocol identifier and
+      manifest entry, a new contract-bundle identity for v2 cases (the
+      locked 82-case A1 bundle is not mutated), `norm-core` engine,
+      facade and repeatable `--target` CLI, handshake listing, and
+      integration docs. Starts after stable promotion.

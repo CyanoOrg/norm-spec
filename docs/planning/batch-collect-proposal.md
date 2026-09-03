@@ -4,8 +4,9 @@ Planning input filed by the dsh-norm-spec adapter track on 2026-09-03, for
 the maintainer's scheduling consideration alongside stable `v0.1.0`
 promotion planning. Revised 2026-09-03 after a joint review against the
 adapter-side target-context plan: each open question now carries an
-explicit recommended position. This is a proposal, not a decision record;
-scope-changing decisions follow the repository update order if adopted.
+explicit recommended position. Adopted 2026-09-03 as decision D020 in
+`docs/decisions.md`; this document remains the design rationale and is
+not itself a decision record.
 
 ## Problem
 

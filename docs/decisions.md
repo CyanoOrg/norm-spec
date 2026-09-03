@@ -719,3 +719,66 @@ path, and one audit answer instead of three. The first stable release
 executed under these rules (dsh-norm-spec `v0.1.0`) demonstrated that
 SHA-exact promotion does not need the pull-request bypass, so the narrowest
 enforceable form wins.
+
+## D020 — Batch multi-target collect ships as collect/v2 after stable promotion
+
+**Decision.** Collection is extended to accept a bounded set of targets in
+one operation: a repeatable `--target` on the CLI and a multi-target
+machine request under a new protocol identifier `collect/v2`, listed in
+the compatibility manifest and discoverable through the handshake.
+`collect/v1` and the locked 82-case A1 bundle stay frozen. The work is
+post-stable backlog: implementation starts only after stable `v0.1.0`
+promotion and rides the minor version line.
+
+The v2 semantics are fixed as follows (full rationale in
+`docs/planning/batch-collect-proposal.md`, revised 2026-09-03):
+
+1. Per-scope sections, not a flat merge: one ordered group per target,
+   most-specific-first within a section, request order across sections.
+2. Shared `.norm` files are deduplicated by reference: the first section
+   in request order carries the full entry; later sections carry a
+   reference entry (path and content digest; exact shape fixed with the
+   v2 contract fixtures) at that file's exact chain position.
+3. Targets are normalized before any identity decision (file targets
+   begin at their parent directory); repeated targets and file/parent
+   equivalents collapse into the earlier section. Ancestor-overlapping
+   sets stay distinct scopes and share bytes through references.
+4. Validation is whole-request and up front: a malformed target
+   (absolute or escaping) or a missing project root fails the entire
+   request with one `norm-spec/error/v1` error. There is no
+   partial-success shape and no per-target "unavailable" state; a scope
+   with no `.norm` files is an empty section and a success.
+5. One size budget spans the whole batch with the existing
+   fail-not-truncate posture, plus a protocol maximum of 8 targets
+   enforced as request validation.
+6. Identical requests produce byte-identical responses.
+7. Per-target contained-relative validation carries over unchanged.
+
+The locked A1 contract bundle is not mutated: v2 cases ship under a new
+contract bundle identity, extending the D015 discovery model. The exact
+bundle identity is fixed when the v2 fixtures land. Implementation
+follows the repository update order: this decision, then the protocol
+identifier and manifest entry, contract fixtures, `norm-core` engine,
+facade and CLI, compatibility and integration docs, changelog.
+
+**Context.** The dsh-norm-spec post-0.1.0 runtime review (2026-09-03)
+filed `docs/planning/batch-collect-proposal.md`: single-target collect
+forces adapter consumers to spawn N processes per step and to fork
+cross-chain merge semantics at the projection layer, against the rule
+that collection semantics are declared here once. The joint review with
+the adapter track pinned every open question, and the maintainer adopted
+the recommended positions on 2026-09-03. The same review leaves the
+reference adapter's interim projection merge mirroring these semantics
+(dsh-norm-spec target-context plan WS2), so its later adoption of v2 is
+a mechanical migration plus a deliberate compatibility-pin bump.
+
+**Rationale.** Sections preserve the only orderings that carry meaning —
+specificity within a chain and request order across chains — instead of
+inventing a cross-scope precedence rule. Dedupe-by-reference keeps the
+bytes bounded for prompt-sized budgets while per-scope chain positions
+stay exact. Up-front whole-request validation matches the
+never-downgrade posture: batch targets come from normalized directories
+of real work, so an invalid target is consumer state drift that should
+fail loudly, not a per-entry status to paper over. A new version
+identifier, rather than an optional field inside v1, keeps one version
+on one response shape and leaves the frozen contract untouched.

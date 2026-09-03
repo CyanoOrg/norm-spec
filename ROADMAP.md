@@ -39,3 +39,7 @@ portable CLI with explicit format and machine contracts.
 The A1 contract remains evolvable until multiple real consumers demonstrate
 that the format is stable enough to receive a separate stable-format
 identifier.
+
+Post-stable additive backlog: batch (multi-target) collect as
+`collect/v2` — decided in D020, specified in
+`docs/planning/batch-collect-proposal.md`.
