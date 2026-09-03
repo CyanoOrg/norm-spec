@@ -444,10 +444,13 @@ Family governance unification executed on 2026-08-18 (D019):
       old monolithic ruleset was deleted, not retained — superseded by D019).
 - [x] Verify the migrations and reduce `cyano-bot` to Write (2026-08-18;
       extended to all three family repositories per D019).
-- [ ] Promote stable `v0.1.0` only after the public RC criteria are complete.
+- [ ] Promote stable `v0.1.0` only after the public RC criteria are
+      complete; executable checklist drafted in
+      `docs/planning/v0.1.0-stable-promotion.md`.
 - [ ] Implement batch multi-target collect as `collect/v2` per D020 and
-      `docs/planning/batch-collect-proposal.md`: protocol identifier and
-      manifest entry, a new contract-bundle identity for v2 cases (the
-      locked 82-case A1 bundle is not mutated), `norm-core` engine,
+      `docs/planning/batch-collect-proposal.md` (acceptance matrix in
+      `docs/planning/collect-v2-contract-cases.md`): protocol identifier
+      and manifest entry, a new contract-bundle identity for v2 cases
+      (the locked 82-case A1 bundle is not mutated), `norm-core` engine,
       facade and repeatable `--target` CLI, handshake listing, and
       integration docs. Starts after stable promotion.
