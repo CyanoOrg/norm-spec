@@ -35,11 +35,11 @@ norm-spec 从一个不同的命题出发：
 
 ## Rust API
 
-使用经过评审的精确 RC 版本：
+稳定版在 crates.io 可用后，可锁定以下精确版本。
 
 ```toml
 [dependencies]
-norm-spec = "=0.1.0-rc.1"
+norm-spec = "=0.1.0"
 ```
 
 ```rust
@@ -58,17 +58,17 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 请求、失败分类、兼容性与打包边界见 `docs/RUST-API.md`。
 
-## 安装发布候选
+## 安装发布版
 
-从 crates.io 安装两个 CLI executable：
+稳定版在 crates.io 可用后，以下命令会安装两个 CLI 可执行文件。
 
 ```bash
-cargo install norm-spec-cli --version '=0.1.0-rc.1' --locked
+cargo install norm-spec-cli --version '=0.1.0' --locked
 norm --version
 norm compatibility --pretty
 ```
 
-GitHub Pre-release 提供各目标平台归档及对应 checksum。将 binary 复制进
+GitHub Releases 提供各目标平台归档及对应 checksum。将 binary 复制进
 `PATH` 前，请按 `docs/INSTALLATION.md` 完成验证。
 
 ## 开发用法
@@ -109,10 +109,9 @@ norm-spec-conformance \
 
 ## 状态
 
-`0.1.0-rc.1` 已发布并完成验证：签名 tag `v0.1.0-rc.1`、三个 crate 上线
-crates.io、docs.rs 页面、四个带 checksum 的原生归档、canonical Skill 路径。
-稳定版 `v0.1.0` 的提升遵循 `ROADMAP.md` 记录的 RC soak 判据——两个独立
-下游适配器在已发布版本中消费 `0.1.0-rc.1`，加上第二个发布后的 soak 窗口。
+`0.1.0` 将 `0.1.0-rc.1` 已验证的 A1 基线提升为稳定版。
+已发布版本、原生归档和校验文件见
+[GitHub Releases](https://github.com/CyanoOrg/norm-spec/releases)。
 
 ## 文档
 

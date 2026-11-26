@@ -6,16 +6,20 @@
   Gate E are complete; release Phases 1–7 are complete (public repo, signed tag,
   GitHub Pre-release, serial crates.io publication, and full public validation).
   Stable `v0.1.0` promotion remains a separate maintainer decision after RC soak.
-- Current resume point: `v0.1.0-rc.1` shipped from `5c781964` (tag signed and
-  verified). The tag, GitHub Pre-release assets, and all three crates bind that
-  release commit. Current `main` is `60d98b6`, with documentation-only commits
-  `8a3801d` and `60d98b6` after the tag. The public GitHub repo, four native
-  archives and checksum assets, and `norm-spec-core` / `norm-spec` /
-  `norm-spec-cli` paths are validated end-to-end (Phase 7 green). The D018
-  layered rulesets and the D019 family unification are live and verified
-  (2026-08-18); `cyano-bot` is back to Write. Next: optional live
-  agent-driven Skill adoption and stable `v0.1.0` promotion after RC soak.
-  (pi-norm-spec is a separate downstream track, decoupled per D013.)
+- The signed `v0.1.0-rc.1` tag, GitHub Pre-release assets, and all three crates
+  bind release commit `5c781964`. The 2026-11-26 audit used `main` at
+  `693c8aa`, with only documentation and planning updates after the tag.
+  Phase 7 verified the public GitHub repo, four native archives and checksum
+  assets, and `norm-spec-core` / `norm-spec` / `norm-spec-cli` paths. The D018
+  layered rulesets and the D019 family unification were verified on
+  2026-08-18, with `cyano-bot` back to Write.
+- Both downstream publication legs are complete. On 2026-11-26, the
+  public rc.1 native archive, registry install and Rust API, conformance,
+  and standalone Skill paths passed fresh re-verification on macOS
+  arm64. The DSH reminder-lifecycle findings are recorded as downstream
+  use evidence. The maintainer still needs to review the soak evidence
+  and decide stable promotion.
+  [Stable promotion checklist](v0.1.0-stable-promotion.md)
 - Batch (multi-target) collect is decided (D020, 2026-09-03) and held as
   post-stable backlog: `collect/v2` semantics are fixed in
   `docs/planning/batch-collect-proposal.md`; implementation starts after
@@ -333,13 +337,12 @@ Phase 7 public validation on 2026-08-12:
 `v0.1.0-rc.1` is published and validated end-to-end. Stable `v0.1.0` promotion
 remains a separate maintainer decision after RC soak.
 
-RC soak criteria (recorded 2026-08-18): at least two independent
-downstream adapters consume `0.1.0-rc.1` in published releases, followed
-by a soak window after the second consumer ships. The first consumer is
-`dsh-norm-spec` `0.1.0` stable (published 2026-08-18 against the pinned
-rc.1 payload); the second is `pi-norm-spec`'s first public beta (its
-E3/E4 remaining). Once both are public, promotion becomes a maintainer
-decision on timing alone.
+The RC soak requires two independently published downstream consumers
+and a real-use window after the second ships. DSH `0.1.0` supplied the
+first leg on 2026-08-18, and Pi `0.1.0-beta.1` opened the window on
+2026-09-05. Use the promotion checklist for the remaining soak judgement
+and public-path rechecks.
+[Stable promotion checklist](v0.1.0-stable-promotion.md)
 
 Post-RC repository-governance checkpoint on 2026-08-14:
 

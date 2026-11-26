@@ -46,11 +46,11 @@ validated at authoring, scoped at collection, observed at delivery.
 
 ## Rust API
 
-Use the exact reviewed release candidate:
+Use an exact dependency pin once the stable version is available on crates.io.
 
 ```toml
 [dependencies]
-norm-spec = "=0.1.0-rc.1"
+norm-spec = "=0.1.0"
 ```
 
 ```rust
@@ -70,19 +70,20 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 See `docs/RUST-API.md` for request, failure, compatibility, and packaging
 boundaries.
 
-## Install the release candidate
+## Install a release
 
-Install both CLI executables from crates.io:
+The stable package installs both CLI executables once it is available on
+crates.io.
 
 ```bash
-cargo install norm-spec-cli --version '=0.1.0-rc.1' --locked
+cargo install norm-spec-cli --version '=0.1.0' --locked
 norm --version
 norm compatibility --pretty
 ```
 
 Target-specific archives and their sibling checksums are available from the
-GitHub Pre-release. Follow `docs/INSTALLATION.md` before copying either binary
-into `PATH`.
+published GitHub Releases. Follow `docs/INSTALLATION.md` before copying either
+binary into `PATH`.
 
 ## Development usage
 
@@ -122,12 +123,9 @@ norm-spec-conformance \
 
 ## Status
 
-`0.1.0-rc.1` is published and validated: signed tag `v0.1.0-rc.1`, all
-three crates on crates.io, docs.rs pages, four native archives with
-checksums, and the canonical Skill path. Stable `v0.1.0` promotion follows
-the RC soak criteria recorded in `ROADMAP.md` — two independent downstream
-adapters consuming `0.1.0-rc.1` in published releases, plus a soak window
-after the second ships.
+Version `0.1.0` promotes the A1 baseline verified in `0.1.0-rc.1`.
+Published versions, native archives, and checksums are listed in
+[GitHub Releases](https://github.com/CyanoOrg/norm-spec/releases).
 
 ## Documentation
 

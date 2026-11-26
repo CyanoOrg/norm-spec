@@ -5,6 +5,13 @@ Versioning and keeps changes under `[Unreleased]` until release preparation.
 
 ## [Unreleased]
 
+## [0.1.0] - 2026-11-26
+
+### Changed
+
+- Promote the `0.1.0-rc.1` A1 baseline to the first stable release. The format,
+  machine APIs, and frozen 82-case conformance suite retain their identities.
+
 ## [0.1.0-rc.1] - 2026-08-12
 
 ### Added

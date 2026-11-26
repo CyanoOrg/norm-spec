@@ -56,16 +56,15 @@ format, machine API, Rust API, suite, case count, and contract digest fields
 needed by the integration; do not infer compatibility from product version or
 help output.
 
-After all three `0.1.0-rc.1` packages are publicly resolvable, the exact
-registry install is:
+The install command pins the exact CLI version after all three `0.1.0`
+packages resolve from the public registry.
 
 ```bash
-cargo install norm-spec-cli --version '=0.1.0-rc.1' --locked
+cargo install norm-spec-cli --version '=0.1.0' --locked
 ```
 
-The tag, GitHub Pre-release, or an upstream crate appearing first does not make
-this command available. Continue using an exact Git revision until
-`norm-spec-cli 0.1.0-rc.1` itself resolves from crates.io.
+Continue using an exact Git revision until `norm-spec-cli 0.1.0` itself
+resolves from crates.io.
 
 ## Adopt an unrelated project without a plugin
 

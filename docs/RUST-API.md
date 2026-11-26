@@ -29,11 +29,11 @@ Do not use a sibling `path = "../norm-spec"` dependency as integration
 evidence. crates.io publication and its core → facade → CLI order are Gate E
 checkpoints; the current package names are not a publication claim.
 
-After `0.1.0-rc.1` actually resolves on crates.io, use the exact reviewed RC:
+Pin the facade to the exact stable version once it resolves from crates.io.
 
 ```toml
 [dependencies]
-norm-spec = "=0.1.0-rc.1"
+norm-spec = "=0.1.0"
 ```
 
 Do not switch from the Git revision merely because a package name or one

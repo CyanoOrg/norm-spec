@@ -13,10 +13,11 @@ in `docs/releases/v0.1.0-rc.1.md`.
 
 ## Install from crates.io
 
-Install both CLI executables with the exact reviewed version:
+The exact stable version installs both CLI executables once it is available
+on crates.io.
 
 ```bash
-cargo install norm-spec-cli --version '=0.1.0-rc.1' --locked
+cargo install norm-spec-cli --version '=0.1.0' --locked
 norm --version
 norm compatibility --pretty
 ```
@@ -166,11 +167,11 @@ toolchain. Do not install a moving branch for production use.
 
 ## Use the Rust facade
 
-Use the exact reviewed public facade release:
+Pin the facade to the exact stable release once it resolves from crates.io.
 
 ```toml
 [dependencies]
-norm-spec = "=0.1.0-rc.1"
+norm-spec = "=0.1.0"
 ```
 
 For source-development work, an exact Git revision remains available as an
